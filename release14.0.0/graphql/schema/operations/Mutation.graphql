@@ -478,4 +478,236 @@ type Mutation {
   requestCustomerPositionReport(
     input: RequestCustomerPositionReportInput!
   ): CustomerCashflow!
+
+  # =========================================================================
+  # Customer Product and Service Directory
+  # =========================================================================
+
+  """
+  Register a new Customer Product and Service Directory entry for a customer.
+  Maps to: POST /CustomerProductandServiceDirectory/Register  (ReCR)
+  """
+  registerCustomerProductAndServiceDirectory(
+    input: RegisterCustomerProductDirectoryInput!
+  ): CustomerProductAndServiceDirectory!
+
+  """
+  Update an existing Customer Product and Service Directory entry.
+  Maps to: PUT /CustomerProductandServiceDirectory/{id}/Update  (UpCR)
+  """
+  updateCustomerProductAndServiceDirectory(
+    """Unique identifier of the directory entry to update."""
+    customerProductAndServiceDirectoryId: ID!
+    input: UpdateCustomerProductDirectoryInput!
+  ): CustomerProductAndServiceDirectory!
+
+  """
+  Execute an action on a product entry in the directory (e.g. suspend, reactivate).
+  Maps to: PUT /CustomerProductandServiceDirectory/{id}/Product/{productId}/Execute  (ExBQ)
+  """
+  executeCustomerDirectoryProduct(
+    """Unique identifier of the directory entry."""
+    customerProductAndServiceDirectoryId: ID!
+    """Unique identifier of the product entry."""
+    productId: ID!
+  ): CustomerDirectoryProduct!
+
+  """
+  Execute an action on a service entry in the directory (e.g. suspend, reactivate).
+  Maps to: PUT /CustomerProductandServiceDirectory/{id}/Service/{serviceId}/Execute  (ExBQ)
+  """
+  executeCustomerDirectoryService(
+    """Unique identifier of the directory entry."""
+    customerProductAndServiceDirectoryId: ID!
+    """Unique identifier of the service entry."""
+    serviceId: ID!
+  ): CustomerDirectoryService!
+
+  # =========================================================================
+  # Sales Product Agreement
+  # =========================================================================
+
+  """
+  Evaluate and create a new Sales Product Agreement for a customer product.
+  Maps to: POST /SalesProductAgreement/Evaluate  (EvCR)
+  """
+  evaluateSalesProductAgreement(
+    input: EvaluateSalesProductAgreementInput!
+  ): SalesProductAgreementRecord!
+
+  """
+  Update an existing Sales Product Agreement.
+  Maps to: PUT /SalesProductAgreement/{id}/Update  (UpCR)
+  """
+  updateSalesProductAgreement(
+    """Unique identifier of the sales product agreement to update."""
+    salesProductAgreementId: ID!
+    input: UpdateSalesProductAgreementInput!
+  ): SalesProductAgreementRecord!
+
+  """
+  Exchange (accept/reject) a Sales Product Agreement.
+  Maps to: PUT /SalesProductAgreement/{id}/Exchange  (EcCR)
+  """
+  exchangeSalesProductAgreement(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesProductAgreementRecord!
+
+  """
+  Control (suspend/resume) a Sales Product Agreement.
+  Maps to: PUT /SalesProductAgreement/{id}/Control  (CoCR)
+  """
+  controlSalesProductAgreement(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesProductAgreementRecord!
+
+  """
+  Request an action on a Sales Product Agreement (e.g. amendment request).
+  Maps to: PUT /SalesProductAgreement/{id}/Request  (RqCR)
+  """
+  requestSalesProductAgreement(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesProductAgreementRecord!
+
+  """
+  Grant authority under the terms of a Sales Product Agreement.
+  Maps to: PUT /SalesProductAgreement/{id}/Grant  (GrCR)
+  """
+  grantSalesProductAgreement(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesProductAgreementRecord!
+
+  """
+  Evaluate and add a legal term to a Sales Product Agreement.
+  Maps to: POST /SalesProductAgreement/{id}/LegalTerm/Evaluate  (EvBQ)
+  """
+  evaluateSalesAgreementLegalTerm(
+    """Unique identifier of the parent sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesAgreementLegalTerm!
+
+  """
+  Update a legal term in a Sales Product Agreement.
+  Maps to: PUT /SalesProductAgreement/{id}/LegalTerm/{legalTermId}/Update  (UpBQ)
+  """
+  updateSalesAgreementLegalTerm(
+    """Unique identifier of the parent sales product agreement."""
+    salesProductAgreementId: ID!
+    """Unique identifier of the legal term to update."""
+    legalTermId: ID!
+  ): SalesAgreementLegalTerm!
+
+  # =========================================================================
+  # Servicing Order
+  # =========================================================================
+
+  """
+  Initiate a new Servicing Order for a customer.
+  Maps to: POST /ServicingOrder/Initiate  (InCR)
+  """
+  initiateServicingOrder(
+    input: InitiateServicingOrderInput!
+  ): ServicingOrderProcedure!
+
+  """
+  Update an in-progress Servicing Order.
+  Maps to: PUT /ServicingOrder/{servicingOrderId}/Update  (UpCR)
+  """
+  updateServicingOrder(
+    """Unique identifier of the servicing order to update."""
+    servicingOrderId: ID!
+    input: UpdateServicingOrderInput!
+  ): ServicingOrderProcedure!
+
+  """
+  Control (suspend/resume/cancel) a Servicing Order.
+  Maps to: PUT /ServicingOrder/{servicingOrderId}/Control  (CoCR)
+  """
+  controlServicingOrder(
+    """Unique identifier of the servicing order."""
+    servicingOrderId: ID!
+  ): ServicingOrderProcedure!
+
+  """
+  Exchange (accept/reject) a Servicing Order.
+  Maps to: PUT /ServicingOrder/{servicingOrderId}/Exchange  (EcCR)
+  """
+  exchangeServicingOrder(
+    """Unique identifier of the servicing order."""
+    servicingOrderId: ID!
+  ): ServicingOrderProcedure!
+
+  """
+  Execute processing of a Servicing Order (automated execution step).
+  Maps to: PUT /ServicingOrder/{servicingOrderId}/Execute  (ExCR)
+  """
+  executeServicingOrder(
+    """Unique identifier of the servicing order."""
+    servicingOrderId: ID!
+  ): ServicingOrderProcedure!
+
+  """
+  Request an action on a Servicing Order (e.g. escalation or review).
+  Maps to: PUT /ServicingOrder/{servicingOrderId}/Request  (RqCR)
+  """
+  requestServicingOrder(
+    """Unique identifier of the servicing order."""
+    servicingOrderId: ID!
+  ): ServicingOrderProcedure!
+
+  # =========================================================================
+  # Customer Product and Service Eligibility
+  # =========================================================================
+
+  """
+  Evaluate and create a customer product and service eligibility assessment.
+  Maps to: POST /CustomerProductAndServiceEligibility/Evaluate  (EvCR)
+  """
+  evaluateCustomerEligibility(
+    input: EvaluateCustomerEligibilityInput!
+  ): CustomerEligibilityAssessment!
+
+  """
+  Update an existing customer eligibility assessment.
+  Maps to: PUT /CustomerProductAndServiceEligibility/{id}/Update  (UpCR)
+  """
+  updateCustomerEligibility(
+    """Unique identifier of the eligibility assessment to update."""
+    customerEligibilityAssessmentId: ID!
+    input: UpdateCustomerEligibilityInput!
+  ): CustomerEligibilityAssessment!
+
+  """
+  Exchange (accept/confirm) a customer eligibility assessment.
+  Maps to: PUT /CustomerProductAndServiceEligibility/{id}/Exchange  (EcCR)
+  """
+  exchangeCustomerEligibility(
+    """Unique identifier of the eligibility assessment."""
+    customerEligibilityAssessmentId: ID!
+  ): CustomerEligibilityAssessment!
+
+  """
+  Update a next-best product recommendation for a customer.
+  Maps to: PUT /CustomerProductAndServiceEligibility/{id}/NextBest/{nextBestId}/Update  (UpBQ)
+  """
+  updateCustomerNextBestProduct(
+    """Unique identifier of the eligibility assessment."""
+    customerEligibilityAssessmentId: ID!
+    """Unique identifier of the next-best record to update."""
+    nextBestId: ID!
+    input: UpdateNextBestProductInput!
+  ): CustomerNextBestProduct!
+
+  """
+  Evaluate (create) a new product eligibility check within an assessment.
+  Maps to: POST /CustomerProductAndServiceEligibility/{id}/EligibilityCheck/Evaluate  (EvBQ)
+  """
+  evaluateCustomerEligibilityCheck(
+    """Unique identifier of the eligibility assessment."""
+    customerEligibilityAssessmentId: ID!
+  ): CustomerEligibilityCheck!
 }

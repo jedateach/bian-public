@@ -28,6 +28,10 @@ subset if the concept proves successful.
 | **CustomerAccessEntitlement** | `CustomerAccessProfileAgreement` | AccessArrangement, Restrictions, Preferences |
 | **CustomerEventHistory** | `CustomerEventLog` | Relationship, Sales, Servicing, ProductProcessing, Case, Fraud, Life |
 | **CustomerPosition** | `CustomerPositionState` | Cashflow, CreditPosition, DelinquentAccount, ReportingArrangement |
+| **CustomerProductAndServiceDirectory** | `CustomerProductAndServiceDirectoryEntry` | Product, Service |
+| **SalesProductAgreement** | `SalesProductAgreement` | LegalTerm, RegulatoryTerm, PolicyTerm |
+| **ServicingOrder** | `ServicingOrderProcedure` | *(single-procedure, no BQs)* |
+| **CustomerProductAndServiceEligibility** | `CustomerEligibilityAssessment` | EligibilityCheck, NextBest |
 
 ---
 
@@ -59,10 +63,10 @@ release14.0.0/graphql/
 ```
 
 **Schema statistics:**
-- **283** named GraphQL types defined
-- **40** query fields (read operations)
-- **39** mutation fields (write operations)
-- **146** enum types (all BIAN `typevalues` schemas in scope)
+- **327** named GraphQL types defined
+- **54** query fields (read operations)
+- **62** mutation fields (write operations)
+- **150** enum types (all BIAN `typevalues` schemas in scope)
 - **6** custom scalar types
 
 ---
@@ -111,6 +115,90 @@ including [Apollo Server](https://www.apollographql.com/docs/apollo-server/),
 ---
 
 ### Example Queries
+
+#### Retrieve a customer's product and service holdings
+
+```graphql
+query GetCustomerProducts($customerId: String!) {
+  customerProductAndServiceDirectoryByCustomer(customerReference: $customerId) {
+    customerProductAndServiceDirectoryId
+    products {
+      productId
+      product {
+        productName { name }
+        productType
+        productLifecycleStatus { productStatus }
+      }
+      productAgreementReference {
+        agreementStatus
+        agreementValidityPeriod { fromDateTime toDateTime }
+      }
+    }
+    services {
+      serviceId
+      service {
+        serviceName { name }
+        serviceType
+        serviceLifecycleStatus { reason }
+      }
+    }
+  }
+}
+```
+
+#### Retrieve sales product agreements for a customer
+
+```graphql
+query GetSalesAgreements($customerId: String!) {
+  salesProductAgreementsByCustomer(customerReference: $customerId) {
+    salesProductAgreementId
+    agreementType
+    agreementValidFromToDate { fromDateTime toDateTime }
+    bankingProductReference {
+      productName { name }
+      productType
+    }
+    legalTerms {
+      legalTermId
+      jurisdiction { jurisdictionName }
+    }
+  }
+}
+```
+
+#### List servicing orders for a customer
+
+```graphql
+query GetServicingOrders($customerId: String!) {
+  servicingOrdersByCustomer(customerReference: $customerId) {
+    servicingOrderId
+    servicingOrderType
+    servicingOrderDescription
+    date
+    servicingOrderWorkTaskResult {
+      taskType
+      taskStatus
+      taskDateTime
+    }
+  }
+}
+```
+
+#### Initiate a servicing order (e.g. change of address)
+
+```graphql
+mutation RaiseServicingOrder {
+  initiateServicingOrder(input: {
+    customerReference: "CUST-001"
+    servicingOrderType: "ChangeOfAddress"
+    servicingOrderDescription: "Customer requesting postal address update"
+  }) {
+    servicingOrderId
+    servicingOrderType
+    date
+  }
+}
+```
 
 #### Retrieve a customer's current account
 
@@ -250,6 +338,10 @@ Each GraphQL Service Domain file maps directly to a BIAN v14 OAS YAML:
 | `CustomerAccessEntitlement.graphql` | `CustomerAccessEntitlement.yaml` |
 | `CustomerEventHistory.graphql` | `CustomerEventHistory.yaml` |
 | `CustomerPosition.graphql` | `CustomerPosition.yaml` |
+| `CustomerProductAndServiceDirectory.graphql` | `CustomerProductandServiceDirectory.yaml` |
+| `SalesProductAgreement.graphql` | `SalesProductAgreement.yaml` |
+| `ServicingOrder.graphql` | `ServicingOrder.yaml` |
+| `CustomerProductAndServiceEligibility.graphql` | `CustomerProductAndServiceEligibility.yaml` |
 
 Source YAML files: `release14.0.0/semantic-apis/oas3 /yamls/`
 

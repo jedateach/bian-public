@@ -15,7 +15,11 @@
 #      ├── CustomerAgreement.graphql
 #      ├── CustomerAccessEntitlement.graphql
 #      ├── CustomerEventHistory.graphql
-#      └── CustomerPosition.graphql
+#      ├── CustomerPosition.graphql
+#      ├── CustomerProductAndServiceDirectory.graphql
+#      ├── SalesProductAgreement.graphql
+#      ├── ServicingOrder.graphql
+#      └── CustomerProductAndServiceEligibility.graphql
 #   5. operations/
 #      ├── Query.graphql            – All read (Retrieve) operations
 #      └── Mutation.graphql         – All write (Initiate/Update/Execute/etc.) operations
@@ -25,16 +29,20 @@
 # This POC covers the following BIAN v14 Service Domains, selected to represent
 # the core Customer Workbench (online banking) capability:
 #
-#   Service Domain                  | BIAN Control Record
-#   --------------------------------|------------------------------------------
-#   CustomerWorkbench               | CustomerWorkbenchOperatingSession
-#   CurrentAccount                  | CurrentAccountFacility
-#   SavingsAccount                  | SavingsAccountFacility
-#   PaymentOrderInitiation          | PaymentOrderInitiationTransaction
-#   CustomerAgreement               | CustomerAgreement
-#   CustomerAccessEntitlement       | CustomerAccessProfileAgreement
-#   CustomerEventHistory            | CustomerEventLog
-#   CustomerPosition                | CustomerPositionState
+#   Service Domain                           | BIAN Control Record
+#   -----------------------------------------|------------------------------------------
+#   CustomerWorkbench                        | CustomerWorkbenchOperatingSession
+#   CurrentAccount                           | CurrentAccountFacility
+#   SavingsAccount                           | SavingsAccountFacility
+#   PaymentOrderInitiation                   | PaymentOrderInitiationTransaction
+#   CustomerAgreement                        | CustomerAgreement
+#   CustomerAccessEntitlement                | CustomerAccessProfileAgreement
+#   CustomerEventHistory                     | CustomerEventLog
+#   CustomerPosition                         | CustomerPositionState
+#   CustomerProductAndServiceDirectory       | CustomerProductAndServiceDirectoryEntry
+#   SalesProductAgreement                    | SalesProductAgreement
+#   ServicingOrder                           | ServicingOrderProcedure
+#   CustomerProductAndServiceEligibility     | CustomerEligibilityAssessment
 #
 # Source:  BIAN Release 14.0.0 Semantic APIs (OAS 3.x)
 # Version: 14.0.0

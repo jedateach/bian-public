@@ -2188,3 +2188,51 @@ enum Withdrawaltypevalues {
   CashWithdrawal
   SecurityWithdrawal
 }
+
+# --- New enums added for products/services/sales/servicing scope ---
+
+"BIAN Customerproductserviceprofiletypevalues enumeration type. BIAN source: Customerproductserviceprofiletypevalues"
+enum Customerproductserviceprofiletypevalues {
+  Customerproductserviceeligibilityprofile
+  Customerproductserviceusageprofile
+  Customerproductservicecoverageprofile
+  Customerproductservicesaleprofile
+  Customerproductserviceconsentprofile
+}
+
+"BIAN Policytypevalues enumeration type. BIAN source: Policytypevalues"
+enum Policytypevalues {
+  SecurityPolicy
+  AdministrativePolicy
+  SocialPolicy
+  RegulatoryPolicy
+}
+
+"BIAN Productserviceagreementinvolvementtypevalues enumeration type. BIAN source: Productserviceagreementinvolvementtypevalues"
+enum Productserviceagreementinvolvementtypevalues {
+  Principal
+  SecondaryOwner
+  Beneficiary
+  PowerOfAttorney
+  LegalGuardian
+  CustodianForMinor
+  SuccessorOnDeath
+  Administrator
+  OtherParty
+  Granter
+  Settlor
+  SeniorManagingOfficial
+  Protector
+  RegisteredShareholderName
+}
+
+"BIAN Workproducttypevalues enumeration type. BIAN source: Workproducttypevalues"
+enum Workproducttypevalues {
+  Document
+  WorkingPaper
+  ActivityLog
+  Form
+  File
+  MeetingSchedule
+  MeetingMinute
+}

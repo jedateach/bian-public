@@ -458,4 +458,159 @@ type Query {
     """The reporting arrangement identifier."""
     reportingArrangementId: ID!
   ): CustomerReportingArrangement
+
+  # -------------------------------------------------------------------------
+  # Customer Product and Service Directory
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve the product and service directory entry for a customer, listing all
+  products and services the customer currently holds at the bank.
+  Maps to: GET /CustomerProductandServiceDirectory/{id}/Retrieve  (ReCR)
+  """
+  customerProductAndServiceDirectory(
+    """Unique identifier of the customer's directory entry."""
+    customerProductAndServiceDirectoryId: ID!
+  ): CustomerProductAndServiceDirectory
+
+  """
+  Retrieve a specific product holding from a customer's directory entry.
+  Maps to: GET /CustomerProductandServiceDirectory/{id}/Product/{productId}/Retrieve  (ReBQ)
+  """
+  customerDirectoryProduct(
+    """Unique identifier of the customer's directory entry."""
+    customerProductAndServiceDirectoryId: ID!
+    """Unique identifier of the product entry."""
+    productId: ID!
+  ): CustomerDirectoryProduct
+
+  """
+  Retrieve a specific service subscription from a customer's directory entry.
+  Maps to: GET /CustomerProductandServiceDirectory/{id}/Service/{serviceId}/Retrieve  (ReBQ)
+  """
+  customerDirectoryService(
+    """Unique identifier of the customer's directory entry."""
+    customerProductAndServiceDirectoryId: ID!
+    """Unique identifier of the service entry."""
+    serviceId: ID!
+  ): CustomerDirectoryService
+
+  """
+  Retrieve all product and service directory entries for a given customer reference.
+  Convenience query (BIAN pattern: search/filter on customerReference).
+  """
+  customerProductAndServiceDirectoryByCustomer(
+    """The customer reference (party ID) to look up."""
+    customerReference: String!
+  ): CustomerProductAndServiceDirectory
+
+  # -------------------------------------------------------------------------
+  # Sales Product Agreement
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a Sales Product Agreement record by its unique identifier.
+  Maps to: GET /SalesProductAgreement/{id}/Retrieve  (ReCR)
+  """
+  salesProductAgreement(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesProductAgreementRecord
+
+  """
+  Retrieve a specific legal term from a Sales Product Agreement.
+  Maps to: GET /SalesProductAgreement/{id}/LegalTerm/{legalTermId}/Retrieve  (ReBQ)
+  """
+  salesAgreementLegalTerm(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+    """Unique identifier of the legal term."""
+    legalTermId: ID!
+  ): SalesAgreementLegalTerm
+
+  """
+  Retrieve a specific regulatory term from a Sales Product Agreement.
+  Maps to: GET /SalesProductAgreement/{id}/RegulatoryTerm/{regulatoryTermId}/Retrieve  (ReBQ)
+  """
+  salesAgreementRegulatoryTerm(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+    """Unique identifier of the regulatory term."""
+    regulatoryTermId: ID!
+  ): SalesAgreementRegulatoryTerm
+
+  """
+  Retrieve all Sales Product Agreements for a given customer.
+  Convenience query (BIAN pattern: filter on customerReference).
+  """
+  salesProductAgreementsByCustomer(
+    """The customer reference (party ID) to look up."""
+    customerReference: String!
+  ): [SalesProductAgreementRecord!]!
+
+  # -------------------------------------------------------------------------
+  # Servicing Order
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a Servicing Order procedure record by its unique identifier.
+  Maps to: GET /ServicingOrder/{servicingOrderId}/Retrieve  (ReCR)
+  """
+  servicingOrder(
+    """Unique identifier of the servicing order."""
+    servicingOrderId: ID!
+  ): ServicingOrderProcedure
+
+  """
+  Retrieve all Servicing Orders for a given customer.
+  Convenience query (BIAN pattern: filter on customerReference).
+  """
+  servicingOrdersByCustomer(
+    """The customer reference (party ID) to look up."""
+    customerReference: String!
+  ): [ServicingOrderProcedure!]!
+
+  # -------------------------------------------------------------------------
+  # Customer Product and Service Eligibility
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a customer's product and service eligibility assessment.
+  Maps to: GET /CustomerProductAndServiceEligibility/{id}/Retrieve  (ReCR)
+  """
+  customerEligibilityAssessment(
+    """Unique identifier of the eligibility assessment."""
+    customerEligibilityAssessmentId: ID!
+  ): CustomerEligibilityAssessment
+
+  """
+  Retrieve a specific product eligibility check within a customer assessment.
+  Maps to: GET /CustomerProductAndServiceEligibility/{id}/EligibilityCheck/{eligibilityCheckId}/Retrieve  (ReBQ)
+  """
+  customerEligibilityCheck(
+    """Unique identifier of the eligibility assessment."""
+    customerEligibilityAssessmentId: ID!
+    """Unique identifier of the eligibility check."""
+    eligibilityCheckId: ID!
+  ): CustomerEligibilityCheck
+
+  """
+  Retrieve a specific next-best product recommendation within a customer assessment.
+  Maps to: GET /CustomerProductAndServiceEligibility/{id}/NextBest/{nextBestId}/Retrieve  (ReBQ)
+  """
+  customerNextBestProduct(
+    """Unique identifier of the eligibility assessment."""
+    customerEligibilityAssessmentId: ID!
+    """Unique identifier of the next-best record."""
+    nextBestId: ID!
+  ): CustomerNextBestProduct
+
+  """
+  Retrieve the product and service eligibility assessment for a given customer.
+  Convenience query (BIAN pattern: filter on customerReference).
+  """
+  customerEligibilityAssessmentByCustomer(
+    """The customer reference (party ID) to look up."""
+    customerReference: String!
+  ): CustomerEligibilityAssessment
 }

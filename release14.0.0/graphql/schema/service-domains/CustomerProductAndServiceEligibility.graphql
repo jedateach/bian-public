@@ -1,0 +1,203 @@
+# BIAN v14 GraphQL Schema - Service Domain: Customer Product and Service Eligibility
+# ==================================================================================
+#
+# The Customer Product and Service Eligibility service domain maintains a list
+# of products and services for which a customer is eligible. It evaluates
+# customer profiles against product eligibility criteria and surfaces the
+# "next best" products the bank could offer the customer.
+#
+# BIAN Control Record: `CustomerEligibilityAssessment`
+# BIAN Behavior Qualifiers:
+#   - EligibilityCheck – individual product/service eligibility checks
+#   - NextBest         – next-best product/service recommendations
+#
+# Source: BIAN Release 14.0.0 - CustomerProductAndServiceEligibility.yaml
+
+# ---------------------------------------------------------------------------
+# Supporting types
+# ---------------------------------------------------------------------------
+
+"""
+Assessment details for a customer product/service eligibility evaluation.
+Maps to the BIAN `Assessment` schema.
+"""
+type EligibilityAssessmentDetail {
+  """Type of assessment performed."""
+  assessmentType: Assessmenttypevalues
+
+  """Method used to perform the assessment."""
+  assessmentMethod: String
+
+  """Schedule for recurring assessments."""
+  assessmentSchedule: Schedule
+
+  """Description of the assessment approach."""
+  assessmentDescription: String
+
+  """Date-time on which this assessment was performed."""
+  assessmentDateTime: DateTime
+
+  """Result of the assessment (e.g. 'Eligible', 'NotEligible')."""
+  assessmentResult: String
+
+  """Expiry date for this assessment result."""
+  assessmentExpiryDate: Date
+
+  """Current status of this assessment."""
+  assessmentStatus: Status
+
+  """Unique identifier for this assessment."""
+  assessmentIdentification: Identifier
+}
+
+"""
+A product usage record capturing how a customer uses an existing product.
+Maps to the BIAN `ProductUsage` schema.
+"""
+type ProductUsage {
+  """The product whose usage is recorded."""
+  product: SalesProduct
+
+  """Quantified usage details (e.g. transaction volume, balance range)."""
+  productUsageRecord: String
+
+  """The arrangement associated with this product usage."""
+  productUsageArrangement: Arrangement
+}
+
+"""
+Customer relationship reference within an eligibility assessment.
+Maps to the BIAN `Customerrelationship` schema.
+"""
+type CustomerRelationshipProfile {
+  """Type of relationship (e.g. Personal, Corporate)."""
+  customerRelationshipType: String
+
+  """Start date of the relationship."""
+  customerRelationshipStartDate: DateTime
+
+  """Duration of the relationship."""
+  customerRelationshipDuration: String
+}
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+The consolidated eligibility assessment record for a customer across all
+products and services offered by the bank.
+
+Captures the customer's product profile, relationship details, and a summary
+of which products they are eligible for. Acts as the basis for presenting
+eligible products through the customer workbench.
+
+BIAN entity: `CustomerEligibilityAssessment` (Control Record)
+"""
+type CustomerEligibilityAssessment {
+  """Unique identifier for this eligibility assessment."""
+  customerEligibilityAssessmentId: ID!
+
+  """The customer being assessed."""
+  customerReference: InvolvedParty
+
+  """The customer's product and service profile type."""
+  customerProductAndServiceProfileType: Customerproductserviceprofiletypevalues
+
+  """The assessed customer-product profile record."""
+  customerProductAndServiceProfile: EligibilityAssessmentDetail
+
+  """Current banking relationship details for this customer."""
+  customerRelationshipReference: CustomerRelationshipProfile
+
+  """Products the customer currently holds (for comparison)."""
+  customerProductUsage: [ProductUsage!]
+
+  # --- Behavior Qualifier collections ---
+
+  """Individual product/service eligibility checks performed."""
+  eligibilityChecks: [CustomerEligibilityCheck!]!
+
+  """Next-best product recommendations for this customer."""
+  nextBestProducts: [CustomerNextBestProduct!]!
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: EligibilityCheck
+# ---------------------------------------------------------------------------
+
+"""
+An individual product or service eligibility check within a customer's
+eligibility assessment. Evaluates whether the customer meets the criteria
+for a specific product or service.
+
+BIAN Behavior Qualifier: `EligibilityCheck`
+"""
+type CustomerEligibilityCheck {
+  """Unique identifier for this eligibility check."""
+  eligibilityCheckId: ID!
+
+  """The product or service being evaluated for eligibility."""
+  eligibilityCheckProduct: SalesProduct
+
+  """Assessment details recording the eligibility evaluation result."""
+  eligibilityCheckAssessment: EligibilityAssessmentDetail
+
+  """Whether the customer is eligible (true = eligible)."""
+  isEligible: Boolean
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: NextBest
+# ---------------------------------------------------------------------------
+
+"""
+A next-best product or service recommendation generated from a customer's
+eligibility assessment.
+
+BIAN Behavior Qualifier: `NextBest`
+"""
+type CustomerNextBestProduct {
+  """Unique identifier for this next-best record."""
+  nextBestId: ID!
+
+  """The recommended product or service."""
+  nextBestProduct: SalesProduct
+
+  """Qualification details explaining why this product is recommended."""
+  nextBestQualification: EligibilityAssessmentDetail
+
+  """Priority rank of this recommendation (lower = higher priority)."""
+  priority: Int
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to evaluate (create) a Customer Product and Service Eligibility record."""
+input EvaluateCustomerEligibilityInput {
+  """The customer for whom eligibility is being assessed."""
+  customerReference: String!
+
+  """Profile type for the assessment."""
+  customerProductAndServiceProfileType: Customerproductserviceprofiletypevalues
+}
+
+"""Input to update an existing eligibility assessment."""
+input UpdateCustomerEligibilityInput {
+  """Updated profile type."""
+  customerProductAndServiceProfileType: Customerproductserviceprofiletypevalues
+
+  """Updated customer relationship reference."""
+  customerRelationshipReference: String
+}
+
+"""Input to update a specific next-best recommendation."""
+input UpdateNextBestProductInput {
+  """Updated priority for this recommendation."""
+  priority: Int
+
+  """Updated qualification notes."""
+  nextBestQualification: String
+}

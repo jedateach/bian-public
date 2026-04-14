@@ -172,6 +172,57 @@ and their GraphQL equivalents in this proof-of-concept schema.
 | `CustomerDelinquentAccount` | *(derived from CustomerPosition pattern)* | BQ - Delinquent account |
 | `CustomerReportingArrangement` | `ReportingArrangement` | BQ - Reporting arrangement |
 
+### CustomerProductAndServiceDirectory
+
+| GraphQL Type | BIAN Schema | Description |
+|---|---|---|
+| `CustomerProductAndServiceDirectory` | `CustomerProductAndServiceDirectoryEntry` | CR - Customer's product & service holdings registry |
+| `CustomerDirectoryProduct` | `Product` (as BQ) | BQ - Individual product holding entry |
+| `CustomerDirectoryService` | `Service` (as BQ) | BQ - Individual service subscription entry |
+| `CustomerHeldProduct` | `Product` | Product details for a customer holding |
+| `CustomerHeldService` | `Service` | Service details for a customer subscription |
+| `ProductstatusType` | `Productstatus` | Product lifecycle status |
+| `ProductFeatureDetail` | `ProductFeature` | Feature associated with a product |
+| `DirectoryProductAgreement` | `ProductAgreement` | Product agreement governing a holding |
+| `DirectoryServiceAgreement` | `ServiceAgreement` | Service agreement governing a subscription |
+
+### SalesProductAgreement
+
+| GraphQL Type | BIAN Schema | Description |
+|---|---|---|
+| `SalesProductAgreementRecord` | `SalesProductAgreement` | CR - Legal agreement for an in-force product |
+| `SalesAgreementLegalTerm` | `LegalTerm` | BQ - Specific legal term |
+| `SalesAgreementLegalTerm` → `SalesAgreementLaw` | `Law` | Law details within a legal term |
+| `SalesAgreementRegulatoryTerm` | `RegulatoryTerm` | BQ - Regulatory compliance term |
+| `SalesAgreementRegulatoryTerm` → `SalesAgreementRegulation` | `Regulation` | Regulation details |
+| `SalesAgreementRegulatoryTerm` → `RegulatoryAuthority` | `RegulatoryAuthority` | Regulatory body |
+| `SalesAgreementPolicyTerm` | `PolicyTerm` | BQ - Internal bank policy term |
+| `SalesAgreementPolicyTerm` → `SalesAgreementPolicy` | `Policy` | Policy details |
+| `ProductAgreementInvolvement` | `ProductAgreementInvolvement` | Party involvement in the agreement |
+| `SalesProduct` | `Product` (extended) | Product with financial instrument & asset details |
+| `FinancialInstrument` | `Financialinstrumentidentification` + type | Financial instrument details |
+| `ProductAsset` | Asset-related schemas | Asset associated with a product |
+
+### ServicingOrder
+
+| GraphQL Type | BIAN Schema | Description |
+|---|---|---|
+| `ServicingOrderProcedure` | `ServicingOrderProcedure` | CR - Servicing request procedure record |
+| `ServicingTask` | `Task` | Individual task step within the procedure |
+| `ServicingWorkProduct` | `Workproduct` | Output produced by the procedure |
+| `ServicingBusinessUnit` | `BusinessUnit` | Bank unit responsible for the order |
+
+### CustomerProductAndServiceEligibility
+
+| GraphQL Type | BIAN Schema | Description |
+|---|---|---|
+| `CustomerEligibilityAssessment` | `CustomerEligibilityAssessment` | CR - Consolidated eligibility assessment |
+| `CustomerEligibilityCheck` | `EligibilityCheck` | BQ - Individual product/service eligibility check |
+| `CustomerNextBestProduct` | `NextBest` | BQ - Next-best product recommendation |
+| `EligibilityAssessmentDetail` | `Assessment` | Assessment details (method, result, status) |
+| `ProductUsage` | `ProductUsage` | Customer product usage record |
+| `CustomerRelationshipProfile` | `Customerrelationship` | Customer relationship reference |
+
 ---
 
 ## Enum Naming Convention
@@ -250,17 +301,28 @@ enum Deposittypevalues {
 | `customerPosition` | ReCR | `GET /CustomerPosition/{id}/Retrieve` |
 | `customerCashflow` | ReBQ | `GET /CustomerPosition/{id}/Cashflow/{bqId}/Retrieve` |
 | `customerReportingArrangement` | ReBQ | `GET /CustomerPosition/{id}/ReportingArrangement/{bqId}/Retrieve` |
+| `customerProductAndServiceDirectory` | ReCR | `GET /CustomerProductandServiceDirectory/{id}/Retrieve` |
+| `customerDirectoryProduct` | ReBQ | `GET /CustomerProductandServiceDirectory/{id}/Product/{productId}/Retrieve` |
+| `customerDirectoryService` | ReBQ | `GET /CustomerProductandServiceDirectory/{id}/Service/{serviceId}/Retrieve` |
+| `salesProductAgreement` | ReCR | `GET /SalesProductAgreement/{id}/Retrieve` |
+| `salesAgreementLegalTerm` | ReBQ | `GET /SalesProductAgreement/{id}/LegalTerm/{legalTermId}/Retrieve` |
+| `salesAgreementRegulatoryTerm` | ReBQ | `GET /SalesProductAgreement/{id}/RegulatoryTerm/{regulatoryTermId}/Retrieve` |
+| `servicingOrder` | ReCR | `GET /ServicingOrder/{servicingOrderId}/Retrieve` |
+| `customerEligibilityAssessment` | ReCR | `GET /CustomerProductAndServiceEligibility/{id}/Retrieve` |
+| `customerEligibilityCheck` | ReBQ | `GET /CustomerProductAndServiceEligibility/{id}/EligibilityCheck/{eligibilityCheckId}/Retrieve` |
+| `customerNextBestProduct` | ReBQ | `GET /CustomerProductAndServiceEligibility/{id}/NextBest/{nextBestId}/Retrieve` |
 | Plus convenience queries | — | `ByCustomer` variants for common lookups |
 
-### Mutation Operations (39 fields)
+### Mutation Operations (62 fields)
 
 | BIAN Operation | Count | Examples |
 |---|---|---|
-| `Initiate` (InCR/InBQ) | 17 | `initiateCurrentAccount`, `initiatePaymentOrder`, `initiateCustomerWorkbenchBrowsing` |
-| `Update` (UpCR/UpBQ) | 8 | `updateCurrentAccount`, `updatePaymentOrder`, `updateCustomerAgreement` |
-| `Execute` (ExBQ) | 3 | `executeCustomerWorkbenchBrowsing`, `executeCustomerWorkbenchContact`, `executeCustomerWorkbenchProductAndServiceAccess` |
-| `Exchange` (EcCR/EcBQ) | 3 | `exchangeCustomerAgreement`, `exchangePaymentOrderInitiationRecord` |
-| `Evaluate` (EvCR) | 1 | `evaluateCustomerAgreement` |
-| `Control` (CoCR) | 3 | `controlCurrentAccount`, `controlCustomerAgreement`, `controlCustomerWorkbenchSession` |
-| `Request` (RqBQ/RqCR) | 4 | `requestCustomerAgreementCheck`, `requestCustomerWorkbenchContact`, `requestCustomerPositionReport` |
-| `Grant` (GrCR) | 1 | `grantCustomerAgreementAuthority` |
+| `Initiate` (InCR/InBQ) | 18 | `initiateCurrentAccount`, `initiatePaymentOrder`, `initiateServicingOrder` |
+| `Update` (UpCR/UpBQ) | 12 | `updateCurrentAccount`, `updateSalesProductAgreement`, `updateCustomerEligibility` |
+| `Execute` (ExBQ/ExCR) | 5 | `executeCustomerWorkbenchBrowsing`, `executeCustomerDirectoryProduct`, `executeServicingOrder` |
+| `Exchange` (EcCR/EcBQ) | 6 | `exchangeCustomerAgreement`, `exchangeSalesProductAgreement`, `exchangeServicingOrder` |
+| `Evaluate` (EvCR/EvBQ) | 5 | `evaluateCustomerAgreement`, `evaluateSalesProductAgreement`, `evaluateCustomerEligibility`, `evaluateCustomerEligibilityCheck` |
+| `Control` (CoCR) | 5 | `controlCurrentAccount`, `controlSalesProductAgreement`, `controlServicingOrder` |
+| `Request` (RqBQ/RqCR) | 5 | `requestCustomerAgreementCheck`, `requestSalesProductAgreement`, `requestServicingOrder` |
+| `Grant` (GrCR) | 2 | `grantCustomerAgreementAuthority`, `grantSalesProductAgreement` |
+| `Register` (ReCR) | 1 | `registerCustomerProductAndServiceDirectory` |
