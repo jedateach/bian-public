@@ -355,7 +355,10 @@ type SavingsAccountSweep {
   """Type of sweep."""
   sweepType: String
 
-  """Definition of the sweep behaviour."""
+  """
+  Detailed definition of the sweep behaviour, including the rules that determine
+  when a sweep is triggered (e.g. minimum balance threshold, excess funds above target).
+  """
   sweepDefinition: String
 
   """The target account for the sweep."""
