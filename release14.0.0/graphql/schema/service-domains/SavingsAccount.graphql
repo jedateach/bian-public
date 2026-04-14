@@ -1,0 +1,429 @@
+# BIAN v14 GraphQL Schema - Service Domain: Savings Account
+# ==========================================================
+#
+# The Savings Account Service Domain orchestrates a consumer savings account.
+# It covers deposits, interest accrual, withdrawals, and the management of
+# savings goals, plans, and associated fee/interest arrangements.
+#
+# BIAN Control Record: `SavingsAccountFacility`
+# BIAN Behavior Qualifiers:
+#   - PaymentTransaction   – payment transactions on the savings account
+#   - Deposit              – deposit transactions
+#   - Withdrawal           – withdrawal transactions
+#   - DirectDebitMandate   – direct debit mandates
+#   - IssuedDevice         – cards/devices linked to the account
+#   - AccountBalance       – balance snapshots
+#   - Sweep                – sweep arrangements
+#   - Interest             – interest accrual and transactions
+#   - ServiceModality      – service mode settings
+#
+# Source: BIAN Release 14.0.0 - SavingsAccount.yaml
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+The primary record for a consumer savings account facility.
+This is the BIAN Control Record for the Savings Account Service Domain.
+
+BIAN entity: `SavingsAccountFacility`
+"""
+type SavingsAccountFacility {
+  """Unique system identifier for this savings account facility."""
+  savingsAccountId: ID!
+
+  """Reference to the product agreement governing this savings account."""
+  productInstanceReference: ProductAgreement
+
+  """The account number (e.g. IBAN or BBAN) for this savings account."""
+  savingsAccountNumber: AccountIdentification
+
+  """The customer who holds this account."""
+  customerReference: InvolvedParty
+
+  """The bank branch where this account is held."""
+  bankBranchLocationReference: Branch
+
+  """The type of savings account."""
+  accountType: Accounttypevalues
+
+  """The account's primary currency."""
+  accountCurrency: AccountCurrency
+
+  """Tax identification reference for this account."""
+  taxReference: Identifier
+
+  """Definition of entitlement options applicable to this account."""
+  entitlementOptionDefinition: PartyObligationOrEntitlement
+
+  """Current entitlement option settings for this account."""
+  entitlementOptionSetting: PartyObligationOrEntitlement
+
+  """Definition of restriction options applicable to this account."""
+  restrictionOptionDefinition: AccountRestriction
+
+  """Current restriction option settings for this account."""
+  restrictionOptionSetting: AccountRestriction
+
+  """Parties associated with this account."""
+  associations: AccountInvolvement
+
+  """Type of association for the primary associated party."""
+  associationType: Accountinvolvementtypevalues
+
+  """Obligation or entitlement for the primary association."""
+  associationObligationOrEntitlement: PartyObligationOrEntitlement
+
+  """Reference to the primary associated party."""
+  associationReference: Party
+
+  """Accounts linked to this savings account."""
+  linkedAccounts: Account
+
+  """Type of link between this and linked accounts."""
+  linkType: Account_Accountrelationshiptypevalues
+
+  """Core account details."""
+  accountDetails: Account
+
+  """Type of limit applied to the account."""
+  limitType: Limittypevalues
+
+  """The limit arrangement details."""
+  limitSettings: LimitArrangement
+
+  """The current calculated limit value."""
+  limitValue: String
+
+  """Type of account-level date being recorded."""
+  accountDateType: Accountdatetimetypevalues
+
+  """The account date value."""
+  accountDate: BianDateTime
+
+  """Current account balance."""
+  accountBalance: AccountBalance
+
+  """Current lifecycle status of the account."""
+  accountStatus: Accountstatustypevalues
+
+  # --- Behavior Qualifier collections ---
+
+  """Payment transactions processed on this savings account."""
+  paymentTransactions: [SavingsAccountPaymentTransaction!]
+
+  """Deposit transactions credited to this account."""
+  deposits: [SavingsAccountDeposit!]
+
+  """Withdrawal transactions from this account."""
+  withdrawals: [SavingsAccountWithdrawal!]
+
+  """Direct debit mandates on this account."""
+  directDebitMandates: [SavingsAccountDirectDebitMandate!]
+
+  """Balance snapshots for this account."""
+  accountBalances: [SavingsAccountBalanceRecord!]
+
+  """Interest accrual records for this account."""
+  interestRecords: [SavingsAccountInterest!]
+
+  """Sweep arrangements for this account."""
+  sweeps: [SavingsAccountSweep!]
+
+  """Service modality settings for this account."""
+  serviceModalities: [SavingsAccountServiceModality!]
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: PaymentTransaction
+# ---------------------------------------------------------------------------
+
+"""
+A payment transaction processed against a savings account.
+
+BIAN Behavior Qualifier: `PaymentTransaction` within Savings Account.
+"""
+type SavingsAccountPaymentTransaction {
+  """Unique identifier for this payment transaction."""
+  paymentTransactionId: ID!
+
+  """Type of payment."""
+  paymentTransactionType: Paymenttypevalues
+
+  """Amount of the payment."""
+  paymentTransactionAmount: Amount
+
+  """Unique identification references for this payment."""
+  paymentTransactionIdentification: PaymentIdentification
+
+  """Payment mechanism used."""
+  paymentTransactionUsedMechanism: String
+
+  """Date and time of the payment."""
+  paymentTransactionDateTime: PaymentDateTime
+
+  """Purpose of the payment."""
+  paymentTransactionPurpose: Paymentpurposevalues
+
+  """Status of the payment transaction."""
+  paymentTransactionStatus: PaymentTransactionStatus
+
+  """Fee amount applied to this payment."""
+  paymentTransactionAppliedFeeAmount: Amount
+
+  """Whether this transaction is a debit or credit."""
+  creditDebitIndicator: Debitcreditindicatortvalues
+
+  """Free-text transaction description."""
+  transactionDescription: String
+
+  """Overall transaction type classification."""
+  transactionType: Transactiontypevalues
+
+  """Overall transaction status."""
+  transactionStatus: Transactionstatustypevalues
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Deposit
+# ---------------------------------------------------------------------------
+
+"""
+A deposit transaction credited to a savings account.
+
+BIAN Behavior Qualifier: `Deposit` within Savings Account.
+"""
+type SavingsAccountDeposit {
+  """Unique identifier for this deposit."""
+  depositId: ID!
+
+  """Type of deposit."""
+  depositType: Deposittypevalues
+
+  """Amount deposited."""
+  depositAmount: Amount
+
+  """Date of deposit."""
+  depositDate: Date
+
+  """Source of the deposit."""
+  depositSourceReference: String
+
+  """Description of the deposit."""
+  depositDescription: String
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Withdrawal
+# ---------------------------------------------------------------------------
+
+"""
+A withdrawal transaction from a savings account.
+
+BIAN Behavior Qualifier: `Withdrawal` within Savings Account.
+"""
+type SavingsAccountWithdrawal {
+  """Unique identifier for this withdrawal."""
+  withdrawalId: ID!
+
+  """Type of withdrawal."""
+  withdrawalType: Withdrawaltypevalues
+
+  """Amount withdrawn."""
+  withdrawalAmount: Amount
+
+  """Date of withdrawal."""
+  withdrawalDate: Date
+
+  """Description of the withdrawal."""
+  withdrawalDescription: String
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: DirectDebitMandate
+# ---------------------------------------------------------------------------
+
+"""
+A direct debit mandate on a savings account.
+
+BIAN Behavior Qualifier: `DirectDebitMandate` within Savings Account.
+"""
+type SavingsAccountDirectDebitMandate {
+  """Unique identifier for this direct debit mandate."""
+  directDebitMandateId: ID!
+
+  """Identification of the direct debit mandate."""
+  directDebitMandateIdentification: Identifier
+
+  """Purpose of the direct debit."""
+  directDebitPurpose: String
+
+  """Source account to be debited."""
+  directDebitSourceAccount: Account
+
+  """Current status of the mandate."""
+  directDebitStatus: Directdebitstatustypevalues
+
+  """Type of direct debit."""
+  directDebitType: Directdebittypevalues
+
+  """Mandate status details."""
+  mandateStatus: Mandatestatustypevalues
+
+  """Mandate type."""
+  mandateType: Mandatetypevalues
+
+  """Duration of the mandate."""
+  mandateDuration: DateTimePeriod
+
+  """Whether this mandate is being tracked."""
+  trackingIndicator: Boolean
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: AccountBalance
+# ---------------------------------------------------------------------------
+
+"""
+A balance snapshot for a savings account.
+
+BIAN Behavior Qualifier: `AccountBalance` within Savings Account.
+"""
+type SavingsAccountBalanceRecord {
+  """Unique identifier for this balance record."""
+  accountBalanceId: ID!
+
+  """The balance amount."""
+  balanceAmount: Amount
+
+  """Type of balance."""
+  balanceType: Balancetypevalues
+
+  """Date/time at which this balance was valid."""
+  balanceValueDate: DateTime
+
+  """Debit or credit indicator for the balance."""
+  balanceIndicator: Debitcreditindicatortvalues
+
+  """Date balance was calculated."""
+  balanceCalculationDate: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Interest
+# ---------------------------------------------------------------------------
+
+"""
+Interest accrual and transaction details for a savings account.
+
+BIAN Behavior Qualifier: `Interest` within Savings Account.
+"""
+type SavingsAccountInterest {
+  """Unique identifier for this interest record."""
+  interestId: ID!
+
+  """The rate plan governing interest on this account."""
+  interestRatePlan: RatePlan
+
+  """The type of interest applied."""
+  interestType: Interesttypevalues
+
+  """The period over which interest was calculated."""
+  interestCalculationPeriod: DateTimePeriod
+
+  """The interest amount accrued or paid."""
+  interestAmount: Amount
+
+  """Date on which interest was applied to the account."""
+  interestApplicationDate: Date
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Sweep
+# ---------------------------------------------------------------------------
+
+"""
+A sweep arrangement for a savings account.
+
+BIAN Behavior Qualifier: `Sweep` within Savings Account.
+"""
+type SavingsAccountSweep {
+  """Unique identifier for this sweep record."""
+  sweepId: ID!
+
+  """Type of sweep."""
+  sweepType: String
+
+  """
+  Detailed definition of the sweep behaviour, including the rules that determine
+  when a sweep is triggered (e.g. minimum balance threshold, excess funds above target).
+  """
+  sweepDefinition: String
+
+  """The target account for the sweep."""
+  targetAccount: FinancialFacility
+
+  """The mandate authorising this sweep."""
+  sweepMandate: Mandate
+
+  """Amount involved in the most recent sweep."""
+  sweepAmount: Amount
+
+  """Date the most recent sweep was executed."""
+  sweepExecutionDate: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: ServiceModality
+# ---------------------------------------------------------------------------
+
+"""
+Service mode configuration for a savings account.
+
+BIAN Behavior Qualifier: `ServiceModality` within Savings Account.
+"""
+type SavingsAccountServiceModality {
+  """Unique identifier for this service modality record."""
+  serviceModalityId: ID!
+
+  """Type of service modality."""
+  serviceModalityType: Modalitytypevalues
+
+  """Feature-level modality type."""
+  featureModalityType: Modalitytypevalues
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to initiate (open) a new Savings Account."""
+input InitiateSavingsAccountInput {
+  """The customer opening the account."""
+  customerReference: String!
+
+  """Branch where the account is opened."""
+  bankBranchLocationReference: String
+
+  """Type of savings account."""
+  accountType: Accounttypevalues
+
+  """Primary currency for the account."""
+  accountCurrencyCode: CurrencyCode
+
+  """Tax reference for the account."""
+  taxReference: String
+}
+
+"""Input to update an existing Savings Account."""
+input UpdateSavingsAccountInput {
+  """Updated account type."""
+  accountType: Accounttypevalues
+
+  """Updated primary currency."""
+  accountCurrencyCode: CurrencyCode
+
+  """Updated tax reference."""
+  taxReference: String
+}

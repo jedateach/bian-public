@@ -1,0 +1,253 @@
+# BIAN v14 GraphQL Schema - Service Domain: Customer Agreement
+# =============================================================
+#
+# The Customer Agreement Service Domain maintains the master customer
+# agreement / legal contract for a customer's relationship with the bank.
+# A customer may be a complex corporate entity with subsidiaries operating
+# in different geopolitical areas. The customer agreement links to as many
+# Sales Product Agreements as needed for all in-force products.
+#
+# BIAN Control Record: `CustomerAgreement`
+# BIAN Behavior Qualifiers:
+#   - LegalTerms        – legal terms and conditions of the agreement
+#   - RegulatoryTerms   – regulatory requirements applicable to the customer
+#   - PolicyTerms       – internal bank policy terms
+#   - ProductAgreement  – individual product agreements linked to this master
+#
+# Source: BIAN Release 14.0.0 - CustomerAgreement.yaml
+
+# ---------------------------------------------------------------------------
+# Supporting types
+# ---------------------------------------------------------------------------
+
+"""
+A party relationship lifecycle phase record.
+Maps to the BIAN `PartyRelationshipLifecyclePhase` schema.
+"""
+type PartyRelationshipLifecyclePhase {
+  """The current lifecycle phase of the customer relationship."""
+  lifecyclePhase: Customerrelationshiplifecyclephasevalues
+
+  """Date on which this phase became effective."""
+  phaseStartDate: Date
+
+  """Date on which this phase ended (null if current)."""
+  phaseEndDate: Date
+}
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+The master agreement record governing the bank's relationship with a customer.
+This is the BIAN Control Record for the Customer Agreement Service Domain.
+
+A customer agreement establishes the overarching legal and commercial
+framework within which all product and service agreements operate.
+
+BIAN entity: `CustomerAgreement`
+"""
+type CustomerAgreement {
+  """Unique identifier for this customer agreement."""
+  customerAgreementId: ID!
+
+  """The customer this agreement applies to."""
+  customerReference: InvolvedParty
+
+  """The legal entity reference for corporate customers."""
+  legalEntityReference: Organisation
+
+  """Classification of the agreement type."""
+  agreementType: Agreementtypevalues
+
+  """The jurisdiction governing this agreement."""
+  agreementJurisdiction: Jurisdiction
+
+  """The date from which this agreement is valid."""
+  agreementValidFromDate: DateTime
+
+  """The date on which this agreement expires."""
+  agreementValidToDate: DateTime
+
+  """Parties who have signed this agreement."""
+  agreementSignatoriesResponsibleParties: InvolvedParty
+
+  """Reference to the executed agreement document."""
+  documentReference: DocumentReference
+
+  """Sales product agreements linked to this master agreement."""
+  salesProductAgreementReference: ProductAgreement
+
+  """The current lifecycle phase of this customer relationship."""
+  partyLifecycleManagementReference: PartyRelationshipLifecyclePhase
+
+  # --- Behavior Qualifier collections ---
+
+  """Legal terms applicable to this customer agreement."""
+  legalTerms: [CustomerLegalTerms!]
+
+  """Regulatory terms applicable to this customer."""
+  regulatoryTerms: [CustomerRegulatoryTerms!]
+
+  """Internal policy terms applicable to this customer."""
+  policyTerms: [CustomerPolicyTerms!]
+
+  """Individual product agreements covered by this master agreement."""
+  productAgreements: [CustomerProductAgreement!]
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: LegalTerms
+# ---------------------------------------------------------------------------
+
+"""
+Legal terms and conditions forming part of a customer agreement.
+
+BIAN Behavior Qualifier: `LegalTerms` within Customer Agreement.
+"""
+type CustomerLegalTerms {
+  """Unique identifier for this legal terms record."""
+  legalTermsId: ID!
+
+  """Description of the applicable legal terms."""
+  applicableLaw: String
+
+  """Jurisdiction in which these legal terms apply."""
+  jurisdiction: Jurisdiction
+
+  """Date from which these legal terms became effective."""
+  applicableLawValidFromDate: Date
+
+  """Date on which these legal terms expire or were superseded."""
+  applicableLawValidToDate: Date
+
+  """Reference to the legal document containing these terms."""
+  legalDocumentReference: DocumentReference
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: RegulatoryTerms
+# ---------------------------------------------------------------------------
+
+"""
+Regulatory requirements and obligations applicable to a customer agreement.
+
+BIAN Behavior Qualifier: `RegulatoryTerms` within Customer Agreement.
+"""
+type CustomerRegulatoryTerms {
+  """Unique identifier for this regulatory terms record."""
+  regulatoryTermsId: ID!
+
+  """The regulatory authority issuing these requirements."""
+  regulatoryAuthority: String
+
+  """The specific regulation applicable to this customer."""
+  applicableRegulation: String
+
+  """Date from which the regulation became applicable."""
+  applicableRegulationValidFromDate: Date
+
+  """Date on which the regulation ceases to apply."""
+  applicableRegulationValidToDate: Date
+
+  """Reference to the regulatory document."""
+  regulatoryDocumentReference: DocumentReference
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: PolicyTerms
+# ---------------------------------------------------------------------------
+
+"""
+Internal bank policy terms and conditions applicable to a customer agreement.
+
+BIAN Behavior Qualifier: `PolicyTerms` within Customer Agreement.
+"""
+type CustomerPolicyTerms {
+  """Unique identifier for this policy terms record."""
+  policyTermsId: ID!
+
+  """The bank's internal policy applicable to this customer."""
+  bankPolicy: String
+
+  """Allowable products and services under this policy."""
+  applicableProducts: String
+
+  """Period of validity for these policy terms."""
+  applicablePolicyValidityPeriod: DateTimePeriod
+
+  """Reference to the policy document."""
+  policyDocumentReference: DocumentReference
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: ProductAgreement (as a BQ of CustomerAgreement)
+# ---------------------------------------------------------------------------
+
+"""
+An individual product agreement linked to a customer's master agreement.
+Unlike the shared `ProductAgreement` type, this BQ captures the specific
+sales context and customer entitlement within the master agreement.
+
+BIAN Behavior Qualifier: `ProductAgreement` within Customer Agreement.
+"""
+type CustomerProductAgreement {
+  """Unique identifier for this customer product agreement."""
+  productAgreementId: ID!
+
+  """Type of product agreement (e.g. loan agreement, deposit agreement)."""
+  productAgreementType: Productagreementtypevalues
+
+  """Unique identification for this product agreement."""
+  productAgreementIdentification: Identifier
+
+  """Date on which this agreement was signed."""
+  agreementSignedDate: Date
+
+  """Type of underlying agreement."""
+  agreementType: Agreementtypevalues
+
+  """Period during which this product agreement is valid."""
+  agreementValidityPeriod: DateTimePeriod
+
+  """Current status of this product agreement."""
+  agreementStatus: Agreementstatustypevalues
+
+  """Reference to the product covered by this agreement."""
+  productReference: Product
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to evaluate (establish) a new customer master agreement."""
+input EvaluateCustomerAgreementInput {
+  """The customer for whom the agreement is being established."""
+  customerReference: String!
+
+  """Legal entity reference for corporate customers."""
+  legalEntityReference: String
+
+  """Classification of the agreement type."""
+  agreementType: Agreementtypevalues
+
+  """Jurisdiction governing the agreement."""
+  jurisdictionName: String
+
+  """Date from which the agreement is valid."""
+  agreementValidFromDate: DateTime
+}
+
+"""Input to update an existing customer agreement."""
+input UpdateCustomerAgreementInput {
+  """Updated agreement type."""
+  agreementType: Agreementtypevalues
+
+  """Updated jurisdiction."""
+  jurisdictionName: String
+
+  """Updated validity end date."""
+  agreementValidToDate: DateTime
+}

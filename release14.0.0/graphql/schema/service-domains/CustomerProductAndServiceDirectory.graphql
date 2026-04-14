@@ -1,0 +1,291 @@
+# BIAN v14 GraphQL Schema - Service Domain: Customer Product and Service Directory
+# =================================================================================
+#
+# The Customer Product and Service Directory maintains the most important details
+# of all the products and services that a customer has acquired from the bank.
+# It provides a consolidated view of a customer's product and service holdings
+# at any point in time, acting as the definitive record of what a customer "has".
+#
+# BIAN Control Record: `CustomerProductAndServiceDirectoryEntry`
+# BIAN Behavior Qualifiers:
+#   - Product  – individual product holdings (accounts, loans, cards, etc.)
+#   - Service  – individual service subscriptions (overdraft, insurance, etc.)
+#
+# Source: BIAN Release 14.0.0 - CustomerProductandServiceDirectory.yaml
+
+# ---------------------------------------------------------------------------
+# Supporting types (new to this Service Domain)
+# ---------------------------------------------------------------------------
+
+"""
+A product held by a customer, as recorded in the Customer Product and Service Directory.
+Maps to the BIAN `Product` schema within CustomerProductandServiceDirectory.
+"""
+type CustomerHeldProduct {
+  """Unique instance reference for this product holding."""
+  productInstanceReference: Identifier
+
+  """Identification details for the product (type/code/ISIN, etc.)."""
+  productIdentification: Identifier
+
+  """Display name of the product."""
+  productName: Name
+
+  """Priority classification of the product."""
+  productPriority: String
+
+  """Detailed description of the product."""
+  productDescription: String
+
+  """Banking product type (e.g. CurrentAccount, Mortgage, CreditCard)."""
+  productType: Bankingproducttypevalues
+
+  """Current lifecycle status of this product holding."""
+  productLifecycleStatus: ProductstatusType
+
+  """Version of the product definition."""
+  productVersion: String
+
+  """Features associated with this product."""
+  productFeature: ProductFeatureDetail
+}
+
+"""
+Product lifecycle status details.
+Maps to the BIAN `Productstatus` schema.
+"""
+type ProductstatusType {
+  """The product status value (e.g. Active, Dormant, Closed)."""
+  productStatus: Productstatustypevalues
+
+  """Date-time at which this status became effective."""
+  productStatusDateTime: DateTime
+
+  """Period during which this status is valid."""
+  productStatusValidityPeriod: DateTimePeriod
+
+  """Reason for the current product status."""
+  productStatusReason: String
+}
+
+"""
+A product feature detail record.
+Maps to the BIAN `ProductFeature` schema.
+"""
+type ProductFeatureDetail {
+  """Type of product feature."""
+  productFeatureType: Productfeaturetypevalues
+
+  """Description of the feature."""
+  productFeatureDescription: String
+}
+
+"""
+A service held by a customer, as recorded in the Customer Product and Service Directory.
+Maps to the BIAN `Service` schema within CustomerProductandServiceDirectory.
+"""
+type CustomerHeldService {
+  """Human-readable name of the service."""
+  serviceName: Name
+
+  """Detailed description of the service."""
+  serviceDescription: String
+
+  """Type classification of the service."""
+  serviceType: Servicetypevalues
+
+  """Unique identifier for this service."""
+  serviceIdentification: Identifier
+
+  """Current lifecycle status of this service."""
+  serviceLifecycleStatus: Status
+
+  """Features associated with this service."""
+  serviceFeature: Feature
+}
+
+"""
+A product agreement record associated with a customer's product holding.
+Maps to the BIAN `ProductAgreement` schema within CustomerProductandServiceDirectory.
+"""
+type DirectoryProductAgreement {
+  """The type of product agreement."""
+  productAgreementType: Productagreementtypevalues
+
+  """Unique identification for this product agreement."""
+  productAgreementIdentification: Identifier
+
+  """Date on which this agreement was signed."""
+  agreementSignedDate: Date
+
+  """Type of agreement."""
+  agreementType: Agreementtypevalues
+
+  """The period during which this agreement is valid."""
+  agreementValidityPeriod: DateTimePeriod
+
+  """Version string for this agreement."""
+  agreementVersion: String
+
+  """Current status of this agreement."""
+  agreementStatus: Agreementstatustypevalues
+
+  """Subject matter of the agreement."""
+  agreementSubjectMatter: String
+
+  """Unique identifier for the agreement."""
+  agreementIdentification: Identifier
+
+  """Date on which the agreement was established."""
+  agreementDate: DateTime
+
+  """Human-readable description of the agreement."""
+  agreementDescription: String
+}
+
+"""
+A service agreement record associated with a customer's service holding.
+Maps to the BIAN `ServiceAgreement` schema within CustomerProductandServiceDirectory.
+"""
+type DirectoryServiceAgreement {
+  """The service covered by this agreement."""
+  serviceReference: CustomerHeldService
+
+  """Date the agreement was signed."""
+  agreementSignedDate: Date
+
+  """Type of agreement."""
+  agreementType: Agreementtypevalues
+
+  """Validity period for this service agreement."""
+  agreementValidityPeriod: DateTimePeriod
+
+  """Version of the agreement."""
+  agreementVersion: String
+
+  """Current status of the service agreement."""
+  agreementStatus: Agreementstatustypevalues
+
+  """Subject matter of the agreement."""
+  agreementSubjectMatter: String
+
+  """Unique identification for this service agreement."""
+  agreementIdentification: Identifier
+
+  """Date the agreement was established."""
+  agreementDate: DateTime
+
+  """Description of the service agreement."""
+  agreementDescription: String
+}
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+The directory entry for a customer's complete product and service holdings.
+This is the BIAN Control Record for the Customer Product and Service Directory.
+
+A single entry per customer captures the full list of products acquired and
+services subscribed to, with their corresponding agreements.
+
+BIAN entity: `CustomerProductAndServiceDirectoryEntry`
+"""
+type CustomerProductAndServiceDirectory {
+  """Unique identifier for this customer directory entry."""
+  customerProductAndServiceDirectoryId: ID!
+
+  """Human-readable description of the directory entry."""
+  description: String
+
+  """Current lifecycle status of the directory entry."""
+  status: Status
+
+  """Usage log for this directory entry."""
+  usageLog: ActivityLog
+
+  """Last update log for this directory entry."""
+  updateLog: ActivityLog
+
+  """Service configuration details."""
+  serviceConfiguration: String
+
+  """The customer whose products and services are recorded here."""
+  customerReference: InvolvedParty
+
+  """The party that services this customer's products."""
+  servicerReference: InvolvedParty
+
+  # --- Behavior Qualifier collections ---
+
+  """Products the customer holds at the bank."""
+  products: [CustomerDirectoryProduct!]!
+
+  """Services the customer subscribes to at the bank."""
+  services: [CustomerDirectoryService!]!
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Product
+# ---------------------------------------------------------------------------
+
+"""
+A specific product holding entry in a customer's product directory.
+Links a product definition to its associated product agreement.
+
+BIAN Behavior Qualifier: `Product` within Customer Product and Service Directory.
+"""
+type CustomerDirectoryProduct {
+  """Unique identifier for this product entry."""
+  productId: ID!
+
+  """Details of the product held by the customer."""
+  product: CustomerHeldProduct
+
+  """The product agreement governing this holding."""
+  productAgreementReference: DirectoryProductAgreement
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Service
+# ---------------------------------------------------------------------------
+
+"""
+A specific service subscription entry in a customer's service directory.
+Links a service definition to its associated service agreement.
+
+BIAN Behavior Qualifier: `Service` within Customer Product and Service Directory.
+"""
+type CustomerDirectoryService {
+  """Unique identifier for this service entry."""
+  serviceId: ID!
+
+  """Details of the service the customer subscribes to."""
+  service: CustomerHeldService
+
+  """The service agreement governing this subscription."""
+  serviceAgreementReference: DirectoryServiceAgreement
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to register a new Customer Product and Service Directory entry."""
+input RegisterCustomerProductDirectoryInput {
+  """The customer for whom the directory entry is being created."""
+  customerReference: String!
+
+  """The servicer managing this customer's products."""
+  servicerReference: String
+}
+
+"""Input to update an existing Customer Product and Service Directory entry."""
+input UpdateCustomerProductDirectoryInput {
+  """Updated service configuration."""
+  serviceConfiguration: String
+
+  """Updated servicer reference."""
+  servicerReference: String
+}

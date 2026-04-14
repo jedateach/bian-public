@@ -1,0 +1,384 @@
+# BIAN v14 GraphQL Schema - Service Domain: Sales Product Agreement
+# ==================================================================
+#
+# The Sales Product Agreement maintains a structured legal agreement defining
+# the contractual terms and conditions for an in-force product for a customer.
+# It is subordinate to the customer's master agreement and sits alongside
+# individual account/product agreements.
+#
+# BIAN Control Record: `SalesProductAgreement`
+# BIAN Behavior Qualifiers:
+#   - LegalTerm       – specific legal terms of the agreement
+#   - RegulatoryTerm  – regulatory and compliance terms
+#   - PolicyTerm      – internal bank policy terms
+#
+# Source: BIAN Release 14.0.0 - SalesProductAgreement.yaml
+
+# ---------------------------------------------------------------------------
+# Supporting types
+# ---------------------------------------------------------------------------
+
+"""
+A party involved in a product or service agreement (e.g. principal, beneficiary).
+Maps to the BIAN `ProductAgreementInvolvement` schema.
+"""
+type ProductAgreementInvolvement {
+  """The involved party (customer, legal entity, etc.)."""
+  party: Party
+
+  """The type of involvement this party has in the agreement."""
+  involvementType: Productserviceagreementinvolvementtypevalues
+
+  """Human-readable description of the involvement role."""
+  involvementDescription: String
+}
+
+"""
+Financial instrument details associated with a banking product.
+Maps to BIAN `Financialinstrumentidentification` and related schemas.
+"""
+type FinancialInstrument {
+  """Classification type of the financial instrument."""
+  financialInstrumentType: Financialinstrumenttypevalues
+
+  """Identification details for the financial instrument."""
+  financialInstrumentIdentification: Identifier
+
+  """Display name for the financial instrument."""
+  financialInstrumentName: Name
+}
+
+"""
+Asset information associated with a banking product.
+"""
+type ProductAsset {
+  """Human-readable title for the asset."""
+  assetTitle: String
+
+  """Unique identification of the asset."""
+  assetIdentification: Identifier
+
+  """Type of asset (e.g. RealEstate, Security)."""
+  assetType: Assettypevalues
+
+  """Detailed description of the asset."""
+  assetDescription: String
+
+  """Current status of the asset."""
+  assetStatus: Status
+
+  """Relevant date for the asset."""
+  assetDate: DateTime
+
+  """Primary classification of the asset (ISO 20022)."""
+  assetClassification: String
+
+  """Classification type (ISO 20022)."""
+  assetClassificationType: String
+
+  """Sub-classification type (ISO 20022)."""
+  assetSubClassificationType: Assetsubclassificationtypevalues
+
+  """Human-readable sub-classification."""
+  assetSubClassification: String
+}
+
+"""
+A banking product as referenced from a Sales Product Agreement.
+Extends the base `Product` type with financial-instrument and asset details
+relevant to the sales agreement context.
+"""
+type SalesProduct {
+  """Product identification details."""
+  productIdentification: Identifier
+
+  """Banking product type (e.g. CurrentAccount, Mortgage)."""
+  productType: Bankingproducttypevalues
+
+  """Current lifecycle status of the product."""
+  productLifecycleStatus: ProductstatusType
+
+  """Priority of this product."""
+  productPriority: String
+
+  """Detailed description of the product."""
+  productDescription: String
+
+  """Version of the product definition."""
+  productVersion: String
+
+  """Display name of the product."""
+  productName: Name
+
+  """Associated financial instrument, if applicable."""
+  financialInstrument: FinancialInstrument
+
+  """Asset details associated with the product, if applicable."""
+  asset: ProductAsset
+}
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+A structured legal agreement for a banking product sold to a customer.
+Captures all contractual, regulatory, and policy terms governing the product,
+linked back to the customer master agreement.
+
+BIAN entity: `SalesProductAgreement` (Control Record)
+"""
+type SalesProductAgreementRecord {
+  """Unique identifier for this sales product agreement."""
+  salesProductAgreementId: ID!
+
+  """The customer who is party to this agreement."""
+  customerReference: InvolvedParty
+
+  """Legal entity representing the bank in this agreement."""
+  legalEntityReference: InvolvedParty
+
+  """The product instance (product agreement) this sales agreement governs."""
+  productInstanceReference: DirectoryProductAgreement
+
+  """The type of agreement."""
+  agreementType: Agreementtypevalues
+
+  """The legal jurisdiction governing this agreement."""
+  agreementJurisdiction: Jurisdiction
+
+  """The period from which this agreement is valid."""
+  agreementValidFromToDate: DateTimePeriod
+
+  """Parties who are signatories or responsible for this agreement."""
+  agreementSignatoriesResponsibleParties: ProductAgreementInvolvement
+
+  """Reference to the physical or digital document for this agreement."""
+  documentDirectoryEntryReference: DocumentReference
+
+  """The customer master agreement this sales agreement is subordinate to."""
+  customerAgreementReference: CustomerAgreement
+
+  """The product to which this sales agreement applies."""
+  bankingProductReference: SalesProduct
+
+  # --- Behavior Qualifier collections ---
+
+  """Specific legal terms attached to this sales product agreement."""
+  legalTerms: [SalesAgreementLegalTerm!]!
+
+  """Regulatory compliance terms attached to this agreement."""
+  regulatoryTerms: [SalesAgreementRegulatoryTerm!]!
+
+  """Internal bank policy terms attached to this agreement."""
+  policyTerms: [SalesAgreementPolicyTerm!]!
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: LegalTerm
+# ---------------------------------------------------------------------------
+
+"""
+A specific legal term within a Sales Product Agreement.
+Captures the statutory and common-law obligations and entitlements
+as defined in the agreement.
+
+BIAN Behavior Qualifier: `LegalTerm`
+"""
+type SalesAgreementLegalTerm {
+  """Unique identifier for this legal term entry."""
+  legalTermId: ID!
+
+  """The jurisdiction under which this legal term applies."""
+  jurisdiction: Jurisdiction
+
+  """Laws defining this legal term."""
+  applicableLaw: SalesAgreementLaw
+
+  """Reference regulatory authority overseeing this term."""
+  legalTermObligations: String
+}
+
+"""
+Law details as referenced in a Sales Product Agreement legal term.
+Maps to the BIAN `Law` schema.
+"""
+type SalesAgreementLaw {
+  """Type classification of the law."""
+  lawType: String
+
+  """Detailed description of the law."""
+  lawDescription: String
+
+  """Possible penalties for breaching this law."""
+  legalPenalty: String
+
+  """Guidelines for adhering to this law."""
+  legalGuideline: String
+
+  """Definition of the rule set derived from this law."""
+  ruleSetDefinition: String
+
+  """Interpretation guidance for the rule set."""
+  ruleSetInterpretation: String
+
+  """Type of rule set."""
+  ruleSetType: Rulesettypevalues
+
+  """Name of the rule set."""
+  ruleSetName: Name
+
+  """Unique identifier for the rule set."""
+  ruleSetIdentification: Identifier
+
+  """Current lifecycle status of the rule set."""
+  ruleSetLifecycleStatus: Status
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: RegulatoryTerm
+# ---------------------------------------------------------------------------
+
+"""
+A specific regulatory term within a Sales Product Agreement.
+Captures requirements imposed by regulatory bodies and the authorities responsible.
+
+BIAN Behavior Qualifier: `RegulatoryTerm`
+"""
+type SalesAgreementRegulatoryTerm {
+  """Unique identifier for this regulatory term entry."""
+  regulatoryTermId: ID!
+
+  """The regulatory authority imposing this requirement."""
+  regulatoryAuthority: RegulatoryAuthority
+
+  """The specific regulation this term derives from."""
+  applicableRegulation: SalesAgreementRegulation
+}
+
+"""
+Regulatory authority details within a Sales Product Agreement.
+Maps to the BIAN `RegulatoryAuthority` schema.
+"""
+type RegulatoryAuthority {
+  """Name of the regulatory authority."""
+  regulatoryAuthorityName: String
+
+  """Type/jurisdiction of the regulatory authority."""
+  regulatoryAuthorityType: String
+}
+
+"""
+A regulation referenced in a Sales Product Agreement regulatory term.
+Maps to the BIAN `Regulation` schema.
+"""
+type SalesAgreementRegulation {
+  """Type of regulation."""
+  regulationType: Rulesettypevalues
+
+  """Detailed description of the regulation."""
+  regulationDescription: String
+
+  """Jurisdiction under which this regulation applies."""
+  regulationJurisdiction: Jurisdiction
+
+  """Applicable date range for the regulation."""
+  regulationApplicationPeriod: DateTimePeriod
+
+  """Regulatory penalty for non-compliance."""
+  regulatoryPenalty: String
+
+  """Rule set definition derived from this regulation."""
+  ruleSetDefinition: String
+
+  """Name of the rule set."""
+  ruleSetName: Name
+
+  """Unique identifier for the rule set."""
+  ruleSetIdentification: Identifier
+
+  """Current lifecycle status of the rule set."""
+  ruleSetLifecycleStatus: Status
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: PolicyTerm
+# ---------------------------------------------------------------------------
+
+"""
+A specific internal bank policy term within a Sales Product Agreement.
+Captures the bank's own policy obligations imposed on the product agreement.
+
+BIAN Behavior Qualifier: `PolicyTerm`
+"""
+type SalesAgreementPolicyTerm {
+  """Unique identifier for this policy term entry."""
+  policyTermId: ID!
+
+  """The bank policy this term is derived from."""
+  applicablePolicy: SalesAgreementPolicy
+}
+
+"""
+A bank policy referenced in a Sales Product Agreement policy term.
+Maps to the BIAN `Policy` schema.
+"""
+type SalesAgreementPolicy {
+  """Type of policy."""
+  policyType: Policytypevalues
+
+  """Detailed description of the policy."""
+  policyDescription: String
+
+  """Rule set definition derived from this policy."""
+  policyRuleSetDefinition: String
+
+  """Name of the policy rule set."""
+  policyRuleSetName: Name
+
+  """Unique identifier for the policy rule set."""
+  policyRuleSetIdentification: Identifier
+
+  """Current lifecycle status of the policy rule set."""
+  policyRuleSetLifecycleStatus: Status
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to evaluate (create) a new Sales Product Agreement."""
+input EvaluateSalesProductAgreementInput {
+  """The customer entering into this agreement."""
+  customerReference: String!
+
+  """The legal entity representing the bank."""
+  legalEntityReference: String
+
+  """The product instance (product agreement) being governed."""
+  productInstanceReference: String!
+
+  """Type of agreement."""
+  agreementType: Agreementtypevalues
+
+  """Jurisdiction for the agreement."""
+  agreementJurisdiction: String
+
+  """Validity period for the agreement."""
+  agreementValidFromDate: Date
+
+  """Expiry date for the agreement (if applicable)."""
+  agreementToDate: Date
+
+  """Reference to the master customer agreement."""
+  customerAgreementReference: String
+}
+
+"""Input to update an existing Sales Product Agreement."""
+input UpdateSalesProductAgreementInput {
+  """Updated validity period end date."""
+  agreementToDate: Date
+
+  """Updated document directory reference."""
+  documentDirectoryEntryReference: String
+}

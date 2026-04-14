@@ -1,0 +1,324 @@
+# BIAN v14 GraphQL Schema - Service Domain: Customer Event History
+# ================================================================
+#
+# The Customer Event History Service Domain captures, classifies, and stores
+# relationship, servicing, and product fulfillment events for a customer.
+# It provides the historical record of all significant interactions and
+# activities related to a customer's banking relationship.
+#
+# BIAN Control Record: `CustomerEventLog`
+# BIAN Behavior Qualifiers:
+#   - Relationship      – customer relationship events (e.g. onboarding, review)
+#   - Sales             – sales and lead events
+#   - ServicingEvent    – servicing interaction events
+#   - ProductProcessing – product lifecycle events
+#   - Case              – case / complaint / investigation events
+#   - Fraud             – fraud-related events
+#   - Life              – customer life events (e.g. address change, marriage)
+#
+# Source: BIAN Release 14.0.0 - CustomerEventHistory.yaml
+
+# ---------------------------------------------------------------------------
+# Supporting types
+# ---------------------------------------------------------------------------
+
+"""
+An event record capturing a significant occurrence in customer history.
+Maps to the BIAN `Event` schema.
+"""
+type CustomerHistoryEvent {
+  """Unique identifier for this event."""
+  eventId: ID!
+
+  """Type classification of the event."""
+  eventType: Customereventtypevalues
+
+  """Date and time this event occurred."""
+  eventDateTime: DateTime
+
+  """Description of the event."""
+  eventDescription: String
+
+  """The employee or unit involved in this event."""
+  employeeUnitReference: InvolvedParty
+
+  """Location where the event occurred."""
+  locationReference: Location
+
+  """The action taken as part of this event."""
+  eventAction: Action
+}
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+The master event log for a customer, aggregating all significant events
+across the customer relationship lifecycle.
+This is the BIAN Control Record for the Customer Event History Service Domain.
+
+BIAN entity: `CustomerEventLog`
+"""
+type CustomerEventLog {
+  """Unique identifier for this customer event log."""
+  customerEventLogId: ID!
+
+  """The customer whose events are captured in this log."""
+  customerReference: InvolvedParty
+
+  """A recent or representative customer event reference."""
+  customerEventReference: CustomerHistoryEvent
+
+  """Reference to the underlying activity log."""
+  customerEventLogReference: ActivityLog
+
+  """The type of events recorded in this log."""
+  customerEventType: Customereventtypevalues
+
+  # --- Behavior Qualifier collections ---
+
+  """Relationship events (e.g. onboarding, reviews, relationship manager changes)."""
+  relationshipEvents: [CustomerRelationshipEvent!]
+
+  """Sales and lead events."""
+  salesEvents: [CustomerSalesEvent!]
+
+  """Servicing interaction events."""
+  servicingEvents: [CustomerServicingEvent!]
+
+  """Product processing and lifecycle events."""
+  productProcessingEvents: [CustomerProductProcessingEvent!]
+
+  """Case, complaint, and investigation events."""
+  caseEvents: [CustomerCaseEvent!]
+
+  """Fraud-related events."""
+  fraudEvents: [CustomerFraudEvent!]
+
+  """Customer life events (address changes, family status changes, etc.)."""
+  lifeEvents: [CustomerLifeEvent!]
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Relationship
+# ---------------------------------------------------------------------------
+
+"""
+A customer relationship event (e.g. onboarding, KYC review, RM assignment).
+
+BIAN Behavior Qualifier: `Relationship` within Customer Event History.
+"""
+type CustomerRelationshipEvent {
+  """Unique identifier for this relationship event."""
+  relationshipEventId: ID!
+
+  """Type description of this relationship event."""
+  customerRelationshipEventType: String
+
+  """The employee or unit involved in this relationship event."""
+  employeeUnitReference: InvolvedParty
+
+  """The event record details."""
+  customerRelationshipEventRecord: CustomerHistoryEvent
+
+  """The action taken as part of this event."""
+  customerRelationshipEventAction: Action
+
+  """Date and time of the event."""
+  dateAndTime: DateTime
+
+  """Location where the event occurred."""
+  locationReference: Location
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Sales
+# ---------------------------------------------------------------------------
+
+"""
+A sales or lead event recorded in the customer event history.
+
+BIAN Behavior Qualifier: `Sales` within Customer Event History.
+"""
+type CustomerSalesEvent {
+  """Unique identifier for this sales event."""
+  salesEventId: ID!
+
+  """Type of sales event."""
+  salesEventType: String
+
+  """Description of the sales activity."""
+  salesEventDescription: String
+
+  """The sales lead details, if applicable."""
+  salesLead: JSON
+
+  """The employee or unit who handled this sales event."""
+  employeeUnitReference: InvolvedParty
+
+  """Date and time of the sales event."""
+  dateAndTime: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Servicing
+# ---------------------------------------------------------------------------
+
+"""
+A customer servicing interaction event.
+
+BIAN Behavior Qualifier: `Servicing` within Customer Event History.
+"""
+type CustomerServicingEvent {
+  """Unique identifier for this servicing event."""
+  servicingEventId: ID!
+
+  """Type of servicing event."""
+  servicingEventType: String
+
+  """Description of the servicing interaction."""
+  servicingEventDescription: String
+
+  """Result of the servicing interaction."""
+  servicingEventResult: String
+
+  """The employee or unit who handled this servicing event."""
+  employeeUnitReference: InvolvedParty
+
+  """Date and time of the servicing event."""
+  dateAndTime: DateTime
+
+  """Location where the servicing occurred."""
+  locationReference: Location
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: ProductProcessing
+# ---------------------------------------------------------------------------
+
+"""
+A product processing event recorded in the customer event history
+(e.g. product opened, payment processed, account closed).
+
+BIAN Behavior Qualifier: `ProductProcessing` within Customer Event History.
+"""
+type CustomerProductProcessingEvent {
+  """Unique identifier for this product processing event."""
+  productProcessingEventId: ID!
+
+  """The product instance this event relates to."""
+  productInstanceReference: ProductAgreement
+
+  """Type of product event."""
+  productEventType: String
+
+  """Description of the product event."""
+  productEventDescription: String
+
+  """The result of the product processing event."""
+  productEventResult: String
+
+  """The employee or unit responsible for this event."""
+  employeeUnitReference: InvolvedParty
+
+  """Date and time of the event."""
+  dateAndTime: DateTime
+
+  """Location where the event occurred."""
+  locationReference: Location
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Case
+# ---------------------------------------------------------------------------
+
+"""
+A case, complaint, or investigation event for a customer.
+
+BIAN Behavior Qualifier: `Case` within Customer Event History.
+"""
+type CustomerCaseEvent {
+  """Unique identifier for this case event."""
+  caseEventId: ID!
+
+  """Type of case (e.g. Card, Loan, Fraud, Payment)."""
+  caseType: Casetypevalues
+
+  """Status of the case."""
+  caseStatus: Casestatustypevalues
+
+  """Description of the case."""
+  caseDescription: String
+
+  """Date the case was opened."""
+  caseOpenDate: Date
+
+  """Date the case was resolved."""
+  caseResolutionDate: Date
+
+  """The employee or unit handling the case."""
+  employeeUnitReference: InvolvedParty
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Fraud
+# ---------------------------------------------------------------------------
+
+"""
+A fraud-related event in the customer event history.
+
+BIAN Behavior Qualifier: `Fraud` within Customer Event History.
+"""
+type CustomerFraudEvent {
+  """Unique identifier for this fraud event."""
+  fraudEventId: ID!
+
+  """Description of the suspected or confirmed fraud."""
+  fraudEventDescription: String
+
+  """Date and time the fraud event was detected."""
+  fraudEventDateTime: DateTime
+
+  """The channel through which fraud was detected."""
+  fraudEventChannel: String
+
+  """Outcome of the fraud investigation."""
+  fraudEventResult: String
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Life
+# ---------------------------------------------------------------------------
+
+"""
+A life event for a customer (e.g. address change, marriage, bereavement).
+
+BIAN Behavior Qualifier: `Life` within Customer Event History.
+"""
+type CustomerLifeEvent {
+  """Unique identifier for this life event."""
+  lifeEventId: ID!
+
+  """Type of life event."""
+  lifeEventType: String
+
+  """Description of the life event."""
+  lifeEventDescription: String
+
+  """Date on which the life event occurred."""
+  lifeEventDate: Date
+
+  """Any follow-up actions triggered by this life event."""
+  lifeEventFollowUpTask: String
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to initiate (create) a customer event log."""
+input InitiateCustomerEventLogInput {
+  """The customer for whom the event log is being created."""
+  customerReference: String!
+}

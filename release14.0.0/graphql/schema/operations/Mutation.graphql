@@ -1,0 +1,713 @@
+# BIAN v14 GraphQL Schema - Mutation Operations
+# =============================================
+#
+# This file defines all write operations (mutations) for the Customer Workbench
+# proof-of-concept scope.  Mutations map to the following BIAN operation types:
+#
+#   - Initiate  (InCR / InBQ)  → Create a new Control Record or Behavior Qualifier
+#   - Update    (UpCR / UpBQ)  → Update an existing CR or BQ
+#   - Execute   (ExBQ)         → Execute a function on a BQ (automated processing)
+#   - Exchange  (EcCR / EcBQ)  → Accept / reject / exchange state with a CR or BQ
+#   - Evaluate  (EvCR)         → Evaluate and establish a CR (with rule application)
+#   - Request   (RqBQ)         → Request a specific action on a BQ
+#   - Control   (CoCR)         → Control processing of a CR (e.g. suspend/resume)
+#   - Grant     (GrCR)         → Grant authority under the terms of an agreement
+#
+# All mutations return the relevant updated entity for immediate feedback.
+#
+# Source: BIAN Release 14.0.0 Semantic APIs (OAS 3.x)
+
+type Mutation {
+
+  # =========================================================================
+  # Customer Workbench
+  # =========================================================================
+
+  """
+  Register a new Customer Workbench session for a customer device.
+  Maps to: POST /CustomerWorkbench/Initiate  (InCR)
+  """
+  initiateCustomerWorkbenchSession(
+    input: InitiateCustomerWorkbenchSessionInput!
+  ): CustomerWorkbenchSession!
+
+  """
+  Update the details of an existing Customer Workbench session (e.g. updated OS version).
+  Maps to: PUT /CustomerWorkbench/{customerworkbenchid}/Update  (UpCR)
+  """
+  updateCustomerWorkbenchSession(
+    """The workbench session to update."""
+    customerWorkbenchId: ID!
+    input: UpdateCustomerWorkbenchSessionInput!
+  ): CustomerWorkbenchSession!
+
+  """
+  Control the processing of a Customer Workbench session
+  (e.g. suspend, resume, terminate the session).
+  Maps to: PUT /CustomerWorkbench/{customerworkbenchid}/Control  (CoCR)
+  """
+  controlCustomerWorkbenchSession(
+    """The workbench session to control."""
+    customerWorkbenchId: ID!
+    """The control action to apply (e.g. Suspend, Resume, Terminate)."""
+    controlAction: String!
+  ): CustomerWorkbenchSession!
+
+  """
+  Initiate a new browsing sub-session within a Customer Workbench session.
+  Maps to: POST /CustomerWorkbench/{cwbId}/Browsing/Initiate  (InBQ)
+  """
+  initiateCustomerWorkbenchBrowsing(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    input: InitiateSessionBrowsingInput!
+  ): SessionBrowsing!
+
+  """
+  Execute a browsing interaction (e.g. navigate to a URL).
+  Maps to: PUT /CustomerWorkbench/{cwbId}/Browsing/{browsingId}/Execute  (ExBQ)
+  """
+  executeCustomerWorkbenchBrowsing(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    """The browsing sub-session to execute."""
+    browsingId: ID!
+    input: InitiateSessionBrowsingInput!
+  ): SessionBrowsing!
+
+  """
+  Initiate a customer contact interaction in a workbench session.
+  Maps to: POST /CustomerWorkbench/{cwbId}/Contact/Initiate  (InBQ)
+  Also supports: POST /CustomerWorkbench/{cwbId}/Contact/Evaluate  (EvBQ)
+  """
+  initiateCustomerWorkbenchContact(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    input: InitiateSessionContactInput!
+  ): SessionContact!
+
+  """
+  Update the details of an ongoing contact in a workbench session.
+  Maps to: PUT /CustomerWorkbench/{cwbId}/Contact/{contactId}/Update  (UpBQ)
+  """
+  updateCustomerWorkbenchContact(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    """The contact record to update."""
+    contactId: ID!
+    input: InitiateSessionContactInput!
+  ): SessionContact!
+
+  """
+  Execute an action within a customer contact interaction.
+  Maps to: PUT /CustomerWorkbench/{cwbId}/Contact/{contactId}/Execute  (ExBQ)
+  """
+  executeCustomerWorkbenchContact(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    """The contact record to execute."""
+    contactId: ID!
+  ): SessionContact!
+
+  """
+  Send a request within a customer contact (e.g. transfer to agent).
+  Maps to: PUT /CustomerWorkbench/{cwbId}/Contact/{contactId}/Request  (RqBQ)
+  """
+  requestCustomerWorkbenchContact(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    """The contact record to request action on."""
+    contactId: ID!
+    """The request type or action description."""
+    requestType: String!
+  ): SessionContact!
+
+  """
+  Initiate a product/service access interaction in a workbench session.
+  Maps to: POST /CustomerWorkbench/{cwbId}/ProductandServiceAccess/Initiate  (InBQ)
+  """
+  initiateCustomerWorkbenchProductAndServiceAccess(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    input: InitiateProductAndServiceAccessInput!
+  ): SessionProductAndServiceAccess!
+
+  """
+  Execute a product/service access interaction (e.g. perform a banking function).
+  Maps to: PUT /CustomerWorkbench/{cwbId}/ProductandServiceAccess/{id}/Execute  (ExBQ)
+  """
+  executeCustomerWorkbenchProductAndServiceAccess(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    """The product/service access record to execute."""
+    productAndServiceAccessId: ID!
+    input: InitiateProductAndServiceAccessInput!
+  ): SessionProductAndServiceAccess!
+
+  """
+  Request a product/service access action (e.g. request a specific report).
+  Maps to: PUT /CustomerWorkbench/{cwbId}/ProductandServiceAccess/{id}/Request  (RqBQ)
+  """
+  requestCustomerWorkbenchProductAndServiceAccess(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    """The product/service access record to request action on."""
+    productAndServiceAccessId: ID!
+    """The request type or action description."""
+    requestType: String!
+  ): SessionProductAndServiceAccess!
+
+  """
+  Initiate a bank broadcast message to be delivered through a workbench.
+  Maps to: POST /CustomerWorkbench/{cwbId}/Broadcast/Initiate  (InBQ)
+  """
+  initiateCustomerWorkbenchBroadcast(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    """The broadcast record content."""
+    broadcastRecord: JSON!
+  ): SessionBroadcast!
+
+  """
+  Request a broadcast action (e.g. mark as read, acknowledge).
+  Maps to: PUT /CustomerWorkbench/{cwbId}/Broadcast/{broadcastId}/Request  (RqBQ)
+  """
+  requestCustomerWorkbenchBroadcast(
+    """The parent workbench session."""
+    customerWorkbenchId: ID!
+    """The broadcast record to act on."""
+    broadcastId: ID!
+    """The request type."""
+    requestType: String!
+  ): SessionBroadcast!
+
+  # =========================================================================
+  # Current Account
+  # =========================================================================
+
+  """
+  Open a new current account for a customer.
+  Maps to: POST /CurrentAccount/Initiate  (InCR)
+  """
+  initiateCurrentAccount(
+    input: InitiateCurrentAccountInput!
+  ): CurrentAccountFacility!
+
+  """
+  Update the details of an existing current account.
+  Maps to: PUT /CurrentAccount/{currentaccountid}/Update  (UpCR)
+  """
+  updateCurrentAccount(
+    """The current account to update."""
+    currentAccountId: ID!
+    input: UpdateCurrentAccountInput!
+  ): CurrentAccountFacility!
+
+  """
+  Control processing on a current account (e.g. block, unblock, close).
+  Maps to: PUT /CurrentAccount/{currentaccountid}/Control  (CoCR)
+  """
+  controlCurrentAccount(
+    """The current account to control."""
+    currentAccountId: ID!
+    """The control action to apply."""
+    controlAction: String!
+  ): CurrentAccountFacility!
+
+  """
+  Initiate a payment transaction from a current account.
+  Maps to: POST /CurrentAccount/{id}/PaymentTransaction/Initiate  (InBQ)
+  """
+  initiateCurrentAccountPayment(
+    input: InitiateCurrentAccountPaymentInput!
+  ): CurrentAccountPaymentTransaction!
+
+  """
+  Update a pending payment transaction on a current account.
+  Maps to: PUT /CurrentAccount/{id}/PaymentTransaction/{txId}/Update  (UpBQ)
+  """
+  updateCurrentAccountPayment(
+    """The current account identifier."""
+    currentAccountId: ID!
+    """The payment transaction to update."""
+    paymentTransactionId: ID!
+    """Updated payment amount."""
+    amount: Decimal
+    """Updated currency."""
+    currency: CurrencyCode
+  ): CurrentAccountPaymentTransaction!
+
+  """
+  Initiate a deposit to a current account.
+  Maps to: POST /CurrentAccount/{id}/Deposit/Initiate  (InBQ)
+  """
+  initiateCurrentAccountDeposit(
+    """The current account to deposit into."""
+    currentAccountId: ID!
+    """Type of deposit."""
+    depositType: Deposittypevalues!
+    """Deposit amount."""
+    amount: Decimal!
+    """Deposit currency."""
+    currency: CurrencyCode!
+    """Description of the deposit."""
+    description: String
+  ): CurrentAccountDeposit!
+
+  """
+  Initiate a withdrawal from a current account.
+  Maps to: POST /CurrentAccount/{id}/Withdrawal/Initiate  (InBQ)
+  """
+  initiateCurrentAccountWithdrawal(
+    """The current account to withdraw from."""
+    currentAccountId: ID!
+    """Type of withdrawal."""
+    withdrawalType: Withdrawaltypevalues!
+    """Withdrawal amount."""
+    amount: Decimal!
+    """Withdrawal currency."""
+    currency: CurrencyCode!
+  ): CurrentAccountWithdrawal!
+
+  # =========================================================================
+  # Savings Account
+  # =========================================================================
+
+  """
+  Open a new savings account for a customer.
+  Maps to: POST /SavingsAccount/Initiate  (InCR)
+  """
+  initiateSavingsAccount(
+    input: InitiateSavingsAccountInput!
+  ): SavingsAccountFacility!
+
+  """
+  Update the details of an existing savings account.
+  Maps to: PUT /SavingsAccount/{savingsaccountid}/Update  (UpCR)
+  """
+  updateSavingsAccount(
+    """The savings account to update."""
+    savingsAccountId: ID!
+    input: UpdateSavingsAccountInput!
+  ): SavingsAccountFacility!
+
+  """
+  Initiate a deposit to a savings account.
+  Maps to: POST /SavingsAccount/{id}/Deposit/Initiate  (InBQ)
+  """
+  initiateSavingsAccountDeposit(
+    """The savings account to deposit into."""
+    savingsAccountId: ID!
+    """Type of deposit."""
+    depositType: Deposittypevalues!
+    """Deposit amount."""
+    amount: Decimal!
+    """Deposit currency."""
+    currency: CurrencyCode!
+    """Description."""
+    description: String
+  ): SavingsAccountDeposit!
+
+  """
+  Initiate a withdrawal from a savings account.
+  Maps to: POST /SavingsAccount/{id}/Withdrawal/Initiate  (InBQ)
+  """
+  initiateSavingsAccountWithdrawal(
+    """The savings account to withdraw from."""
+    savingsAccountId: ID!
+    """Withdrawal amount."""
+    amount: Decimal!
+    """Withdrawal currency."""
+    currency: CurrencyCode!
+  ): SavingsAccountWithdrawal!
+
+  # =========================================================================
+  # Payment Order Initiation
+  # =========================================================================
+
+  """
+  Initiate a new payment order.
+  Maps to: POST /PaymentOrderInitiation/Initiate  (InCR)
+  """
+  initiatePaymentOrder(
+    input: InitiatePaymentOrderInput!
+  ): PaymentOrderInitiation!
+
+  """
+  Update a pending payment order before it is submitted.
+  Maps to: PUT /PaymentOrderInitiation/{paymentorderinitiationid}/Update  (UpCR)
+  """
+  updatePaymentOrder(
+    """The payment order to update."""
+    paymentOrderInitiationId: ID!
+    input: UpdatePaymentOrderInput!
+  ): PaymentOrderInitiation!
+
+  """
+  Exchange state on a payment order initiation record
+  (e.g. accept or reject a pending payment instruction).
+  Maps to: PUT /PaymentOrderInitiation/{id}/OrderInitiation/{orderId}/Exchange  (EcBQ)
+  """
+  exchangePaymentOrderInitiationRecord(
+    """The payment order initiation identifier."""
+    paymentOrderInitiationId: ID!
+    """The order initiation record to exchange state on."""
+    orderInitiationId: ID!
+    """The exchange action (e.g. Accept, Reject)."""
+    exchangeAction: String!
+  ): PaymentOrderInitiationRecord!
+
+  # =========================================================================
+  # Customer Agreement
+  # =========================================================================
+
+  """
+  Evaluate and establish a new customer master agreement.
+  Maps to: POST /CustomerAgreement/Evaluate  (EvCR)
+  """
+  evaluateCustomerAgreement(
+    input: EvaluateCustomerAgreementInput!
+  ): CustomerAgreement!
+
+  """
+  Update an active customer master agreement.
+  Maps to: PUT /CustomerAgreement/{customeragreementid}/Update  (UpCR)
+  """
+  updateCustomerAgreement(
+    """The customer agreement to update."""
+    customerAgreementId: ID!
+    input: UpdateCustomerAgreementInput!
+  ): CustomerAgreement!
+
+  """
+  Exchange state on a customer agreement
+  (e.g. accept, reject, or execute the agreement).
+  Maps to: PUT /CustomerAgreement/{customeragreementid}/Exchange  (EcCR)
+  """
+  exchangeCustomerAgreement(
+    """The customer agreement to act on."""
+    customerAgreementId: ID!
+    """The exchange action (e.g. Accept, Reject, Execute)."""
+    exchangeAction: String!
+  ): CustomerAgreement!
+
+  """
+  Control the processing of a customer agreement
+  (e.g. suspend, terminate).
+  Maps to: PUT /CustomerAgreement/{customeragreementid}/Control  (CoCR)
+  """
+  controlCustomerAgreement(
+    """The customer agreement to control."""
+    customerAgreementId: ID!
+    """The control action to apply."""
+    controlAction: String!
+  ): CustomerAgreement!
+
+  """
+  Request a compatibility check on a proposed activity against the agreement.
+  Maps to: PUT /CustomerAgreement/{customeragreementid}/Request  (RqCR)
+  """
+  requestCustomerAgreementCheck(
+    """The customer agreement to check against."""
+    customerAgreementId: ID!
+    """Description of the proposed activity to check."""
+    proposedActivityDescription: String!
+  ): CustomerAgreement!
+
+  """
+  Grant authority to act under the terms of a customer agreement.
+  Maps to: PUT /CustomerAgreement/{customeragreementid}/Grant  (GrCR)
+  """
+  grantCustomerAgreementAuthority(
+    """The customer agreement to grant authority under."""
+    customerAgreementId: ID!
+    """Description of the authority being granted."""
+    grantDescription: String!
+  ): CustomerAgreement!
+
+  # =========================================================================
+  # Customer Access Entitlement
+  # =========================================================================
+
+  """
+  Establish a customer access profile agreement.
+  Maps to: POST /CustomerAccessEntitlement/Initiate  (InCR)
+  """
+  initiateCustomerAccessProfile(
+    input: InitiateCustomerAccessProfileInput!
+  ): CustomerAccessProfile!
+
+  """
+  Update a customer access profile.
+  Maps to: PUT /CustomerAccessEntitlement/{id}/Update  (UpCR)
+  """
+  updateCustomerAccessProfile(
+    """The customer access profile to update."""
+    customerAccessProfileId: ID!
+    input: UpdateCustomerAccessProfileInput!
+  ): CustomerAccessProfile!
+
+  # =========================================================================
+  # Customer Event History
+  # =========================================================================
+
+  """
+  Initiate (create) a customer event log.
+  Maps to: POST /CustomerEventHistory/Initiate  (InCR)
+  """
+  initiateCustomerEventLog(
+    input: InitiateCustomerEventLogInput!
+  ): CustomerEventLog!
+
+  # =========================================================================
+  # Customer Position
+  # =========================================================================
+
+  """
+  Initiate a customer position tracking record.
+  Maps to: POST /CustomerPosition/Initiate  (InCR)
+  """
+  initiateCustomerPosition(
+    input: InitiateCustomerPositionInput!
+  ): CustomerPositionState!
+
+  """
+  Request a customer position report (e.g. a cashflow or credit position analysis).
+  Maps to: PUT /CustomerPosition/{id}/Cashflow/{cashflowId}/Request  (RqBQ)
+  """
+  requestCustomerPositionReport(
+    input: RequestCustomerPositionReportInput!
+  ): CustomerCashflow!
+
+  # =========================================================================
+  # Customer Product and Service Directory
+  # =========================================================================
+
+  """
+  Register a new Customer Product and Service Directory entry for a customer.
+  Maps to: POST /CustomerProductandServiceDirectory/Register  (ReCR)
+  """
+  registerCustomerProductAndServiceDirectory(
+    input: RegisterCustomerProductDirectoryInput!
+  ): CustomerProductAndServiceDirectory!
+
+  """
+  Update an existing Customer Product and Service Directory entry.
+  Maps to: PUT /CustomerProductandServiceDirectory/{id}/Update  (UpCR)
+  """
+  updateCustomerProductAndServiceDirectory(
+    """Unique identifier of the directory entry to update."""
+    customerProductAndServiceDirectoryId: ID!
+    input: UpdateCustomerProductDirectoryInput!
+  ): CustomerProductAndServiceDirectory!
+
+  """
+  Execute an action on a product entry in the directory (e.g. suspend, reactivate).
+  Maps to: PUT /CustomerProductandServiceDirectory/{id}/Product/{productId}/Execute  (ExBQ)
+  """
+  executeCustomerDirectoryProduct(
+    """Unique identifier of the directory entry."""
+    customerProductAndServiceDirectoryId: ID!
+    """Unique identifier of the product entry."""
+    productId: ID!
+  ): CustomerDirectoryProduct!
+
+  """
+  Execute an action on a service entry in the directory (e.g. suspend, reactivate).
+  Maps to: PUT /CustomerProductandServiceDirectory/{id}/Service/{serviceId}/Execute  (ExBQ)
+  """
+  executeCustomerDirectoryService(
+    """Unique identifier of the directory entry."""
+    customerProductAndServiceDirectoryId: ID!
+    """Unique identifier of the service entry."""
+    serviceId: ID!
+  ): CustomerDirectoryService!
+
+  # =========================================================================
+  # Sales Product Agreement
+  # =========================================================================
+
+  """
+  Evaluate and create a new Sales Product Agreement for a customer product.
+  Maps to: POST /SalesProductAgreement/Evaluate  (EvCR)
+  """
+  evaluateSalesProductAgreement(
+    input: EvaluateSalesProductAgreementInput!
+  ): SalesProductAgreementRecord!
+
+  """
+  Update an existing Sales Product Agreement.
+  Maps to: PUT /SalesProductAgreement/{id}/Update  (UpCR)
+  """
+  updateSalesProductAgreement(
+    """Unique identifier of the sales product agreement to update."""
+    salesProductAgreementId: ID!
+    input: UpdateSalesProductAgreementInput!
+  ): SalesProductAgreementRecord!
+
+  """
+  Exchange (accept/reject) a Sales Product Agreement.
+  Maps to: PUT /SalesProductAgreement/{id}/Exchange  (EcCR)
+  """
+  exchangeSalesProductAgreement(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesProductAgreementRecord!
+
+  """
+  Control (suspend/resume) a Sales Product Agreement.
+  Maps to: PUT /SalesProductAgreement/{id}/Control  (CoCR)
+  """
+  controlSalesProductAgreement(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesProductAgreementRecord!
+
+  """
+  Request an action on a Sales Product Agreement (e.g. amendment request).
+  Maps to: PUT /SalesProductAgreement/{id}/Request  (RqCR)
+  """
+  requestSalesProductAgreement(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesProductAgreementRecord!
+
+  """
+  Grant authority under the terms of a Sales Product Agreement.
+  Maps to: PUT /SalesProductAgreement/{id}/Grant  (GrCR)
+  """
+  grantSalesProductAgreement(
+    """Unique identifier of the sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesProductAgreementRecord!
+
+  """
+  Evaluate and add a legal term to a Sales Product Agreement.
+  Maps to: POST /SalesProductAgreement/{id}/LegalTerm/Evaluate  (EvBQ)
+  """
+  evaluateSalesAgreementLegalTerm(
+    """Unique identifier of the parent sales product agreement."""
+    salesProductAgreementId: ID!
+  ): SalesAgreementLegalTerm!
+
+  """
+  Update a legal term in a Sales Product Agreement.
+  Maps to: PUT /SalesProductAgreement/{id}/LegalTerm/{legalTermId}/Update  (UpBQ)
+  """
+  updateSalesAgreementLegalTerm(
+    """Unique identifier of the parent sales product agreement."""
+    salesProductAgreementId: ID!
+    """Unique identifier of the legal term to update."""
+    legalTermId: ID!
+  ): SalesAgreementLegalTerm!
+
+  # =========================================================================
+  # Servicing Order
+  # =========================================================================
+
+  """
+  Initiate a new Servicing Order for a customer.
+  Maps to: POST /ServicingOrder/Initiate  (InCR)
+  """
+  initiateServicingOrder(
+    input: InitiateServicingOrderInput!
+  ): ServicingOrderProcedure!
+
+  """
+  Update an in-progress Servicing Order.
+  Maps to: PUT /ServicingOrder/{servicingOrderId}/Update  (UpCR)
+  """
+  updateServicingOrder(
+    """Unique identifier of the servicing order to update."""
+    servicingOrderId: ID!
+    input: UpdateServicingOrderInput!
+  ): ServicingOrderProcedure!
+
+  """
+  Control (suspend/resume/cancel) a Servicing Order.
+  Maps to: PUT /ServicingOrder/{servicingOrderId}/Control  (CoCR)
+  """
+  controlServicingOrder(
+    """Unique identifier of the servicing order."""
+    servicingOrderId: ID!
+  ): ServicingOrderProcedure!
+
+  """
+  Exchange (accept/reject) a Servicing Order.
+  Maps to: PUT /ServicingOrder/{servicingOrderId}/Exchange  (EcCR)
+  """
+  exchangeServicingOrder(
+    """Unique identifier of the servicing order."""
+    servicingOrderId: ID!
+  ): ServicingOrderProcedure!
+
+  """
+  Execute processing of a Servicing Order (automated execution step).
+  Maps to: PUT /ServicingOrder/{servicingOrderId}/Execute  (ExCR)
+  """
+  executeServicingOrder(
+    """Unique identifier of the servicing order."""
+    servicingOrderId: ID!
+  ): ServicingOrderProcedure!
+
+  """
+  Request an action on a Servicing Order (e.g. escalation or review).
+  Maps to: PUT /ServicingOrder/{servicingOrderId}/Request  (RqCR)
+  """
+  requestServicingOrder(
+    """Unique identifier of the servicing order."""
+    servicingOrderId: ID!
+  ): ServicingOrderProcedure!
+
+  # =========================================================================
+  # Customer Product and Service Eligibility
+  # =========================================================================
+
+  """
+  Evaluate and create a customer product and service eligibility assessment.
+  Maps to: POST /CustomerProductAndServiceEligibility/Evaluate  (EvCR)
+  """
+  evaluateCustomerEligibility(
+    input: EvaluateCustomerEligibilityInput!
+  ): CustomerEligibilityAssessment!
+
+  """
+  Update an existing customer eligibility assessment.
+  Maps to: PUT /CustomerProductAndServiceEligibility/{id}/Update  (UpCR)
+  """
+  updateCustomerEligibility(
+    """Unique identifier of the eligibility assessment to update."""
+    customerEligibilityAssessmentId: ID!
+    input: UpdateCustomerEligibilityInput!
+  ): CustomerEligibilityAssessment!
+
+  """
+  Exchange (accept/confirm) a customer eligibility assessment.
+  Maps to: PUT /CustomerProductAndServiceEligibility/{id}/Exchange  (EcCR)
+  """
+  exchangeCustomerEligibility(
+    """Unique identifier of the eligibility assessment."""
+    customerEligibilityAssessmentId: ID!
+  ): CustomerEligibilityAssessment!
+
+  """
+  Update a next-best product recommendation for a customer.
+  Maps to: PUT /CustomerProductAndServiceEligibility/{id}/NextBest/{nextBestId}/Update  (UpBQ)
+  """
+  updateCustomerNextBestProduct(
+    """Unique identifier of the eligibility assessment."""
+    customerEligibilityAssessmentId: ID!
+    """Unique identifier of the next-best record to update."""
+    nextBestId: ID!
+    input: UpdateNextBestProductInput!
+  ): CustomerNextBestProduct!
+
+  """
+  Evaluate (create) a new product eligibility check within an assessment.
+  Maps to: POST /CustomerProductAndServiceEligibility/{id}/EligibilityCheck/Evaluate  (EvBQ)
+  """
+  evaluateCustomerEligibilityCheck(
+    """Unique identifier of the eligibility assessment."""
+    customerEligibilityAssessmentId: ID!
+  ): CustomerEligibilityCheck!
+}

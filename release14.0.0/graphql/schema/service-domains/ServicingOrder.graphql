@@ -1,0 +1,169 @@
+# BIAN v14 GraphQL Schema - Service Domain: Servicing Order
+# ===========================================================
+#
+# The Servicing Order service domain handles the processing of a customer
+# servicing request as a predefined procedure. A wide range of standard
+# servicing requests can be supported (e.g. change of address, change of
+# email, close account, update standing order). The process can include
+# a check of permissions or eligibility before executing the request.
+#
+# BIAN Control Record: `ServicingOrderProcedure`
+# (No Behavior Qualifiers – the single procedure encompasses all task tracking)
+#
+# Source: BIAN Release 14.0.0 - ServicingOrder.yaml
+
+# ---------------------------------------------------------------------------
+# Supporting types
+# ---------------------------------------------------------------------------
+
+"""
+A unit of work that forms part of a servicing order procedure.
+Maps to the BIAN `Task` schema.
+"""
+type ServicingTask {
+  """Type of task being performed."""
+  taskType: String
+
+  """Description of what this task does."""
+  taskDescription: String
+
+  """Business unit assigned to perform this task."""
+  taskResponsibleParty: String
+
+  """Current status of this task."""
+  taskStatus: String
+
+  """Date-time on which this task was completed or last updated."""
+  taskDateTime: DateTime
+}
+
+"""
+A work product produced as an output of the servicing order procedure.
+Maps to the BIAN `Workproduct` schema.
+"""
+type ServicingWorkProduct {
+  """Type of work product (e.g. Document, Form, ActivityLog)."""
+  workProductType: Workproducttypevalues
+
+  """Description of the work product."""
+  workProductDescription: String
+
+  """Identifier for the work product."""
+  workProductIdentification: Identifier
+
+  """Period over which this work product applies."""
+  workProductVersion: String
+}
+
+"""
+Organisation (business unit) details for the party responsible for a servicing order.
+Maps to the BIAN `BusinessUnit` schema.
+"""
+type ServicingBusinessUnit {
+  """Business function carried out by this unit."""
+  businessFunction: String
+
+  """Goal of this business unit."""
+  goal: String
+
+  """Unique identifier for this business unit."""
+  organisationIdentification: Identifier
+
+  """Sector of business for this unit."""
+  organisationSector: String
+
+  """Type of organisation."""
+  organisationType: Organisationtypevalues
+
+  """Legal structure of the organisation."""
+  organisationLegalStructure: Organisationlegalstructuretypevalues
+}
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+A customer servicing order – a predefined procedure initiated to fulfil a
+specific servicing request. Tracks the tasks, results, and work products
+produced during fulfilment.
+
+BIAN entity: `ServicingOrderProcedure` (Control Record)
+
+Examples of servicing orders: change of address, change of email address,
+close account, reset PIN, update standing order, add authorised user.
+"""
+type ServicingOrderProcedure {
+  """Unique identifier for this servicing order."""
+  servicingOrderId: ID!
+
+  """Third party requesting the servicing on behalf of the customer, if applicable."""
+  thirdPartyReference: Party
+
+  """Reference to any third-party servicing mandate."""
+  thirdPartyServicingMandateReference: String
+
+  """The mandate granting permission to a third party to service this customer."""
+  thirdPartyServicingMandate: String
+
+  """The customer for whom this servicing order is being processed."""
+  customerReference: InvolvedParty
+
+  """Reference to the eligibility assessment that approved this order."""
+  customerEligibilityAssessmentInstanceReference: Identifier
+
+  """Type of servicing order (e.g. 'ChangeOfAddress', 'CloseAccount')."""
+  servicingOrderType: String
+
+  """The main task record describing the procedure steps and sequencing."""
+  servicingOrderTaskRecord: ServicingTask
+
+  """Human-readable description of the servicing order procedure."""
+  servicingOrderDescription: String
+
+  """Date-time on which this servicing order was processed or last updated."""
+  date: DateTime
+
+  """The bank employee or business unit responsible for processing this order."""
+  employeeBusinessUnitReference: ServicingBusinessUnit
+
+  """Work product generated as an output of this procedure."""
+  servicingOrderWorkProduct: ServicingWorkProduct
+
+  """The final result of the servicing order task."""
+  servicingOrderWorkTaskResult: ServicingTask
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to initiate a new Servicing Order."""
+input InitiateServicingOrderInput {
+  """The customer for whom the servicing order is being raised."""
+  customerReference: String!
+
+  """The type of servicing order to process."""
+  servicingOrderType: String!
+
+  """Description of the servicing request."""
+  servicingOrderDescription: String
+
+  """Third party requesting on behalf of the customer, if applicable."""
+  thirdPartyReference: String
+
+  """Mandate reference for the third party, if applicable."""
+  thirdPartyServicingMandateReference: String
+
+  """Reference to an eligibility assessment already completed."""
+  customerEligibilityAssessmentInstanceReference: String
+}
+
+"""Input to update an in-progress Servicing Order."""
+input UpdateServicingOrderInput {
+  """Updated description or notes for the servicing order."""
+  servicingOrderDescription: String
+
+  """Updated task record status."""
+  servicingOrderType: String
+}
