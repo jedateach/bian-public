@@ -1,0 +1,45 @@
+# BIAN v14 GraphQL Schema – Custom Scalar Types
+# ==============================================
+#
+# Scalar types map BIAN/OpenAPI primitive formats to GraphQL scalars.
+# Each scalar preserves the semantic intent of the corresponding BIAN data type.
+#
+# Source: BIAN Release 14.0.0 Semantic APIs (OAS 3.x)
+
+"""
+ISO 8601 combined date and time value (e.g. 2024-03-15T10:30:00Z).
+Maps to the BIAN Datetime / DateTimeContent property pattern.
+"""
+scalar DateTime
+
+"""
+ISO 8601 calendar date (e.g. 2024-03-15).
+Used where BIAN specifies a date-only value without a time component.
+"""
+scalar Date
+
+"""
+ISO 4217 three-letter currency code (e.g. "USD", "EUR", "GBP").
+Maps to the BIAN `Currencycode` schema.
+"""
+scalar CurrencyCode
+
+"""
+Arbitrary-precision decimal number represented as a string (e.g. "1234.56").
+Used for all monetary amounts to avoid floating-point rounding errors.
+Maps to BIAN `Amount` value fields and any field with format "Amount".
+"""
+scalar Decimal
+
+"""
+Uniform Resource Locator string (e.g. "https://example.com/resource").
+Maps to BIAN properties with format "Object" that carry URL semantics.
+"""
+scalar URL
+
+"""
+Opaque JSON object or array serialised as a string.
+Used for BIAN properties whose structure is unspecified (format "Object")
+or that act as an open container (e.g. report payloads, configuration records).
+"""
+scalar JSON

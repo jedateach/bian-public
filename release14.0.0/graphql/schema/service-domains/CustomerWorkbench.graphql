@@ -1,0 +1,271 @@
+# BIAN v14 GraphQL Schema - Service Domain: Customer Workbench
+# =============================================================
+#
+# The Customer Workbench Service Domain represents customer-side devices and
+# access portals. It is the primary entry point through which customers interact
+# with the bank's products and services via any channel or device (web, mobile,
+# branch kiosk, etc.).
+#
+# BIAN Control Record: `CustomerWorkbenchOperatingSession`
+# BIAN Behavior Qualifiers:
+#   - Browsing          – web portal / URL based browsing
+#   - Contact           – initiated customer contact / session
+#   - Broadcast         – bank-initiated broadcast messages to the customer
+#   - SWUpdate          – software/application update on the customer device
+#   - ProductAndServiceAccess – access to specific product or service functions
+#
+# Source: BIAN Release 14.0.0 - CustomerWorkbench.yaml
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+Represents an active Customer Workbench operating session for a customer device.
+This is the BIAN Control Record for the Customer Workbench Service Domain.
+
+A session captures device registration details, installed bank application
+versions, and the access permissions granted to this device.
+
+BIAN entity: `CustomerWorkbenchOperatingSession`
+"""
+type CustomerWorkbenchSession {
+  """Unique identifier for this operating session."""
+  customerWorkbenchId: ID!
+
+  """The customer who owns or is using this workbench device."""
+  customerReference: InvolvedParty
+
+  """Type of device (e.g. Mobile, Tablet, PersonalComputer)."""
+  deviceType: Devicetypevalues
+
+  """
+  Device registration details used to identify the device
+  (e.g. URL, ANI, serial number).
+  """
+  deviceRegistration: String
+
+  """Manufacturer of the customer device, if known."""
+  deviceManufacturer: String
+
+  """The operating system type and version on the device."""
+  deviceOperatingSystemVersionNumber: String
+
+  """Access permissions granted to this device."""
+  deviceAccessPermissions: Arrangement
+
+  """Details of installed bank applications on this device."""
+  installedBankApplicationType: String
+
+  """Version number(s) of device-resident bank software."""
+  installedBankApplicationVersionNumber: String
+
+  """Timestamp of the last software update on this device."""
+  lastUpdateDateAndTime: DateTime
+
+  """Active browsing sub-sessions on this workbench."""
+  browsingSessions: [SessionBrowsing!]
+
+  """Contact interactions initiated through this workbench."""
+  contacts: [SessionContact!]
+
+  """Broadcast messages sent to this workbench."""
+  broadcasts: [SessionBroadcast!]
+
+  """Software update operations for this workbench."""
+  softwareUpdates: [SessionSoftwareUpdate!]
+
+  """Product and service access interactions on this workbench."""
+  productAndServiceAccesses: [SessionProductAndServiceAccess!]
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Browsing
+# ---------------------------------------------------------------------------
+
+"""
+A web-browsing sub-session within a Customer Workbench session.
+Captures the URLs involved in a browsing interaction.
+
+BIAN Behavior Qualifier: `Browsing`
+"""
+type SessionBrowsing {
+  """Unique identifier for this browsing sub-session."""
+  browsingId: ID!
+
+  """
+  The customer device URL, which can be used to detect known and
+  repeat customer access.
+  """
+  customerURL: URL
+
+  """URL of the public bank information website accessed."""
+  bankWebsiteURL: URL
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Contact
+# ---------------------------------------------------------------------------
+
+"""
+A customer contact interaction initiated through a workbench session.
+Captures the start/end time and an activity log for the contact.
+
+BIAN Behavior Qualifier: `Contact`
+"""
+type SessionContact {
+  """Unique identifier for this contact sub-session."""
+  contactId: ID!
+
+  """The start and end date-time of this contact interaction."""
+  contactStartEndTime: BianDateTime
+
+  """An activity log recording events during this contact."""
+  contactActivityLog: ActivityLog
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Broadcast
+# ---------------------------------------------------------------------------
+
+"""
+A bank-to-customer broadcast message delivered through the workbench.
+
+BIAN Behavior Qualifier: `Broadcast`
+"""
+type SessionBroadcast {
+  """Unique identifier for this broadcast."""
+  broadcastId: ID!
+
+  """The content / payload of the broadcast record."""
+  broadcastRecord: JSON
+
+  """The date and time this broadcast was sent."""
+  broadcastRecordDateAndTime: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: SWUpdate
+# ---------------------------------------------------------------------------
+
+"""
+A software update operation performed on the customer workbench device.
+
+BIAN Behavior Qualifier: `SWUpdate`
+"""
+type SessionSoftwareUpdate {
+  """Unique identifier for this software update record."""
+  swUpdateId: ID!
+
+  """The application being updated."""
+  swUpdateApplication: String
+
+  """The version of the software being applied."""
+  swUpdateVersion: String
+
+  """The binary image or download reference for the update."""
+  swUpdateImage: String
+
+  """Date on which the software update was applied."""
+  updateDate: Date
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: ProductAndServiceAccess
+# ---------------------------------------------------------------------------
+
+"""
+A product or service access interaction within a workbench session.
+Captures the customer preferences, menu accessed, and session timing.
+
+BIAN Behavior Qualifier: `ProductAndServiceAccess`
+"""
+type SessionProductAndServiceAccess {
+  """Unique identifier for this product/service access record."""
+  productAndServiceAccessId: ID!
+
+  """
+  Customer details and preferences relevant to this access
+  (personalisation settings, preferred language, etc.).
+  """
+  customerDetailsPreferences: JSON
+
+  """The product/service menu presented to the customer."""
+  productAndServiceMenu: JSON
+
+  """Log of the customer's navigation through the menu."""
+  productAndServiceMenuAccessLog: ActivityLog
+
+  """Start and end time of this access interaction."""
+  accessStartEndTime: BianDateTime
+
+  """Files or data maintained locally for this customer session."""
+  customerResidentFiles: JSON
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to initiate (register) a new Customer Workbench session."""
+input InitiateCustomerWorkbenchSessionInput {
+  """Reference to the customer initiating the session."""
+  customerReference: String!
+
+  """Type of device being registered."""
+  deviceType: Devicetypevalues!
+
+  """Device registration identifier (URL, ANI, serial number, etc.)."""
+  deviceRegistration: String
+
+  """Device manufacturer, if known."""
+  deviceManufacturer: String
+
+  """OS type and version on the device."""
+  deviceOperatingSystemVersionNumber: String
+
+  """Installed bank application type details."""
+  installedBankApplicationType: String
+
+  """Version number of installed bank software."""
+  installedBankApplicationVersionNumber: String
+}
+
+"""Input to update an existing Customer Workbench session."""
+input UpdateCustomerWorkbenchSessionInput {
+  """Updated device type."""
+  deviceType: Devicetypevalues
+
+  """Updated device registration details."""
+  deviceRegistration: String
+
+  """Updated OS version number."""
+  deviceOperatingSystemVersionNumber: String
+
+  """Updated bank application type."""
+  installedBankApplicationType: String
+
+  """Updated bank application version number."""
+  installedBankApplicationVersionNumber: String
+}
+
+"""Input to initiate a browsing sub-session."""
+input InitiateSessionBrowsingInput {
+  """The device URL for this browsing session."""
+  customerURL: URL
+
+  """The bank website URL being browsed."""
+  bankWebsiteURL: URL
+}
+
+"""Input to initiate a contact within a workbench session."""
+input InitiateSessionContactInput {
+  """Start time for this contact."""
+  contactStartTime: DateTime
+}
+
+"""Input to initiate a product/service access interaction."""
+input InitiateProductAndServiceAccessInput {
+  """Customer preferences to apply during this access."""
+  customerDetailsPreferences: JSON
+}

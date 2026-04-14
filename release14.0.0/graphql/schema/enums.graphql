@@ -1,0 +1,2190 @@
+# BIAN v14 GraphQL Schema - Enumeration Types
+#
+# All enums are derived directly from BIAN v14 typevalues schemas.
+# Naming: BIAN <name>typevalues -> GraphQL <Name>typevalues (first letter capitalised).
+# Enum member names are preserved verbatim from BIAN
+# (characters invalid in GraphQL identifiers replaced with underscore).
+#
+# Source: BIAN Release 14.0.0 Semantic APIs (OAS 3.x)
+
+" BIAN source: Accessarrangementinvolvementtypevalues"
+enum Accessarrangementinvolvementtypevalues {
+  PartyWhoGivesTheAccessToParty
+  PartyWhoTakesTheAccessFromParty
+  PartyWhoAuthoriseTheAccessForParty
+}
+
+" BIAN source: Accessrestrictiontypevalues"
+enum Accessrestrictiontypevalues {
+  Accessrestrictionbychanneldevice
+  Accessrestrictionbylocation
+  Accessrestrictionbyfrequency_Limit
+  Accessrestrictionbytime_Duration
+}
+
+" BIAN source: Account_Accountrelationshiptypevalues"
+enum Account_Accountrelationshiptypevalues {
+  AccountIsParentAccountForAccount
+  AccountIsSubAccountForAccount
+  AccountIsLinkedToAccount
+}
+
+" BIAN source: Accountdatetimetypevalues"
+enum Accountdatetimetypevalues {
+  OpeningDate
+  ClosingDate
+  BlockingDate
+  MaturityDate
+  LiveDate
+  RenewalDate
+}
+
+" BIAN source: Accountentrydatetimetypevalues"
+enum Accountentrydatetimetypevalues {
+  EntryDate
+  ValueDate
+  PostingDate
+}
+
+" BIAN source: Accountentrystatustypevalues"
+enum Accountentrystatustypevalues {
+  Booked
+  Future
+  Information
+  Pending
+}
+
+" BIAN source: Accountentrytypevalues"
+enum Accountentrytypevalues {
+  Trial
+  Official
+  Requested
+}
+
+" BIAN source: Accountidentificationtypevalues"
+enum Accountidentificationtypevalues {
+  BBAN
+  IBAN
+  UPIC
+  AccountNumber
+  PAN
+  Paym
+  Wallet
+  SortCodeAndAccountNumber
+  AIIN
+  CUID
+}
+
+" BIAN source: Accountingstandardtypevalues"
+enum Accountingstandardtypevalues {
+  USGAAP
+  IFRS
+  LocalGAAP
+  StatutoryAccounting
+  InternalAccountingStandard
+  TaxBasis
+}
+
+" BIAN source: Accountinvolvementtypevalues"
+enum Accountinvolvementtypevalues {
+  PartyIsOwnerOfAccount
+  PartyIsServicerOfAccount
+  PartyIsPrimaryOwnerOfAccount
+  PartyIsCo_OwnerOfAccount
+  PartyIsJointOwnerOfAccount
+}
+
+" BIAN source: Accountrestrictionstatustypevalues"
+enum Accountrestrictionstatustypevalues {
+  Active
+  Inactive
+}
+
+" BIAN source: Accountstatustypevalues"
+enum Accountstatustypevalues {
+  Enabled
+  Disabled
+  Deleted
+  Proforma
+  Pending
+}
+
+" BIAN source: Accounttypevalues"
+enum Accounttypevalues {
+  DebitAccount
+  CreditAccount
+  VostroAcount
+  NostroAccount
+  PaymentAccount
+  SettlementAccount
+  SavingAccount
+  CurrentAccount
+  CashAccount
+  LoanAccount
+  IndividualAccount
+  JointAccount
+  LiquidationAccount
+  ProvisionAccount
+  PartnershipAccount
+  InvestmentAccount
+}
+
+" BIAN source: Actiontypevalues"
+enum Actiontypevalues {
+  Initiate
+  Execute
+  Create
+  Transfer
+  Pay
+  Deliver
+  Apply
+  Calculate
+}
+
+" BIAN source: Addresstypevalues"
+enum Addresstypevalues {
+  PostalAddress
+  GeolocationAddress
+  LatitudeAddress
+  LongitudeAddress
+  ElectronicAddress
+}
+
+" BIAN source: Adjustmentdirectiontypevalues"
+enum Adjustmentdirectiontypevalues {
+  Added
+  Substracted
+}
+
+" BIAN source: Agreementstatustypevalues"
+enum Agreementstatustypevalues {
+  Offered
+  Confirmed
+  Completed
+  Signed
+  Terminated
+  Rejected
+}
+
+" BIAN source: Agreementtypevalues"
+enum Agreementtypevalues {
+  CustomerAgreement
+  SupplierAgreement
+  BrokerAgreement
+  SalesAgreement
+  PurchaseAgreement
+  MaintenanceAgreement
+  ProductAgreement
+  ResourceAgreement
+  PartnerAgreement
+  MasterAgreement
+  BilateralAgreement
+  RepurchaseAgreement
+}
+
+" BIAN source: Allocationstatustypevalues"
+enum Allocationstatustypevalues {
+  Fullyallocated
+  Partiallyallocated
+  Earmarked
+}
+
+" BIAN source: Amounttypevalues"
+enum Amounttypevalues {
+  Principal
+  Actual
+  Estimated
+  Maximum
+  Default
+  Replacement
+  Incremental
+  Decremental
+  Reserved
+  Available
+  Used
+  DuePayable
+  Minimum
+  Open
+  Unknown
+  Fixed
+}
+
+" BIAN source: Analysistypevalues"
+enum Analysistypevalues {
+  PerformanceAnalysis
+  ActivityAnalysis
+  RevenueAnalysis
+  CostAnalysis
+  PredictiveAnalysis
+  BehavioralAnalysis
+  ProfitabilityAnalysis
+  CompetitiveAnalysis
+  CohortAnalysis
+  SegmentAnalysis
+  SWOTAnalysis
+  Benchmarking
+  PositioningAnalysis
+  ScenarioAnalysis
+  IntelligenceGathering
+  Profiling
+}
+
+" BIAN source: Arrangementstatustypevalues"
+enum Arrangementstatustypevalues {
+  Requested
+  Proposed
+  Offered
+  Accepted
+  Cancelled
+  Fulfilled
+  Terminated
+}
+
+" BIAN source: Arrangementtypevalues"
+enum Arrangementtypevalues {
+  SweepArrangement
+  WithdrawalArrangement
+  DepositArrangement
+  InterestArrangement
+  FeeArrangement
+  LienArrangement
+  InformationArrangement
+  PaymentArrangement
+  EntitlementArrangement
+  PeriodArrangement
+  CollateralArrangement
+  LimitArrangement
+  AccessArrangement
+  CardPaymentArrangement
+  StandingOrderArrangement
+  OverdraftArrangement
+  RepaymentArrangement
+  StatementArrangement
+  CreditTransferArrangement
+  ProductAndServiceArrangement
+  FactoringArrangement
+  RolloverArrangement
+  RestructuringArrangement
+  InsuranceArrangement
+  CollectionArrangement
+  UnderwritingArrangement
+  TerminationArrangement
+  MaturityArrangement
+  AdministrativeArrangement
+}
+
+" BIAN source: Assessmenttypevalues"
+enum Assessmenttypevalues {
+  Valuation
+  Matching
+  Authorization
+  Authentication
+  QualityAssurance
+  Audit
+  ComplianceCheck
+  FundingCheck
+  SuitabilityCheck
+  PerformanceCheck
+  ImpactAssessment
+  RiskAssessment
+  Rating
+  UnderwritingAssessment
+  Qualification
+  Verification
+  KYCAssessment
+  PEPAssessment
+  AMLAssessment
+  EligibilityCheck
+  ExternalAgencyCheck
+  EntitlementCheck
+}
+
+" BIAN source: Assetsubclassificationtypevalues"
+enum Assetsubclassificationtypevalues {
+  Subassetclass
+  Timetomaturitybucket
+  Optiontimetomaturitybucket
+  Swaptimetomaturitybucket
+  Underlyinginstrumentidentification
+  Underlyingbondissuer
+  Underlyinginterestrate
+  Underlyingbondterm
+  Assetclass
+  Underlyingindexidentification
+  Interestratetermofcontract
+  Underlyingreferenceentity
+  Sovereignandpublictypeissuer
+  Irdnotionalcurrency1
+  Fexnotionalcurrency1
+  Cfdnotionalcurrency1
+  Fexnotionalcurrency2
+  Irdnotionalcurrency2
+  Cfdnotionalcurrency2
+  Swaptionnotionalcurrency
+  Creditnotionalcurrency
+  Commoditynotionalcurrency
+  Contracttype
+  Baseproduct
+  Subproduct
+  Furthersubproduct
+  Deliverycashlocation
+  Deliverysettlementtype
+  Sizespecificationrelatedtofreightsubtype
+  Specificroutetimecharteraverage
+  Equityunderlyingtype
+  Parameter
+  Inflationindexcodename
+  ISIN
+  Underlyingindexcdssubclassidentification
+  Underlyingtype
+}
+
+" BIAN source: Assettypevalues"
+enum Assettypevalues {
+  TangibleAsset
+  IntangibleAsset
+  OperatingAsset
+  Non_OperatingAsset
+  CurrentAsset
+  Non_Current_Fixed_Asset
+  PersonalAsset
+  BusinessAsset
+}
+
+" BIAN source: Authenticationmethodtypevalues"
+enum Authenticationmethodtypevalues {
+  Onlinepin
+  Offlinepin
+  Signaturecapture
+  Password
+  Biometry
+  Cscverification
+  Cryptogramverification
+  Unknownmethod
+  Bypass
+  Papersignature
+  Manualverification
+  Merchantauthentication
+  Securecertificate
+  Securenocertificate
+  Securedchannel
+  Billingaddressverification
+  Cardholderidentificationdata
+  Passiveauthentication
+  Secureelectroniccommerce
+  Shippingaddressverification
+  Tokenauthentication
+  Paymenttoken
+  Authenticationtoken
+  Mobile
+  Other
+  Addressdigits
+  Alienregistrationnumber
+  Arqcverification
+  Birthdate
+  Cardholdername
+  Cityofbirth
+  Customeridentification
+  Driveridentification
+  Driverlicensenumber
+  Email
+  Employeeidentificationnumber
+  Employeridentificationnumber
+  Identitycardnumber
+  Onetimepassword
+  Othercardholderidentification
+  Othercryptogram
+  Passportnumber
+  Postalcode
+  Shippingaddressfrom
+  Shippingaddressto
+  Cardholderaddress
+  Nonvisiblecsc
+  Othernational
+  Otherprivate
+  Placeofbirth
+  Socialsecuritynumber
+  Taxidentificationnumber
+  Accountdigitalsignature
+  Arpcverification
+  ATC
+  Offlinebiographics
+  Offlinebiometrics
+  Offlinedataauthentication
+  Offlinedigitisedsignatureanalysis
+  Offlinepinencrypted
+  Offlinepininclear
+  Onlinebiographics
+  Phonehome
+  Phonework
+  Pkisignature
+  Qualifiedcertificate
+  Threeds
+  Cardholdercertificateserialnumber
+  Acceptorcertificateserialnumber
+  Nationalidentifier
+}
+
+" BIAN source: Balancecounterpartytypevalues"
+enum Balancecounterpartytypevalues {
+  Bilateral
+  Multilateral
+}
+
+" BIAN source: Balancesubtypevalues"
+enum Balancesubtypevalues {
+  Adjustment
+  Basecurrency
+  Blocked
+  Blockedfunds
+  Daylightoverdraft
+  Eligibleassets
+  Firmcollateralization
+  Amountsthathavebeenusedtoserveasfirmcollateral
+  Securitiesforecast
+  Netfunding
+  Intermediate
+  Localcurrency
+  Limitrelated
+  Reservedliquidity
+  Securitiespending
+  Payinpayout
+  Progressiveaverage
+  Reserve
+  Selfcollateralization
+  Amountsthathavebeenusedtoserveasselfcollateral
+  Threshold
+}
+
+" BIAN source: Balancetypevalues"
+enum Balancetypevalues {
+  OpeningBalance
+  ClosingBalance
+  CurrentBalance
+  AvailableBalance
+  LedgerBalance
+  ReserveBalance
+  FreeBalance
+  PrincipalBalance
+  ClosingAvailable
+  ClosingBooked
+  ForwardAvailable
+  Information
+  InterimAvailable
+  InterimBooked
+  OpeningAvailable
+  OpeningBooked
+  PreviouslyClosedBooked
+  Expected
+}
+
+" BIAN source: Bankingproducttypevalues"
+enum Bankingproducttypevalues {
+  LoanProduct
+  CurrentAccountProduct
+  SavingAccountProduct
+  BrokeredProduct
+  TermDepositProduct
+}
+
+" BIAN source: Budgettypevalues"
+enum Budgettypevalues {
+  OperatingBudget
+  FinancialBudget
+  ResourceBudget
+}
+
+" BIAN source: Calendartypevalues"
+enum Calendartypevalues {
+  UKCalendar
+  ChineseCalendar
+}
+
+" BIAN source: Casestatustypevalues"
+enum Casestatustypevalues {
+  Closed
+  Assigned
+  UnderInvestigation
+  Unknown
+  Overdue
+}
+
+" BIAN source: Casetypevalues"
+enum Casetypevalues {
+  Card
+  Loan
+  Fraud
+  Payment
+  Market
+  Security
+  Other
+}
+
+" BIAN source: Channeltypevalues"
+enum Channeltypevalues {
+  CommunicationChannel
+  AuthenticationChannel
+}
+
+" BIAN source: Chargebearertypevalues"
+enum Chargebearertypevalues {
+  Bornebydebtor
+  Bornebycreditor
+  Shared
+  Followingservicelevel
+}
+
+" BIAN source: Clearingchanneltypevalues"
+enum Clearingchanneltypevalues {
+  Realtimegrosssettlementsystem
+  Realtimenetsettlementsystem
+  Masspaymentnetsystem
+  Booktransfer
+}
+
+" BIAN source: Collateralassetstatustypevalues"
+enum Collateralassetstatustypevalues {
+  Offered
+  UnderAssessment
+  Transferred
+  Allocated
+  FreeForAllocation
+  AllocatedToAnotherLoan
+  IssuedForExecution
+}
+
+" BIAN source: Collateraltypevalues"
+enum Collateraltypevalues {
+  Letterofcredit
+  Cash
+  Securities
+  Physicalentities
+  Insurance
+  Stockcertificate
+  Bond
+  Bankguarantee
+  Other
+  Commodity
+  Automobile
+  Industrialvehicle
+  Commercialtruck
+  Railvehicle
+  Nauticalcommercialvehicle
+  Nauticalleisurevehicle
+  Aeroplane
+  Machinetool
+  Industrialequipment
+  Officeequipment
+  Itequipment
+  Medicalequipment
+  Energyrelatedequipment
+  Commercialbuilding
+}
+
+" BIAN source: Compliancechecktypevalues"
+enum Compliancechecktypevalues {
+  RegulatoryComplianceCheck
+  LegalComplianceCheck
+  GuidelineComplianceCheck
+}
+
+" BIAN source: Conditionstatustypevalues"
+enum Conditionstatustypevalues {
+  Defined
+  Pending
+  Activated
+  Evaluated
+  Fulfilled
+  Violated
+  Expired
+  Archived
+}
+
+" BIAN source: Contactpointtypevalues"
+enum Contactpointtypevalues {
+  ElectronicAddress
+  PostalAddress
+  PhoneNumber
+  Socialnetworkaddress
+}
+
+" BIAN source: Creditfacilityratetypevalues"
+enum Creditfacilityratetypevalues {
+  AvailabilityCommission
+}
+
+" BIAN source: Creditfacilitytypevalues"
+enum Creditfacilitytypevalues {
+  Revolving
+  FixedAmount
+  Decreasing
+}
+
+" BIAN source: Currencytypevalues"
+enum Currencytypevalues {
+  BaseCurrency
+  ReportingCurrency
+  SecondaryCurrency
+  TransferCurrency
+  SettlementCurrency
+}
+
+" BIAN source: Currentaccounttypevalues"
+enum Currentaccounttypevalues {
+  BusinessCurrentAccount
+  PersonalCurrentAccount
+  StandardCurrentAccount
+  PremiumOrPackagedCurrentAccount
+  StudentCurrentAccount
+  YouthCurrentAccount
+  JointCurrentAccount
+  SalaryAccount
+  ForeignCurrencyCurrentAccount
+  IslamicCurrentAccount
+  BasicBankAccount
+  PrivateBankingCurrentAccount
+}
+
+" BIAN source: Customereventtypevalues"
+enum Customereventtypevalues {
+  CustomerRelationshipEvent
+  CustomerSaleEvent
+  CustomerProductEvent
+  CustomerFraudEvent
+  CustomerLifeEvent
+}
+
+" BIAN source: Customerrelationshiplifecyclephasevalues"
+enum Customerrelationshiplifecyclephasevalues {
+  Lead
+  Prospect
+  Customer
+  LoyalCustomer
+}
+
+" BIAN source: Datetimetypevalues"
+enum Datetimetypevalues {
+  MaturityDate
+  InitiatedDate
+  RequestedDate
+  ExecutedDate
+  OpenDate
+  CloseDate
+  ExpiryDate
+  EffectiveDate
+  CreatingDate
+  ActivationDate
+  DeactivationDate
+  BlockingDate
+  SendingDate
+  ValidFromDate
+  ValidToDate
+  ReceivingDate
+  SigningDate
+  DueDate
+  ValueDate
+  FulfillmentDate
+  EntryDate
+}
+
+" BIAN source: Debitcreditindicatortvalues"
+enum Debitcreditindicatortvalues {
+  Debit
+  Credit
+}
+
+" BIAN source: Deposittypevalues"
+enum Deposittypevalues {
+  CashDeposit
+  SecurityDeposit
+  PawnDeposit
+  Call_NoticeDeposit
+  FixedTermDeposit
+  DemandDeposit
+  TimeDeposit
+  CardDeposit
+}
+
+" BIAN source: Devicecustomizationtypevalues"
+enum Devicecustomizationtypevalues {
+  CardDesign
+}
+
+" BIAN source: Deviceidentificationtypevalues"
+enum Deviceidentificationtypevalues {
+  IMEI
+  Serialnumber
+  Secureelementidentification
+  Othernational
+  Otherprivate
+}
+
+" BIAN source: Deviceoperatingsystemtypevalues"
+enum Deviceoperatingsystemtypevalues {
+  Android
+  Ios
+  Windows
+  Blackberry
+  Tizen
+  Othernational
+  Otherprivate
+}
+
+" BIAN source: Devicetypevalues"
+enum Devicetypevalues {
+  Securecardreader
+  Nonsecurecardreader
+  Mobile
+  Tablet
+  Personalcomputer
+  Othernational
+  Otherprivate
+  Wearable
+  Vehicle
+  Embedded
+  Keyfob
+  Jewellery
+  Sticker
+  Gamingdevice
+  Watch
+  Unknown
+  BiometricDevice
+}
+
+" BIAN source: Directdebitfrequencyvalues"
+enum Directdebitfrequencyvalues {
+  Annual
+  Monthly
+  Quarterly
+  Weekly
+  Daily
+  Adhoc
+  Fortnightly
+  Hourly
+  Half_Yearly
+}
+
+" BIAN source: Directdebitstatustypevalues"
+enum Directdebitstatustypevalues {
+  Active
+  Inactive
+  Created
+  PendingApproval
+  Cancelled
+  Expired
+  Rejected
+  Completed
+  Archived
+  Failed
+  Suspended
+}
+
+" BIAN source: Directdebittypevalues"
+enum Directdebittypevalues {
+  FixedAmount
+  VariableAmount
+  UsagebasedAmont
+  Paper
+  Emandate
+}
+
+" BIAN source: Directoryentrydatetypevalues"
+enum Directoryentrydatetypevalues {
+  OpenDate
+  RefreshDate
+}
+
+" BIAN source: Documentdatetimetypevalues"
+enum Documentdatetimetypevalues {
+  CreationDate
+  CapturingDate
+  VersionDate
+  ValueDate
+  IssueDate
+}
+
+" BIAN source: Featuretypevalues"
+enum Featuretypevalues {
+  FeeFeature
+  InterestFeature
+  WithdrawalFeature
+  DepositFeature
+  SweepFeature
+  LienFeature
+  PaymentFeature
+  RepaymentFeature
+  LimitFeature
+  OverdraftFeature
+  StatementFeature
+  CurrencyExchangeFeature
+  PriceFeature
+}
+
+" BIAN source: Feeapplicationfrequencyvalues"
+enum Feeapplicationfrequencyvalues {
+  Onclosing
+  Onopening
+  Chargingperiod
+  Daily
+  Peritem
+  Monthly
+  Onanniversary
+  Other
+  Perhundredpounds
+  Perhour
+  Peroccurrence
+  Persheet
+  Pertransaction
+  Pertransactionamount
+  Pertransactionpercentage
+  Quarterly
+  Sixmonthly
+  Statementmonthly
+  Weekly
+  Yearly
+}
+
+" BIAN source: Feecalculationbasistypevalues"
+enum Feecalculationbasistypevalues {
+  Flat
+  Perunit
+  Percentage
+  Rateperbrackets
+  Ratewithminimumamount
+  Ratewithmaximumamount
+  Other
+  Grossamount
+  Netamount
+  Netassetvalueprice
+}
+
+" BIAN source: Feecalculationfrequencyvalues"
+enum Feecalculationfrequencyvalues {
+  Onclosing
+  Onopening
+  Chargingperiod
+  Daily
+  Peritem
+  Monthly
+  Onanniversary
+  Other
+  Perhundredpounds
+  Perhour
+  Peroccurrence
+  Persheet
+  Pertransaction
+  Pertransactionamount
+  Pertransactionpercentage
+  Quarterly
+  Sixmonthly
+  Statementmonthly
+  Weekly
+  Yearly
+}
+
+" BIAN source: Feepaymentmethodtypevalues"
+enum Feepaymentmethodtypevalues {
+  Cash
+  Unit
+}
+
+" BIAN source: Feeplantypevalues"
+enum Feeplantypevalues {
+  StandardFeePlan
+  FinalFeePlan
+}
+
+" BIAN source: Feetypevalues"
+enum Feetypevalues {
+  Accountingfee
+  Adrfee
+  Advisoryfee
+  Airwaybillfee
+  Backendload
+  Brokeragefee
+  Clearanceandhandlingatdestination
+  Clearanceandhandlingatorigin
+  Collectfreight
+  Commission
+  Contingencydeferredsalescharge
+  Correspondentbankcharge
+  Custodyfee
+  Dangerousgoodsfee
+  Dilutionlevy
+  Discount
+  Equalisation
+  Frontendload
+  Initial
+  Insurancepremium
+  Issuancecancellationfee
+  Issuancefee
+  Managementfee
+  Matchingfees
+  Miscellaneousfee
+  Other
+  Packaging
+  Partacquis
+  Penalty
+  Pickup
+  Postagecharge
+  Premium
+  Publicationfee
+  Regulatoryfee
+  Securitycharge
+  Serviceprovisionfee
+  Shippingcharge
+  Signatureservice
+  Specialconcessions
+  Speciallyagreedfrontendload
+  Storageatdestination
+  Storageatorigin
+  Switch
+  Transferfee
+  Transportcharges
+  Ucitscommission
+  ChequeRelatedFee
+}
+
+" BIAN source: Financialdocumenttypevalues"
+enum Financialdocumenttypevalues {
+  Meteredserviceinvoice
+  Creditnoterelatedtofinancialadjustment
+  Debitnoterelatedtofinancialadjustment
+  Commercialinvoice
+  Creditnote
+  Debitnote
+  Hireinvoice
+  Selfbilledinvoice
+  Remittanceadvicemessage
+  Relatedpaymentinstruction
+  Commercialcontract
+  Foreignexchangedealreference
+  Statementofaccount
+  Dispatchadvice
+  Purchaseorder
+  Structuredcommunicationreference
+  Billoflading
+  Voucher
+  Accountreceivableopenitem
+  Tradeservicesutilitytransaction
+  Cashierreceipt
+  Customerreceipt
+  Journal
+  Salereceipt
+}
+
+" BIAN source: Financialinstrumentdatetimetypevalues"
+enum Financialinstrumentdatetimetypevalues {
+  CouponDate
+  ExpiryDate
+  FloatingRateFixingDate
+  MaturityDate
+  IssueDate
+  NextCallableDate
+  PutableDate
+  DatedDate
+  FirstPaymentDate
+}
+
+" BIAN source: Financialinstrumentidentificationtypevalues"
+enum Financialinstrumentidentificationtypevalues {
+  NASDAQ
+  ISIN
+}
+
+" BIAN source: Financialinstrumenttypevalues"
+enum Financialinstrumenttypevalues {
+  Loan
+  Bond
+  Deposit
+  Stock
+  Option
+  Share
+  Debt
+  Letterofcredit
+  Security
+  Derivative
+}
+
+" BIAN source: Financialtransactiontypevalues"
+enum Financialtransactiontypevalues {
+  PricingTransaction
+  FeeTransaction
+  WithdrawalTransaction
+  DepositTransaction
+  PaymentTransaction
+  ClearingTransaction
+  SettlementTransaction
+  Reconciliationtransaction
+  Updatetransaction
+  Securitiestransaction
+  RepaymentTransaction
+}
+
+" BIAN source: Frequencytypevalues"
+enum Frequencytypevalues {
+  Annual
+  Monthly
+  Quarterly
+  Semiannual
+  Weekly
+  Daily
+  Adhoc
+  Intraday
+  Overnight
+  Tendays
+  Fortnightly
+  Triggeredbymovement
+  Never
+  Rate
+  Oncreditevent
+  Upfront
+  Onexpiry
+  Hourly
+}
+
+" BIAN source: Geographicalareatypevalues"
+enum Geographicalareatypevalues {
+  Continent
+  Country
+  State
+  District
+  Province
+  Town
+  City
+  Region
+}
+
+" BIAN source: Goaldatetimetypevalues"
+enum Goaldatetimetypevalues {
+  SettingDate
+  PlanningDate
+  StartDate
+  ReviewDate
+  CompletionDate
+}
+
+" BIAN source: Goalstatustypevalues"
+enum Goalstatustypevalues {
+  Setting
+  Planning
+  Execution
+  MonitoringAndEvaluation
+  CompletionOrAchievement
+  MaintenanceOrSustainment
+  ClosureOrRenewal
+}
+
+" BIAN source: Goaltypevalues"
+enum Goaltypevalues {
+  Short_TermGoal
+  Long_TermGoal
+  BusinessGoal
+  PerformanceGoal
+  FinancialGoal
+  OutcomeGoal
+  SMARTGoal
+}
+
+" BIAN source: Instructiondatetimetypevalues"
+enum Instructiondatetimetypevalues {
+  DueDate
+  ExecutionDate
+  FulfillmentDate
+}
+
+" BIAN source: Instructionidentificationtypevalues"
+enum Instructionidentificationtypevalues {
+  OrderNumber
+  InstructionNumber
+}
+
+" BIAN source: Instructionstatustypevalues"
+enum Instructionstatustypevalues {
+  Pendingprocessing
+  Acknowledgedaccepted
+  Rejected
+  Accepted
+  Completed
+  Notreceived
+  Cancelled
+  Beingcancelled
+  Receivedbyissuerorregistrar
+  Pending
+  Standinginstruction
+  Queued
+  Cancelledbysubcustodian
+  Forwarded
+}
+
+" BIAN source: Instructiontypevalues"
+enum Instructiontypevalues {
+  PaymentInstruction
+  DeliveryOrder
+  InformationRequest
+  ExchangeInstruction
+  AllocationInstruction
+  MaintenanceInstruction
+}
+
+" BIAN source: Insurancearrangementtypevalues"
+enum Insurancearrangementtypevalues {
+  PremiumArrangement
+  CoverageArrangement
+  ExclusionArrangement
+  ClaimArrangement
+  TerminationArrangement
+  RenewalArrangement
+  BenefitArrangement
+  Legal_RegulatoryArrangement
+  PaymentArrangement
+  ServiceArrangement
+}
+
+" BIAN source: Interestcalculationmethodtypevalues"
+enum Interestcalculationmethodtypevalues {
+  Simple
+  Compounding
+}
+
+" BIAN source: Interestratetypevalues"
+enum Interestratetypevalues {
+  Fixed
+  Forfeit
+  Variable
+  Scheduled
+  Unscheduled
+  Discount
+  Fixedrateunderlyingexposureforlife
+  Fixedrateunderlyingexposurewithcompulsoryfutureswitchtofloating
+  Fixedwithfutureperiodicresets
+  Floatinglinkedtoindex
+  Floatingrateunderlyingexposureforlife
+  Floatingrateunderlyingexposurewithcap
+  Floatingrateunderlyingexposurewithfloor
+  Floatingrateunderlyingexposurewithfloorandcap
+  Modular
+  Obligorswapped
+  Other
+  Swicthoptionality
+}
+
+" BIAN source: Interesttransactiontypevalues"
+enum Interesttransactiontypevalues {
+  InterestAllocationTransaction
+  InterestPaymentTransaction
+  InterestAdjustmentTransaction
+}
+
+" BIAN source: Interesttypevalues"
+enum Interesttypevalues {
+  Fixed
+  Floatingratenote
+  Dualbasis
+  Index
+  Discounted
+  Zerocoupon
+  Exinterest
+  Cuminterest
+}
+
+" BIAN source: Issueddevicestatustypevalues"
+enum Issueddevicestatustypevalues {
+  Issued
+  IssuedButNotActivated
+  Activated
+  Suspended
+  Retrieved
+}
+
+" BIAN source: Journalstatustypevalues"
+enum Journalstatustypevalues {
+  DraftOrInProgress
+  SubmittedOrPendingApproval
+  RejectedOrReturned
+  Approved
+  Scheduled
+  Posted
+  PartiallyPosted
+  Reversed
+  VoidedOrCanceled
+  ArchivedOrClosed
+}
+
+" BIAN source: Journaltypevalues"
+enum Journaltypevalues {
+  GeneralJournal
+  RecurringJournal
+  AccrualJournal
+  AdjustmentJournal
+  ReversingJournal
+  SubledgerJournal
+  SalesJournal
+  PurchasesJournal
+  CashReceiptsJournal
+  CashDisbursementsJournal
+  PayrollJournal
+  IntercompanyJournal
+  ConsolidationJournal
+  TaxJournal
+  BudgetJournal
+}
+
+" BIAN source: Ledgeraccountingbasistypevalues"
+enum Ledgeraccountingbasistypevalues {
+  GAAP
+  IFRS
+  LocalStatutoryAccounting
+  CashBasisAccounting
+  TaxBasisAccounting
+}
+
+" BIAN source: Ledgertypevalues"
+enum Ledgertypevalues {
+  Primary
+  Secondary
+  Statutory
+  Management
+  Budget
+  Tax
+  Consolidation
+  Adjustment
+}
+
+" BIAN source: Limitstatustypevalues"
+enum Limitstatustypevalues {
+  Enabled
+  Disabled
+  Deleted
+  Requested
+}
+
+" BIAN source: Limittypevalues"
+enum Limittypevalues {
+  Multilateral
+  Bilateral
+  Netbilateral
+  Indirectbilateral
+  Global
+  Mandatorybilateral
+  Discretionarybilateral
+  Directdebit
+  Singlecustomerdirectdebit
+  Singlefinancialinstitutiondirectdebit
+  Totaldailycustomerdirectdebit
+  Totaldailyfinancialinstitutiondirectdebit
+  Autocollateralisation
+  Unsecuredcredit
+  Externalguarantee
+}
+
+" BIAN source: Mandatestatustypevalues"
+enum Mandatestatustypevalues {
+  Accepted
+  Rejected
+}
+
+" BIAN source: Mandatetypevalues"
+enum Mandatetypevalues {
+  Consent
+  PowerOfAttorney
+  DirectDebitMandate
+  ServicingMandate
+}
+
+" BIAN source: Modalitytypevalues"
+enum Modalitytypevalues {
+  AllocationModality
+  CalculationModality
+  DerivationModality
+  PaymentModality
+  ProcessingModality
+  ApplicationModality
+  DeliveryModality
+}
+
+" BIAN source: Organisationdatetimetypevalues"
+enum Organisationdatetimetypevalues {
+  RegistrationDate
+  EstablishmentDate
+  EntityExpirationDate
+}
+
+" BIAN source: Organisationidentificationtypevalues"
+enum Organisationidentificationtypevalues {
+  LEI
+  ELF
+  MIC
+  BICFI
+  Bankpartyidentification
+  Centralbankidentificationnumber
+  Clearingidentificationnumber
+  Certificateofincorporationnumber
+  Countryidentificationcode
+  Customernumber
+  Datauniversalnumberingsystem
+  Employeridentificationnumber
+  Gs1glnidentifier
+  SIREN
+  SIRET
+  Taxidentificationnumber
+  EANGLN
+}
+
+" BIAN source: Organisationlegalstructuretypevalues"
+enum Organisationlegalstructuretypevalues {
+  Corporation
+  Individual
+  Supranational
+  Sovereign
+  Municipal
+  Province
+  State
+  County
+  Partnership
+  Financialinstitution
+  National
+}
+
+" BIAN source: Organisationnametypevalues"
+enum Organisationnametypevalues {
+  ShortName
+  TradingName
+  LegalName
+}
+
+" BIAN source: Organisationtypevalues"
+enum Organisationtypevalues {
+  LegalEntity
+  Authority
+  OrganisationUnit
+  FinancialInstitution
+  Charity
+  GovernmentBody
+}
+
+" BIAN source: Partyidentificationtypevalues"
+enum Partyidentificationtypevalues {
+  Taxidentificationnumber
+  Nationalregistrationnumber
+  Registrationauthorityidentification
+  LEI_LegalEntityIdentifier_
+  Alienregistrationnumber
+  Passportnumber
+  Taxexemptidentificationnumber
+  Corporateidentification
+  Driverlicensenumber
+  Foreigninvestmentidentitynumber
+  Socialsecuritynumber
+  Identitycardnumber
+  Concat
+  Nationalregistrationidentificationnumber
+}
+
+" BIAN source: Partyinvolvementtypevalues"
+enum Partyinvolvementtypevalues {
+  AgreementInvolvement
+  PartyInvolvement
+  ArrangementInvolvement
+  DesignSpecificationInvolvement
+  RelationshipInvolvement
+  LocationInvolvement
+  BankGuaranteeInvolvement
+}
+
+" BIAN source: Partylegalstructuretypevalues"
+enum Partylegalstructuretypevalues {
+  Individual
+  CommunityInterestCompany
+  CharitableIncorporatedOrganisation
+  Co_Operative
+  Charity
+  GeneralPartnership
+  LimitedLiabilityPartnership
+  ScottishLimitedPartnership
+  LimitedPartnership
+  PrivateLimitedCompany
+  PublicLimitedCompany
+  Sole_SoleTrader_
+}
+
+" BIAN source: Partylocationtypevalues"
+enum Partylocationtypevalues {
+  LocationIsResidentialAddressOfParty
+  LocationIsDomicileAddressOfParty
+  LocationIsPlaceOfBirthOfParty
+  LocationIsWorkAddressOfParty
+  LocationIsDeliveryPointAddressOfParty
+  PartyIsOwnerOfLocation
+  PartyIsOccupierOfLocation
+  PartyIsAlliancePartnerOfLocation
+  LocationIsContactPointAddressOfParty
+}
+
+" BIAN source: Partytypevalues"
+enum Partytypevalues {
+  Person
+  Organisation
+}
+
+" BIAN source: Paymentamountandcurrencytypevalues"
+enum Paymentamountandcurrencytypevalues {
+  InstructedAmountAndCurrency
+  EquivalentAmountAndCurrency
+  DebtorAccountAmountAndCurrency
+  InterbankSettlementAmountAndCurrency
+  CreditorAccountAmountAndCurrency
+  Net_ReceivedAmountAndCurrency
+}
+
+" BIAN source: Paymentcategorypurposetypevalues"
+enum Paymentcategorypurposetypevalues {
+  Bonuspayment
+  Cashmanagementtransfer
+  Cardbulkclearing
+  Creditcardpayment
+  Tradesettlementpayment
+  Debitcardpayment
+  Dividend
+  Deliveragainstpayment
+  Epayment
+  Feecollection
+  Governmentpayment
+  Hedging
+  Irrevocablecreditcardpayment
+  Irrevocabledebitcardpayment
+  Intracompanypayment
+  Interest
+  Loan
+  Commercial
+  Consumer
+  Otherpayment
+  Pensionpayment
+  Represented
+  Reimbursementreceivedcredittransfer
+  Receiveagainstpayment
+  Salarypayment
+  Securities
+  Socialsecuritybenefit
+  Supplierpayment
+  Taxpayment
+  Trade
+  Treasurypayment
+  Valueaddedtaxpayment
+  Withholding
+}
+
+" BIAN source: Paymentdatetimetypevalues"
+enum Paymentdatetimetypevalues {
+  RequestedExecutionDate
+  AcceptanceDate
+  CreationDate
+  ValueDate
+  DueDate
+  ExpiryDate
+  ExpectedDate
+  PoolingAdjustmentDate
+}
+
+" BIAN source: Paymentidentificationtypevalues"
+enum Paymentidentificationtypevalues {
+  Executionidentification
+  Endtoendidentification
+  Instructionidentification
+  Transactionidentification
+  Clearingsystemreference
+  Creditorreference
+  UETR
+  Counterpartyreference
+  Identification
+  Commonidentification
+  Matchingreference
+  Uniquetradeidentifier
+  Clearingbrokeridentification
+  PaymentOrderID
+  ClientReference
+  End_To_EndID
+  ExternalReference
+  InstructionID
+  TransactionID_ExecutionID_
+}
+
+" BIAN source: Paymentinvolvementtypevalues"
+enum Paymentinvolvementtypevalues {
+  PayerOrDebtor
+  PayeeBankOrCreditorAgent
+  PayeeOrCreditor
+  PayerBankOrDebtorAgent
+  Initiator
+  PSU
+  PSP
+  UltimateDebtor
+  UltimateCreditor
+}
+
+" BIAN source: Paymentlocalinstumenttypevalues"
+enum Paymentlocalinstumenttypevalues {
+  Directdebitconfirmedelectronicmandate
+  Directdebitpapermandatewithpaperauthorization
+  Directdebitunconfirmedelectronicmandate
+  Batchpaymentsaruba
+  Instantpaymentsaruba
+  Credittransfers
+  Nonpreauthoriseddirectdebitat
+  Preauthoriseddirectdebitat
+  Cashperpost
+  Returnedcredittransfers
+  Truncatedcredittransfers
+  Directdebits
+  Returneddirectdebits
+  Truncatedchecks
+  Revokedcredittransfers
+  Revokeddirectdebits
+  Revokedreturnedcredittransfers
+  Revokedreturneddirectdebits
+  Revokedtruncatedchecks
+  Revokedtruncatedcredittransfers
+  Cardclearing
+  Nonpreauthoriseddirectdebitde
+  Preauthoriseddirectdebitde
+  Imagebasedchequecollection
+  Paperlesschequecollection
+  Businesstobusinessdirectdebit
+  Businesstocustomerdirectdebit
+  Ancillarysystemtransferinitiation
+  Backuppayment
+  Mandatedpayment
+  Settlementbanktransferinitiation
+  Preauthoriseddirectdebitacc_l_r_acceleratedclearing2dayordinairenormalclearing4day
+  Preauthoriseddirectdebitordinairenormalclearing4day
+  Preauthoriseddirectdebitv_rifi_verifiedclearing
+  Recoveredbillofexchangeorpromissorynote
+  Nonpreauthoriseddirectdebitriba
+  Preauthorisedrevocabledirectdebit
+  Preauthorisedrevocableurgentdirectdebit
+  Paymentsviainternetownedbycurrence
+  Instantcredittransfernottimecritical
+  Instantcredittransfertimecritical
+  Paymentsviainternetownedbycurrenceusinginstantcredittransfer
+  Paymentsviainternetownedbycurrenceusinginstantcredittransfernottimecritical
+  Paymentsviainternetownedbycurrenceusinginstantcredittransfertimecritical
+  Dutchdomesticbulkpayment
+  Dutchurgentpayment
+  Paymentviaacceptgiroownedbycurrence
+  Paymentsviastandaarddigitalenota
+  Incidentmanagementcorrection
+  Directdebitinitiatedbythegovernmentwithspecialconditions
+  Masspaymentbeneficiary
+  Masspaymentours
+  Masspaymentshared
+  Standingorder
+  Oneoffauthorisation
+  Oneoffauthorisationcharities
+  Oneoffauthorisationconstructionindustry
+  Oneoffauthorisationtuitionfees
+  Standingauthorisationcompanies
+  Standingauthorisationcompanieswithoutdebtorrevocationright
+  Standingauthorisationgeneral
+  Standingauthorisationlotteries
+  Convertedbankpayment
+  Businesspayment
+  Crossbordercustomercredittransfer
+  Overnight
+  Paymentwitheri
+  Sameday
+  Corenorefund
+  Directdebitfixedamount
+  Sepadirectdebitcore
+  Sepab2bdirectdebitami
+  Sepabusinesstobusinessdirectdebit
+  Sepacored1directdebitami
+  Sepacoredirectdebitami
+  Sepadirectdebit1daysettlement
+  Sepafadirectdebitami
+  Instantcredittransfer
+  Authenticateddirectdebit
+  Unauthenticateddirectdebit
+  Cashconcentrationintragroup
+  Banktransfer
+  Checksamedaysettlementwire
+  Customertransfer
+  Customertransferplus
+  Deposittosendersaccount
+  Fedfundsreturned
+  Fedfundssold
+  Nonvalueservicemessage
+  Drawdownresponsevaluetohonoradrawdownrequest
+  Banktobankdrawdownrequestorresponsenonvalue
+  Customerorcorporatedrawdownrequestorresponsenonvalue
+  Internationalach
+  Cashconcentrationordisbursementcorporatecounterparty
+  Corporatetradeexchange
+  Prearrangedpaymentordepositconsumercounterparty
+  Customerinitiatedentry
+  Representedcheckentry
+  Accountsreceivablecheck
+  Internetinitiatedentry
+  Pointofpurchase
+  Pointofsale
+  Telephoneinitiatedentry
+}
+
+" BIAN source: Paymentmechanismtypevalues"
+enum Paymentmechanismtypevalues {
+  ACH
+  SWIFT
+}
+
+" BIAN source: Paymentmethodtypevalues"
+enum Paymentmethodtypevalues {
+  Cheque
+  Credittransfer
+  Directdebit
+  Transferadvice
+  Direct
+  Classical
+}
+
+" BIAN source: Paymentpurposevalues"
+enum Paymentpurposevalues {
+  Salarypayment
+  Treasurypayment
+  Advancepayment
+  Agriculturaltransfer
+  Alimonypayment
+  Childbenefit
+  Unemploymentdisabilitybenefit
+  Bonuspayment_
+  Cashmanagementtransfer
+  Capitalbuilding
+  Charitypayment
+  Collectionpayment
+  Commoditytransfer
+  Commercialpayment
+  Commission
+  Costs
+  Copyright
+  Dividend
+  Foreignexchange
+  Purchasesaleofgoods
+  Governmentpayment
+  Instalmenthirepurchaseagreement
+  Intracompanypayment
+  Insurancepremium
+  Interest
+  Licensefee
+  Loan
+  Loanrepayment
+  Netting
+  Payroll
+  Pensionpayment
+  Refund
+  Rent
+  Royalties
+  Purchasesaleofservices
+  Securities
+  Socialsecuritybenefit
+  Subscription
+  Taxpayment
+  Valueaddedtaxpayment
+  Consumerthirdpartyconsolidatedpayment
+  Debitcollectionpayment
+  Supplierpayment
+  Hedging
+  Multipleservicetypes
+  Nototherwisespecified
+  Cardpayment
+  Creditcardbill
+  Ferry
+  Air
+  Bus
+  Railway
+  Convalescentcarefacility
+  Dentalservices
+  Anesthesiaservices
+  Homehealthcare
+  Hospitalcare
+  Intermediatecarefacility
+  Longtermcarefacility
+  Medicalservices
+  Visioncare
+  Durablemedicaleequipment
+  Cabletvbill
+  Electricitybill
+  Gasbill
+  Telephonebill
+  Othertelecomrelatedbill
+  Waterbill
+  Study
+  Pricepayment
+  Installment
+  Recurringinstallmentpayment
+  Openingfee
+  Cancellationfee
+  Governmentinsurance
+  Insurancepremiumcar
+  Laborinsurance
+  Lifeinsurance
+  Propertyinsurance
+  Healthinsurance
+  Carloanprincipalrepayment
+  Housingloanrepayment
+  Companysocialloanpaymenttobank
+  Estatetax
+  Housingtax
+  Incometax
+  Netincometax
+  Businessexpenses
+  Trustfund
+  Networkcharge
+  Networkcommunication
+  Receiptpayment
+  Paymentterms
+  Other
+  Withholding
+}
+
+" BIAN source: Paymentsequencetypevalues"
+enum Paymentsequencetypevalues {
+  First
+  Recurring
+  Final
+  Oneoff
+  Represented
+}
+
+" BIAN source: Paymentservicetypevalues"
+enum Paymentservicetypevalues {
+  CreditTransferService
+  StandingOrderService
+  DirectDebitService
+  CardPaymentService
+  WithdrawService
+  DepositService
+  OverdraftService
+  MoneyRemittanceService
+  StatementService
+}
+
+" BIAN source: Paymenttimevalues"
+enum Paymenttimevalues {
+  Paymentondelivery
+  Endofmonthofdelivery
+  Endofperiodafterdelivery
+  Endofperiodafterendofdeliverymonth
+  Paymentonreceiptofinvoice
+  Endofperiodafterendofreceiptmonth
+  Endofperiodafterreceipt
+  Endofmonthofreceipt
+  Endofperiodaftermatch
+  Endofperiodaftershipmentdate
+  Endofperiodafterpurchaseorderdate
+  Endofperiodafterbaselineestablishment
+  Endofperiodafterinvoicedate
+}
+
+" BIAN source: Paymenttransactionstatustypevalues"
+enum Paymenttransactionstatustypevalues {
+  Acceptedtechnicalvalidation
+  Received
+  Partiallyaccepted
+  Rejected
+  Pending
+  Acceptedcustomerprofile
+  Acceptedsettlementinprocess
+  Acceptedsettlementcompleted
+  Accepted
+  Acceptedcancellationrequest
+  Rejectedcancellationrequest
+  Acceptedwithchange
+  Partiallyacceptedcancellationrequest
+  Pendingcancellationrequest
+  Acceptedcreditsettlementcompleted
+  Paymentcancelled
+  Nocancellationprocess
+}
+
+" BIAN source: Paymenttypevalues"
+enum Paymenttypevalues {
+  Cashtransaction
+  Domesticpayment
+  Domestichighvaluepayment
+  Domesticprioritypayment
+  Crossborderpayment
+  Crossborderprioritypayment
+  Crossborderhighvaluepayment
+  Thirdcurrencypayment
+  Thirdcurrencyhighvaluepayment
+  Thirdcurrencyprioritypayment
+  Tradesettlementpayment
+  Foreignexchange
+  Equivalentamount
+  Loan
+  Loanrepayment
+  Securities
+  Lockbox
+  Dividend
+  Crossedcheque
+  Opencheque
+  Ordercheque
+  Circularcheque
+  Travellerscheques
+  Bankdraft
+  Documentarycredit
+  Billofexchange
+  Collection
+  Cashmanagementtransfer
+  Topaccount
+  Zerobalanceaccount
+  Standingfacilities
+  Standardservicelevelcredit
+  Liquiditytransfer
+  Advancepayment
+  Valuedateadjustment
+  Dvpgross
+  Dvpnet
+  Netting
+  Limitpayment
+  Backup
+  Expresspayment
+  Centralbankoperation
+  Clspayment
+  Eurodomesticpayment
+  Agriculturaltransfer
+  Alimonypayment
+  Balanceretail
+  Bonuspayment_
+  Brokeragefee
+  Capitalbuilding
+  Charitypayment
+  Childbenefit
+  Commercialcredit
+  Commission
+  Commoditytransfer
+  Costs
+  Copyright
+  Governmentpayment
+  Instalmenthirepurchaseagreement
+  Insurancepremium
+  Intracompanypayment
+  Interest
+  Licensefee
+  Metals
+  Pensionpayment
+  Purchasesaleofgoods
+  Refund
+  Rent
+  Royalties
+  Purchasesaleofservices
+  Salarypayment
+  Socialsecuritybenefit
+  Standingorder
+  Subscription
+  Treasurystatepayment
+  Unemploymentdisabilitybenefit
+  Valueaddedtaxpayment
+  Taxpayment
+  Overnightdeposit
+  Marginallending
+  Other
+  Upfront
+  Unwind
+  Principalexchange
+}
+
+" BIAN source: Plantypevalues"
+enum Plantypevalues {
+  AdministrativePlan
+  ManagementPlan
+  StratgyPlan
+  FinancialPlan
+  DevelopmentPlan
+}
+
+" BIAN source: Pointofaccesstypevalues"
+enum Pointofaccesstypevalues {
+  ChannelAccess
+  ProductAndServiceAccess
+  DeviceAccess
+  APIAccess
+}
+
+" BIAN source: Positiontypevalues"
+enum Positiontypevalues {
+  Balance_Cashflow
+  CreditPosition
+  CollateralPosition
+  SecurityPosition
+}
+
+" BIAN source: Productagreementinvolvementtypevalues"
+enum Productagreementinvolvementtypevalues {
+  Customer
+  Servicer
+  Broker
+}
+
+" BIAN source: Productagreementtypevalues"
+enum Productagreementtypevalues {
+  CurrentAccountAgreement
+  SavingsAccountAgreement
+  BrokeredProductAgreement
+  ConsumerLoanAgreement
+  MortgageLoanAgreement
+  DirectDebitServiceAgreement
+  TermDepositAgreement
+}
+
+" BIAN source: Productfeaturetypevalues"
+enum Productfeaturetypevalues {
+  Bankingservice
+  Administrationservice
+  Accessservice
+  Pricefeature
+}
+
+" BIAN source: Productidentificationtypevalues"
+enum Productidentificationtypevalues {
+  ISINCode
+  PackageCode
+  Buyersitemnumber
+  Commercialdescriptioncodename
+  EAN
+  Harmonizedtariffcodename
+  Manufacturersitemnumber
+  Modelnumber
+  Partnumber
+  Quotacategory
+  Stylenumber
+  Suppliersitemnumber
+  Universalproductcode
+}
+
+" BIAN source: Productstatustypevalues"
+enum Productstatustypevalues {
+  Initiated
+  Announced
+  Sold
+  Obsolete
+  Active
+}
+
+" BIAN source: Rateplantypevalues"
+enum Rateplantypevalues {
+  StandardRatePlan
+  AdjustmentRatePlan
+  FinalRatePlan
+}
+
+" BIAN source: Ratetypevalues"
+enum Ratetypevalues {
+  Fixed
+  Forfeit
+  Variable
+  Open
+  Unknown
+  Nilpayment
+  Additionaltax
+  Charges
+  Cashinlieuofsecurities
+  Gross
+  Cashincentive
+  Net
+  Sollication
+  Stampduty
+  Stockexchangetax
+  Withholdingtax
+  Transfertax
+  Transactiontax
+  Taxdeferred
+  Taxfeeamount
+  Withholdingofforeigntax
+  Withholdingoflocaltax
+  Imputed
+  Precompte
+  Onetiertax
+  Localtax
+  Scheduled
+  Unscheduled
+  Anyandall
+}
+
+" BIAN source: Remittancedeliverymethodtypevalues"
+enum Remittancedeliverymethodtypevalues {
+  Fax
+  Electronicdatainterchange
+  Uniformresourceidentifier
+  Email
+  Post
+  SMS
+}
+
+" BIAN source: Reporttypevalues"
+enum Reporttypevalues {
+  FinancialReport
+  BusinessReport
+  ManagementReport
+  Statement
+  MaintenanceReport
+  RegulatoryReport
+  TaxReport
+  AnalysisReport
+}
+
+" BIAN source: Rulesettypevalues"
+enum Rulesettypevalues {
+  Policy
+  Regulation
+  Law
+  Guideline
+  Criterion
+  Standard
+}
+
+" BIAN source: Servicetypevalues"
+enum Servicetypevalues {
+  ITService
+  AdministrativeService
+  SystemService
+  FinancialService
+  InformationService
+  BusinessService
+}
+
+" BIAN source: Standingorderdatetimetypevalues"
+enum Standingorderdatetimetypevalues {
+  FirstPaymentDateTime
+  NextPaymentDateTime
+  LastPaymentDateTime
+  FinalPaymentDateTime
+}
+
+" BIAN source: Standingordertypevalues"
+enum Standingordertypevalues {
+  UserDefinedStandingOrder
+  PredefinedStandingOrder
+}
+
+" BIAN source: Taxidentificationtypevalues"
+enum Taxidentificationtypevalues {
+  TaxIdentificationNumber
+  GlobalIntermediaryIdentificationNumber
+}
+
+" BIAN source: Taxtypevalues"
+enum Taxtypevalues {
+  Valueaddedtaxofzerorate
+  Provincial
+  Nationaltax
+  Statetax
+  Withholdingtax
+  Capitalgaintax
+  Interimprofittax
+  Stampduty
+  Wealthtax
+  Inheritancetax
+  Solidaritysurcharge
+  Taxcredit
+  Equalisation
+  Gifttax
+  Consumptiontax
+  Alternativeminimumtax
+  Localtax
+  Nationalfederaltax
+  Paymentlevytax
+  Stockexchangetax
+  Transactiontax
+  Transfertax
+  Valueaddedtax
+  Localbrokercommission
+  Executingbrokercommission
+  Eutaxretention
+  Aktiengewinn1
+  Aktiengewinn2
+  Zwischengewinn
+  Customstax
+  Other
+  Mietgewinn
+  Germanlocaltax3
+  Germanlocaltax4
+  Germanlocaltax2
+  Withholdingofforeigntax
+  Withholdingoflocaltax
+  Capitallosscredit
+}
+
+" BIAN source: Termandconditiontypevalues"
+enum Termandconditiontypevalues {
+  CommissionTermAndCondition
+  LegalTermAndCondition
+  RegulatoryTermAndCondition
+  PolicyTermAndCondition
+  RestrictionTermAndCondition
+  PreferenceTermAndCondition
+  InvestmentTermAndCondition
+  MandateTermAndCondition
+  OperationalTermAndCondition
+  ProductTermAndCondition
+  AgreementTermAndCondition
+  RelationshipTermAndCondition
+  ConfidentialTermAndCondition
+}
+
+" BIAN source: Transactiondatetimetypevalues"
+enum Transactiondatetimetypevalues {
+  ExecutedDate
+  FulfillmentDate
+  InitiatedDate
+  CancelledDate
+  ApprovedDate
+  ValueDate
+  BookingDate
+}
+
+" BIAN source: Transactionstatustypevalues"
+enum Transactionstatustypevalues {
+  Initiated
+  Executed
+  Cancelled
+  Confirmed
+  Suspended
+  Pending
+  Completed
+  Notified
+  Booked
+  Rejected
+}
+
+" BIAN source: Transactiontypevalues"
+enum Transactiontypevalues {
+  FinancialTransaction
+  BusinessTransaction
+  BankingTransaction
+  AccountingTransaction
+  BookingTransaction
+  AllocationTransaction
+  DeliveryTransaction
+  ProductionTransaction
+}
+
+" BIAN source: Truefalseindicatorvalues"
+enum Truefalseindicatorvalues {
+  _1
+  _0
+}
+
+" BIAN source: Undertakingtransactiontypevalues"
+enum Undertakingtransactiontypevalues {
+  PaymentTransaction
+  IssuingTransaction
+  BookingTransaction
+  CollateralAllocationTransaction
+  TerminationTransaction
+  AmendmentTransaction
+}
+
+" BIAN source: Withdrawaltypevalues"
+enum Withdrawaltypevalues {
+  CashWithdrawal
+  SecurityWithdrawal
+}

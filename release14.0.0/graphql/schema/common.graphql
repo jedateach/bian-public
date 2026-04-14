@@ -1,0 +1,864 @@
+# BIAN v14 GraphQL Schema - Common / Shared Types
+# ================================================
+#
+# This file defines the base structural types that appear across multiple
+# BIAN v14 Service Domains. They correspond to shared `components/schemas`
+# entries that are referenced by many Service Domain schemas.
+#
+# All type names use PascalCase; field names use camelCase, preserving
+# the semantic name from BIAN (e.g. BIAN `IdentifierValue` → `identifierValue`).
+#
+# Source: BIAN Release 14.0.0 Semantic APIs (OAS 3.x)
+
+# ---------------------------------------------------------------------------
+# Identifier
+# ---------------------------------------------------------------------------
+
+"""
+A unique identifier for a BIAN entity instance.
+Maps to the BIAN `Identifier` schema used pervasively across all Service Domains.
+"""
+type Identifier {
+  """The identifier value string."""
+  identifierValue: String
+
+  """Reference to the party or system that issued this identifier."""
+  identifierIssuerReference: String
+
+  """Date from which this identifier is valid."""
+  identifierStartDate: Date
+
+  """Date on which this identifier expires."""
+  identifierEndDate: Date
+}
+
+# ---------------------------------------------------------------------------
+# DateTime & Period
+# ---------------------------------------------------------------------------
+
+"""
+A structured date-time value as used across BIAN Service Domains.
+Maps to the BIAN `Datetime` schema.
+"""
+type BianDateTime {
+  """The date-time value in ISO 8601 format."""
+  dateTimeContent: DateTime
+
+  """IANA time-zone code (e.g. 'Europe/London', 'UTC')."""
+  timeZoneCode: String
+
+  """Indicates whether daylight saving time is in effect."""
+  daylightSavingIndicator: Boolean
+
+  """Classifies the purpose of this date-time (e.g. MaturityDate, OpenDate)."""
+  dateTimeType: Datetimetypevalues
+}
+
+"""
+A contiguous period defined by a start and end date-time.
+Maps to the BIAN `Datetimeperiod` schema.
+"""
+type DateTimePeriod {
+  """Start of the period."""
+  fromDateTime: DateTime
+
+  """End of the period."""
+  toDateTime: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Amount & Currency
+# ---------------------------------------------------------------------------
+
+"""
+A monetary amount with its currency denomination.
+Maps to the BIAN `Amount` schema.
+"""
+type Amount {
+  """The numeric amount value."""
+  amountValue: Decimal
+
+  """ISO 4217 currency code for this amount."""
+  currencyCode: CurrencyCode
+
+  """Classifies the semantic purpose of the amount (e.g. Principal, Actual)."""
+  amountType: Amounttypevalues
+}
+
+"""
+An account balance with its currency details.
+Maps to the BIAN `Accountbalance` / `AccountBalance` schemas.
+"""
+type AccountBalance {
+  """The monetary value of the balance."""
+  balanceAmount: Amount
+
+  """The type of balance (e.g. AvailableBalance, LedgerBalance)."""
+  balanceType: Balancetypevalues
+
+  """The date and time at which this balance was calculated."""
+  balanceValueDate: DateTime
+
+  """Whether the balance represents a debit or credit position."""
+  balanceIndicator: Debitcreditindicatortvalues
+
+  """Counterparty type for bilateral/multilateral balance positions."""
+  balanceCounterpartyType: Balancecounterpartytypevalues
+
+  """Date on which this balance was calculated."""
+  balanceCalculationDate: DateTime
+
+  """Further sub-classification of the balance type."""
+  balanceSubType: Balancesubtypevalues
+}
+
+"""
+Currency denomination details for an account.
+Maps to the BIAN `Accountcurrency` schema.
+"""
+type AccountCurrency {
+  """ISO 4217 currency code."""
+  currencyCode: CurrencyCode
+
+  """Classifies the currency role for the account."""
+  currencyType: Currencytypevalues
+}
+
+# ---------------------------------------------------------------------------
+# InvolvedParty
+# ---------------------------------------------------------------------------
+
+"""
+A reference to a party that plays a role in a BIAN activity.
+Maps to the BIAN `Involvedparty` schema.
+"""
+type InvolvedParty {
+  """Opaque reference / identifier for the party."""
+  partyReference: String
+
+  """Reference identifying the specific involvement or role of the party."""
+  involvementReference: String
+}
+
+# ---------------------------------------------------------------------------
+# Status
+# ---------------------------------------------------------------------------
+
+"""
+Generic status wrapper used across many BIAN Service Domain entities.
+Maps to the BIAN `Status` schema.
+"""
+type Status {
+  """The reason or explanation for the current status."""
+  statusReason: String
+
+  """The date-time at which this status became effective."""
+  statusDateTime: DateTime
+
+  """The period during which this status is valid."""
+  statusValidityPeriod: DateTimePeriod
+
+  """Party responsible for or associated with this status."""
+  statusInvolvedPartyReference: InvolvedParty
+}
+
+# ---------------------------------------------------------------------------
+# Log
+# ---------------------------------------------------------------------------
+
+"""
+An activity log or journal record.
+Maps to the BIAN `Log` schema.
+"""
+type ActivityLog {
+  """Classification of the log (e.g. transaction log, access log)."""
+  logType: String
+
+  """The time period covered by this log."""
+  logPeriod: DateTimePeriod
+
+  """The date on which this log entry was created."""
+  logDate: DateTime
+
+  """Unique identifier for this log entry."""
+  logIdentification: Identifier
+}
+
+# ---------------------------------------------------------------------------
+# Name
+# ---------------------------------------------------------------------------
+
+"""
+A name value wrapper.
+Maps to the BIAN `Name` schema.
+"""
+type Name {
+  """The name string."""
+  name: String
+}
+
+# ---------------------------------------------------------------------------
+# Address & Location
+# ---------------------------------------------------------------------------
+
+"""
+A physical or electronic address.
+Maps to the BIAN `Address` schema.
+"""
+type Address {
+  """Classification of the address (e.g. PostalAddress, ElectronicAddress)."""
+  addressType: Addresstypevalues
+
+  """Human-readable address description."""
+  addressDescription: String
+}
+
+"""
+A geographical or logical location.
+Maps to the BIAN `Location` schema.
+"""
+type Location {
+  """Human-readable description of the location."""
+  locationDescription: String
+
+  """Date-time associated with this location record."""
+  locationDateTime: DateTime
+
+  """Current status of this location."""
+  locationStatus: String
+
+  """Type classification of the location."""
+  locationType: Geographicalareatypevalues
+
+  """Unique identifier for this location."""
+  locationIdentification: Identifier
+
+  """Postal or electronic address for this location."""
+  locationAddress: Address
+
+  """The name of the location."""
+  locationName: String
+
+  """The time-zone code for this location."""
+  locationTimeZone: String
+}
+
+# ---------------------------------------------------------------------------
+# Action & Event
+# ---------------------------------------------------------------------------
+
+"""
+An action or event record.
+Maps to the BIAN `Action` schema.
+"""
+type Action {
+  """Classification of the action type."""
+  actionType: Actiontypevalues
+
+  """Type of event that triggered or constitutes this action."""
+  eventType: String
+
+  """Date and time of the event."""
+  eventDateTime: DateTime
+
+  """Human-readable description of the event."""
+  eventDescription: String
+
+  """The source entity or system that generated the event."""
+  eventSource: String
+
+  """Location where the event occurred."""
+  eventLocation: Location
+
+  """The specific action taken."""
+  eventAction: String
+
+  """The status of the event/action."""
+  eventStatus: Status
+
+  """A value associated with the event."""
+  eventValue: String
+
+  """Validity period for this event record."""
+  eventValidityPeriod: DateTimePeriod
+
+  """Unique identifier for this event/action."""
+  eventIdentification: Identifier
+}
+
+# ---------------------------------------------------------------------------
+# Arrangement
+# ---------------------------------------------------------------------------
+
+"""
+A formal arrangement between parties (e.g. fee arrangement, sweep arrangement).
+Maps to the BIAN `Arrangement` schema.
+"""
+type Arrangement {
+  """The action associated with this arrangement."""
+  arrangementAction: Action
+
+  """Date on which this arrangement becomes effective."""
+  arrangementStartDate: Date
+
+  """Date on which this arrangement expires or ends."""
+  arrangementEndDate: Date
+
+  """Current status of the arrangement."""
+  arrangementStatus: ArrangementstatusType
+
+  """Subject matter covered by the arrangement."""
+  arrangementSubjectMatter: String
+
+  """Classification of the arrangement type."""
+  arrangementType: Arrangementtypevalues
+
+  """Unique identifier for this arrangement."""
+  arrangementIdentification: Identifier
+}
+
+"""
+The status of an arrangement.
+Maps to the BIAN `Arrangementstatus` schema.
+"""
+type ArrangementstatusType {
+  """The arrangement status value."""
+  arrangementStatus: Arrangementstatustypevalues
+
+  """The type of arrangement status."""
+  arrangementStatusType: String
+}
+
+# ---------------------------------------------------------------------------
+# Account & Product references
+# ---------------------------------------------------------------------------
+
+"""
+Basic account reference details.
+Maps to the BIAN `Account` schema.
+"""
+type Account {
+  """Account identification details."""
+  accountIdentification: AccountIdentification
+
+  """Date/time metadata for the account."""
+  accountDateTime: AccountDateTime
+
+  """Type of account."""
+  accountType: Accounttypevalues
+
+  """Current status of the account."""
+  accountStatus: Accountstatustypevalues
+}
+
+"""
+Identification information for an account.
+Maps to the BIAN `Accountidentification` schema.
+"""
+type AccountIdentification {
+  """The account identifier value."""
+  accountIdentificationValue: String
+
+  """Classification of the account identification type (e.g. IBAN, BBAN)."""
+  accountIdentificationType: Accountidentificationtypevalues
+}
+
+"""
+Date/time metadata for an account.
+Maps to the BIAN `Accountdatetime` schema.
+"""
+type AccountDateTime {
+  """The date-time value."""
+  accountDateTime: DateTime
+
+  """The purpose of this date-time in the account lifecycle."""
+  accountDateTimeType: Accountdatetimetypevalues
+}
+
+"""
+Current status of an account.
+Maps to the BIAN `Accountstatus` schema.
+"""
+type AccountstatusType {
+  """The status value."""
+  accountStatus: Accountstatustypevalues
+
+  """Date-time of the status change."""
+  accountStatusDateTime: DateTime
+
+  """Validity period for this status."""
+  accountStatusValidityPeriod: DateTimePeriod
+
+  """The reason for the current status."""
+  accountStatusReason: String
+}
+
+# ---------------------------------------------------------------------------
+# Party & Organisation
+# ---------------------------------------------------------------------------
+
+"""
+A party (person or legal entity) involved in a banking relationship.
+Maps to the BIAN `Party` schema.
+"""
+type Party {
+  """Party identification details."""
+  partyIdentification: PartyIdentification
+
+  """Legal structure of the party."""
+  partyLegalStructure: Partylegalstructuretypevalues
+
+  """Type classification of the party."""
+  partyType: Partytypevalues
+
+  """Date-time metadata for the party record."""
+  partyDateTime: DateTime
+
+  """The party's address."""
+  partyAddress: Address
+
+  """Primary contact point for the party."""
+  partyContactPoint: ContactPoint
+}
+
+"""
+Identification details for a party.
+Maps to the BIAN `Partyidentification` schema.
+"""
+type PartyIdentification {
+  """Identifier value and metadata."""
+  partyIdentification: Identifier
+
+  """Type of party identifier (e.g. national ID, passport)."""
+  partyIdentificationType: Partyidentificationtypevalues
+}
+
+"""
+A contact point (phone, email, address) for a party.
+Maps to the BIAN `Contactpoint` schema.
+"""
+type ContactPoint {
+  """The contact point value (e.g. phone number, email address)."""
+  contactPointValue: String
+
+  """Classification of the contact point type."""
+  contactPointType: Contactpointtypevalues
+}
+
+"""
+An organisation (legal entity) involved in a banking context.
+Maps to the BIAN `Organisation` schema.
+"""
+type Organisation {
+  """Unique organisation identifier."""
+  organisationIdentification: Identifier
+
+  """Official legal name of the organisation."""
+  organisationName: String
+
+  """Legal structure (e.g. limited company, sole trader)."""
+  organisationLegalStructure: Organisationlegalstructuretypevalues
+
+  """Sector or industry classification code."""
+  organisationIndustryCode: String
+
+  """Registered address of the organisation."""
+  organisationAddress: Address
+}
+
+# ---------------------------------------------------------------------------
+# Document
+# ---------------------------------------------------------------------------
+
+"""
+A reference to a document stored in a document directory.
+Maps to the BIAN `DocumentDirectoryEntry` / `Document` schemas.
+"""
+type DocumentReference {
+  """Unique identifier for the document directory entry."""
+  documentDirectoryEntryId: String
+
+  """Human-readable name or title of the document."""
+  documentName: String
+
+  """Classification of the document type."""
+  documentType: Financialdocumenttypevalues
+
+  """Date-time the document was created."""
+  documentCreationDate: DateTime
+
+  """The document content or a URI to retrieve it."""
+  documentContent: String
+}
+
+# ---------------------------------------------------------------------------
+# Product
+# ---------------------------------------------------------------------------
+
+"""
+A banking product definition.
+Maps to the BIAN `Product` schema.
+"""
+type Product {
+  """Unique identifier for the product."""
+  productIdentification: Identifier
+
+  """Classification of the banking product type."""
+  productType: Bankingproducttypevalues
+
+  """Current lifecycle status of the product."""
+  productStatus: Productstatustypevalues
+
+  """Date-time information for the product record."""
+  productDateTime: DateTime
+}
+
+"""
+An agreement for a specific banking product instance.
+Maps to the BIAN `ProductAgreement` schema.
+"""
+type ProductAgreement {
+  """Unique identifier for this product agreement."""
+  productAgreementIdentification: Identifier
+
+  """The type of product agreement."""
+  productAgreementType: Productagreementtypevalues
+
+  """The date the agreement was signed."""
+  agreementSignedDate: Date
+
+  """Type of underlying agreement."""
+  agreementType: Agreementtypevalues
+
+  """The period during which this agreement is valid."""
+  agreementValidityPeriod: DateTimePeriod
+
+  """Version string for this agreement."""
+  agreementVersion: String
+
+  """Current status of the agreement."""
+  agreementStatus: Agreementstatustypevalues
+
+  """Subject matter description of the agreement."""
+  agreementSubjectMatter: String
+
+  """Unique identifier for the agreement itself."""
+  agreementIdentification: Identifier
+
+  """Date on which the agreement was established."""
+  agreementDate: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Fee & Interest
+# ---------------------------------------------------------------------------
+
+"""
+Fee arrangement details for a product or service.
+Maps to the BIAN `FeeArrangement` / `Feearrangement` schema.
+"""
+type FeeArrangement {
+  """Type classification of the fee."""
+  feeType: Feetypevalues
+
+  """The fee plan type (Standard or Final)."""
+  feePlanType: Feeplantypevalues
+
+  """Method used to calculate the fee."""
+  feeCalculationBasis: Feecalculationbasistypevalues
+
+  """How often the fee is calculated."""
+  feeCalculationFrequency: Feecalculationfrequencyvalues
+
+  """How often the fee is applied."""
+  feeApplicationFrequency: Feeapplicationfrequencyvalues
+
+  """The monetary amount of the fee."""
+  feeAmount: Amount
+}
+
+# ---------------------------------------------------------------------------
+# Schedule
+# ---------------------------------------------------------------------------
+
+"""
+A schedule defining when something occurs.
+Maps to the BIAN `Schedule` schema.
+"""
+type Schedule {
+  """Description of the schedule."""
+  scheduleDescription: String
+
+  """Start date of the schedule."""
+  scheduleStartDate: Date
+
+  """End date of the schedule."""
+  scheduleEndDate: Date
+
+  """How often the scheduled event repeats."""
+  scheduleFrequency: Frequencytypevalues
+}
+
+# ---------------------------------------------------------------------------
+# Branch
+# ---------------------------------------------------------------------------
+
+"""
+A bank branch location.
+Maps to the BIAN `Branch` schema.
+"""
+type Branch {
+  """Unique identifier for the branch."""
+  branchIdentification: Identifier
+
+  """Type of branch."""
+  branchType: String
+
+  """Physical address of the branch."""
+  branchAddress: Address
+}
+
+# ---------------------------------------------------------------------------
+# Rate Plan
+# ---------------------------------------------------------------------------
+
+"""
+An interest rate plan.
+Maps to the BIAN `Rateplan` schema.
+"""
+type RatePlan {
+  """The rate plan type."""
+  ratePlanType: Rateplantypevalues
+
+  """The interest rate type (fixed, variable, etc.)."""
+  interestRateType: Interestratetypevalues
+
+  """The applicable interest rate value."""
+  interestRate: Decimal
+}
+
+# ---------------------------------------------------------------------------
+# Jurisdiction
+# ---------------------------------------------------------------------------
+
+"""
+A legal jurisdiction context.
+Maps to the BIAN `Jurisdiction` schema.
+"""
+type Jurisdiction {
+  """Name or code of the jurisdiction."""
+  jurisdictionName: String
+
+  """Type of legal entity within this jurisdiction."""
+  jurisdictionLegalEntityType: String
+
+  """Date from which this jurisdiction applies."""
+  jurisdictionStartDate: Date
+}
+
+# ---------------------------------------------------------------------------
+# Mandate
+# ---------------------------------------------------------------------------
+
+"""
+A mandate (authorisation) for a recurring or specific financial activity.
+Maps to the BIAN `Mandate` schema.
+"""
+type Mandate {
+  """Unique identifier for the mandate."""
+  mandateIdentification: Identifier
+
+  """Type of mandate."""
+  mandateType: Mandatetypevalues
+
+  """Current status of the mandate."""
+  mandateStatus: Mandatestatustypevalues
+
+  """Duration / validity period of the mandate."""
+  mandateDuration: DateTimePeriod
+
+  """Whether the mandate is currently active."""
+  trackingIndicator: Boolean
+
+  """Number of days the mandate must be tracked."""
+  trackingDays: String
+}
+
+# ---------------------------------------------------------------------------
+# Payment base types
+# ---------------------------------------------------------------------------
+
+"""
+Payment identification details.
+Maps to the BIAN `Paymentidentification` schema.
+"""
+type PaymentIdentification {
+  """The identifier value."""
+  paymentIdentification: Identifier
+
+  """The type of payment identification."""
+  paymentIdentificationType: Paymentidentificationtypevalues
+}
+
+"""
+Date-time information specific to a payment.
+Maps to the BIAN `Paymentdatetime` schema.
+"""
+type PaymentDateTime {
+  """The payment date and time."""
+  paymentDateTime: DateTime
+
+  """The type of payment date-time (e.g. execution date, value date)."""
+  paymentDateTimeType: Paymentdatetimetypevalues
+}
+
+"""
+The current status of a payment transaction.
+Maps to the BIAN `Paymenttransactionstatus` schema.
+"""
+type PaymentTransactionStatus {
+  """The payment transaction status value."""
+  paymentTransactionStatus: Paymenttransactionstatustypevalues
+}
+
+"""
+Amount and currency details specific to a payment.
+Maps to the BIAN `Paymentamountandcurrency` schema.
+"""
+type PaymentAmountAndCurrency {
+  """The payment amount."""
+  paymentAmount: Amount
+
+  """The payment amount and currency type classification."""
+  paymentAmountType: Paymentamountandcurrencytypevalues
+}
+
+# ---------------------------------------------------------------------------
+# FinancialFacility (used by sweep targets)
+# ---------------------------------------------------------------------------
+
+"""
+A reference to a financial facility (e.g. another account).
+Maps to the BIAN `FinancialFacility` schema.
+"""
+type FinancialFacility {
+  """Reference identifier for the financial facility."""
+  financialFacilityReference: String
+
+  """Type classification of the facility."""
+  financialFacilityType: String
+}
+
+# ---------------------------------------------------------------------------
+# LimitArrangement
+# ---------------------------------------------------------------------------
+
+"""
+A limit applied to an account or facility.
+Maps to the BIAN `LimitArrangement` / `Limitarrangement` schema.
+"""
+type LimitArrangement {
+  """The type of limit (e.g. DailyWithdrawalLimit, CreditLimit)."""
+  limitType: Limittypevalues
+
+  """Current status of the limit."""
+  limitStatus: Limitstatustypevalues
+
+  """Start date for this limit."""
+  limitStartDate: Date
+
+  """End date for this limit."""
+  limitEndDate: Date
+}
+
+# ---------------------------------------------------------------------------
+# PartyObligationOrEntitlement
+# ---------------------------------------------------------------------------
+
+"""
+Defines an obligation or entitlement for a party in relation to an account.
+Maps to the BIAN `PartyObligationOrEntitlement` schema.
+"""
+type PartyObligationOrEntitlement {
+  """The party this obligation or entitlement applies to."""
+  partyReference: InvolvedParty
+
+  """Type of involvement (obligation vs entitlement)."""
+  partyInvolvementType: Partyinvolvementtypevalues
+
+  """Description of the obligation or entitlement."""
+  obligationOrEntitlementDescription: String
+}
+
+# ---------------------------------------------------------------------------
+# AccountRestriction
+# ---------------------------------------------------------------------------
+
+"""
+A restriction applied to an account.
+Maps to the BIAN `AccountRestriction` schema.
+"""
+type AccountRestriction {
+  """Current status of the account restriction."""
+  accountRestrictionStatus: Accountrestrictionstatustypevalues
+
+  """The reason why the restriction was applied."""
+  accountRestrictionStatusReason: String
+
+  """Period during which the restriction is in force."""
+  accountRestrictionApplicationPeriod: DateTimePeriod
+}
+
+# ---------------------------------------------------------------------------
+# AccountInvolvement
+# ---------------------------------------------------------------------------
+
+"""
+Describes the relationship between a party and an account.
+Maps to the BIAN `AccountInvolvement` schema.
+"""
+type AccountInvolvement {
+  """The party involved with the account."""
+  partyReference: InvolvedParty
+
+  """How the party is involved (e.g. owner, servicer, joint holder)."""
+  partyInvolvementType: Accountinvolvementtypevalues
+
+  """Any obligation or entitlement arising from this involvement."""
+  partyObligationOrEntitlement: PartyObligationOrEntitlement
+}
+
+# ---------------------------------------------------------------------------
+# Device
+# ---------------------------------------------------------------------------
+
+"""
+A customer device (e.g. card, mobile phone, token).
+Maps to the BIAN `Device` schema.
+"""
+type Device {
+  """Unique identifier for the device."""
+  deviceIdentification: Identifier
+
+  """Classification of the device type."""
+  deviceType: Devicetypevalues
+
+  """The operating system running on the device."""
+  deviceOperatingSystem: Deviceoperatingsystemtypevalues
+}
+
+# ---------------------------------------------------------------------------
+# Feature
+# ---------------------------------------------------------------------------
+
+"""
+A product or service feature.
+Maps to the BIAN `Feature` schema.
+"""
+type Feature {
+  """Classification of the feature type."""
+  featureType: Featuretypevalues
+
+  """Description of the feature."""
+  featureDescription: String
+}

@@ -1,0 +1,461 @@
+# BIAN v14 GraphQL Schema - Query Operations
+# ==========================================
+#
+# This file defines all read operations (queries) for the Customer Workbench
+# proof-of-concept scope.  Each query maps to a BIAN `Retrieve` operation on
+# the corresponding Service Domain.
+#
+# BIAN Retrieve operations return the Control Record (CR) or a specific
+# Behavior Qualifier (BQ) sub-entity.
+#
+# Naming convention:
+#   - Retrieve CR   → `<serviceDomain>(id: ID!): <ControlRecordType>`
+#   - Retrieve BQ   → `<serviceDomain><BQ>(parentId, bqId): <BQType>`
+#
+# Source: BIAN Release 14.0.0 Semantic APIs (OAS 3.x)
+
+type Query {
+
+  # -------------------------------------------------------------------------
+  # Customer Workbench
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a Customer Workbench operating session by its unique identifier.
+  Maps to: GET /CustomerWorkbench/{customerworkbenchid}/Retrieve
+  """
+  customerWorkbenchSession(
+    """The unique identifier of the customer workbench session."""
+    customerWorkbenchId: ID!
+  ): CustomerWorkbenchSession
+
+  """
+  Retrieve all workbench sessions for a given customer.
+  Convenience query not directly mapped to a single BIAN endpoint,
+  equivalent to a filtered retrieve of CustomerWorkbenchOperatingSession.
+  """
+  customerWorkbenchSessions(
+    """Filter sessions by customer reference."""
+    customerReference: String
+  ): [CustomerWorkbenchSession!]!
+
+  """
+  Retrieve a specific browsing sub-session within a workbench session.
+  Maps to: GET /CustomerWorkbench/{cwbId}/Browsing/{browsingId}/Retrieve
+  """
+  customerWorkbenchBrowsing(
+    """The parent workbench session identifier."""
+    customerWorkbenchId: ID!
+    """The browsing sub-session identifier."""
+    browsingId: ID!
+  ): SessionBrowsing
+
+  """
+  Retrieve a specific contact within a workbench session.
+  Maps to: GET /CustomerWorkbench/{cwbId}/Contact/{contactId}/Retrieve
+  """
+  customerWorkbenchContact(
+    """The parent workbench session identifier."""
+    customerWorkbenchId: ID!
+    """The contact identifier."""
+    contactId: ID!
+  ): SessionContact
+
+  """
+  Retrieve a specific software update record within a workbench session.
+  Maps to: GET /CustomerWorkbench/{cwbId}/SWUpdate/{swUpdateId}/Retrieve
+  """
+  customerWorkbenchSoftwareUpdate(
+    """The parent workbench session identifier."""
+    customerWorkbenchId: ID!
+    """The software update identifier."""
+    swUpdateId: ID!
+  ): SessionSoftwareUpdate
+
+  """
+  Retrieve a product/service access record within a workbench session.
+  Maps to: GET /CustomerWorkbench/{cwbId}/ProductandServiceAccess/{id}/Retrieve
+  """
+  customerWorkbenchProductAndServiceAccess(
+    """The parent workbench session identifier."""
+    customerWorkbenchId: ID!
+    """The product and service access identifier."""
+    productAndServiceAccessId: ID!
+  ): SessionProductAndServiceAccess
+
+  # -------------------------------------------------------------------------
+  # Current Account
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a current account facility by its unique identifier.
+  Maps to: GET /CurrentAccount/{currentaccountid}/Retrieve
+  """
+  currentAccount(
+    """The unique identifier of the current account."""
+    currentAccountId: ID!
+  ): CurrentAccountFacility
+
+  """
+  Retrieve all current accounts for a given customer.
+  Convenience query equivalent to a filtered retrieve.
+  """
+  currentAccounts(
+    """Filter accounts by customer reference."""
+    customerReference: String
+  ): [CurrentAccountFacility!]!
+
+  """
+  Retrieve a specific payment transaction on a current account.
+  Maps to: GET /CurrentAccount/{id}/PaymentTransaction/{txId}/Retrieve
+  """
+  currentAccountPaymentTransaction(
+    """The current account identifier."""
+    currentAccountId: ID!
+    """The payment transaction identifier."""
+    paymentTransactionId: ID!
+  ): CurrentAccountPaymentTransaction
+
+  """
+  Retrieve a balance snapshot for a current account.
+  Maps to: GET /CurrentAccount/{id}/AccountBalance/{balanceId}/Retrieve
+  """
+  currentAccountBalance(
+    """The current account identifier."""
+    currentAccountId: ID!
+    """The balance record identifier."""
+    accountBalanceId: ID!
+  ): CurrentAccountBalanceRecord
+
+  """
+  Retrieve a specific deposit on a current account.
+  Maps to: GET /CurrentAccount/{id}/Deposit/{depositId}/Retrieve
+  """
+  currentAccountDeposit(
+    """The current account identifier."""
+    currentAccountId: ID!
+    """The deposit identifier."""
+    depositId: ID!
+  ): CurrentAccountDeposit
+
+  """
+  Retrieve a specific withdrawal from a current account.
+  Maps to: GET /CurrentAccount/{id}/Withdrawal/{withdrawalId}/Retrieve
+  """
+  currentAccountWithdrawal(
+    """The current account identifier."""
+    currentAccountId: ID!
+    """The withdrawal identifier."""
+    withdrawalId: ID!
+  ): CurrentAccountWithdrawal
+
+  """
+  Retrieve a direct debit mandate on a current account.
+  Maps to: GET /CurrentAccount/{id}/DirectDebitMandate/{mandateId}/Retrieve
+  """
+  currentAccountDirectDebitMandate(
+    """The current account identifier."""
+    currentAccountId: ID!
+    """The direct debit mandate identifier."""
+    directDebitMandateId: ID!
+  ): CurrentAccountDirectDebitMandate
+
+  """
+  Retrieve a sweep arrangement on a current account.
+  Maps to: GET /CurrentAccount/{id}/Sweep/{sweepId}/Retrieve
+  """
+  currentAccountSweep(
+    """The current account identifier."""
+    currentAccountId: ID!
+    """The sweep identifier."""
+    sweepId: ID!
+  ): CurrentAccountSweep
+
+  """
+  Retrieve an issued device for a current account.
+  Maps to: GET /CurrentAccount/{id}/IssuedDevice/{deviceId}/Retrieve
+  """
+  currentAccountIssuedDevice(
+    """The current account identifier."""
+    currentAccountId: ID!
+    """The issued device identifier."""
+    issuedDeviceId: ID!
+  ): CurrentAccountIssuedDevice
+
+  # -------------------------------------------------------------------------
+  # Savings Account
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a savings account facility by its unique identifier.
+  Maps to: GET /SavingsAccount/{savingsaccountid}/Retrieve
+  """
+  savingsAccount(
+    """The unique identifier of the savings account."""
+    savingsAccountId: ID!
+  ): SavingsAccountFacility
+
+  """
+  Retrieve all savings accounts for a given customer.
+  Convenience query equivalent to a filtered retrieve.
+  """
+  savingsAccounts(
+    """Filter accounts by customer reference."""
+    customerReference: String
+  ): [SavingsAccountFacility!]!
+
+  """
+  Retrieve a specific deposit on a savings account.
+  Maps to: GET /SavingsAccount/{id}/Deposit/{depositId}/Retrieve
+  """
+  savingsAccountDeposit(
+    """The savings account identifier."""
+    savingsAccountId: ID!
+    """The deposit identifier."""
+    depositId: ID!
+  ): SavingsAccountDeposit
+
+  """
+  Retrieve a balance snapshot for a savings account.
+  Maps to: GET /SavingsAccount/{id}/AccountBalance/{balanceId}/Retrieve
+  """
+  savingsAccountBalance(
+    """The savings account identifier."""
+    savingsAccountId: ID!
+    """The balance record identifier."""
+    accountBalanceId: ID!
+  ): SavingsAccountBalanceRecord
+
+  """
+  Retrieve an interest record for a savings account.
+  Maps to: GET /SavingsAccount/{id}/Interest/{interestId}/Retrieve
+  """
+  savingsAccountInterest(
+    """The savings account identifier."""
+    savingsAccountId: ID!
+    """The interest record identifier."""
+    interestId: ID!
+  ): SavingsAccountInterest
+
+  # -------------------------------------------------------------------------
+  # Payment Order Initiation
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a payment order initiation record by its unique identifier.
+  Maps to: GET /PaymentOrderInitiation/{paymentorderinitiationid}/Retrieve
+  """
+  paymentOrderInitiation(
+    """The unique identifier of the payment order initiation."""
+    paymentOrderInitiationId: ID!
+  ): PaymentOrderInitiation
+
+  """
+  Retrieve a compliance check record for a payment order.
+  Maps to: GET /PaymentOrderInitiation/{id}/Compliance/{complianceId}/Retrieve
+  """
+  paymentOrderComplianceCheck(
+    """The payment order initiation identifier."""
+    paymentOrderInitiationId: ID!
+    """The compliance check identifier."""
+    complianceId: ID!
+  ): PaymentComplianceCheck
+
+  """
+  Retrieve a confirmation record for a payment order.
+  Maps to: GET /PaymentOrderInitiation/{id}/Confirmation/{confirmationId}/Retrieve
+  """
+  paymentOrderConfirmation(
+    """The payment order initiation identifier."""
+    paymentOrderInitiationId: ID!
+    """The confirmation record identifier."""
+    confirmationId: ID!
+  ): PaymentOrderConfirmation
+
+  """
+  Retrieve an order initiation record for a payment order.
+  Maps to: GET /PaymentOrderInitiation/{id}/OrderInitiation/{orderId}/Retrieve
+  """
+  paymentOrderInitiationRecord(
+    """The payment order initiation identifier."""
+    paymentOrderInitiationId: ID!
+    """The order initiation record identifier."""
+    orderInitiationId: ID!
+  ): PaymentOrderInitiationRecord
+
+  # -------------------------------------------------------------------------
+  # Customer Agreement
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a customer agreement by its unique identifier.
+  Maps to: GET /CustomerAgreement/{customeragreementid}/Retrieve
+  """
+  customerAgreement(
+    """The unique identifier of the customer agreement."""
+    customerAgreementId: ID!
+  ): CustomerAgreement
+
+  """
+  Retrieve the customer agreement for a given customer.
+  Convenience query for the common use case of finding the agreement by customer.
+  """
+  customerAgreementByCustomer(
+    """The customer reference to look up."""
+    customerReference: String!
+  ): CustomerAgreement
+
+  """
+  Retrieve legal terms within a customer agreement.
+  Maps to: GET /CustomerAgreement/{id}/LegalTerms/{legalTermsId}/Retrieve
+  """
+  customerAgreementLegalTerms(
+    """The customer agreement identifier."""
+    customerAgreementId: ID!
+    """The legal terms record identifier."""
+    legalTermsId: ID!
+  ): CustomerLegalTerms
+
+  """
+  Retrieve regulatory terms within a customer agreement.
+  Maps to: GET /CustomerAgreement/{id}/RegulatoryTerms/{regulatoryTermsId}/Retrieve
+  """
+  customerAgreementRegulatoryTerms(
+    """The customer agreement identifier."""
+    customerAgreementId: ID!
+    """The regulatory terms record identifier."""
+    regulatoryTermsId: ID!
+  ): CustomerRegulatoryTerms
+
+  """
+  Retrieve policy terms within a customer agreement.
+  Maps to: GET /CustomerAgreement/{id}/PolicyTerms/{policyTermsId}/Retrieve
+  """
+  customerAgreementPolicyTerms(
+    """The customer agreement identifier."""
+    customerAgreementId: ID!
+    """The policy terms record identifier."""
+    policyTermsId: ID!
+  ): CustomerPolicyTerms
+
+  # -------------------------------------------------------------------------
+  # Customer Access Entitlement
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a customer's access profile (entitlement) record.
+  Maps to: GET /CustomerAccessEntitlement/{customeraccessentitlementid}/Retrieve
+  """
+  customerAccessProfile(
+    """The unique identifier of the customer access profile."""
+    customerAccessProfileId: ID!
+  ): CustomerAccessProfile
+
+  """
+  Retrieve the access profile for a given customer.
+  Convenience query to find the profile by customer reference.
+  """
+  customerAccessProfileByCustomer(
+    """The customer reference to look up."""
+    customerReference: String!
+  ): CustomerAccessProfile
+
+  """
+  Retrieve a specific access arrangement within a customer's access profile.
+  Maps to: GET /CustomerAccessEntitlement/{id}/AccessArrangement/{arId}/Retrieve
+  """
+  customerAccessArrangement(
+    """The customer access profile identifier."""
+    customerAccessProfileId: ID!
+    """The access arrangement identifier."""
+    accessArrangementId: ID!
+  ): CustomerAccessArrangement
+
+  # -------------------------------------------------------------------------
+  # Customer Event History
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a customer event log by its unique identifier.
+  Maps to: GET /CustomerEventHistory/{customereventhistoryid}/Retrieve
+  """
+  customerEventLog(
+    """The unique identifier of the customer event log."""
+    customerEventLogId: ID!
+  ): CustomerEventLog
+
+  """
+  Retrieve the event log for a specific customer.
+  Convenience query to find the event log by customer reference.
+  """
+  customerEventLogByCustomer(
+    """The customer reference to look up."""
+    customerReference: String!
+  ): CustomerEventLog
+
+  """
+  Retrieve a specific relationship event from a customer event log.
+  Maps to: GET /CustomerEventHistory/{id}/Relationship/{relationshipId}/Retrieve
+  """
+  customerRelationshipEvent(
+    """The customer event log identifier."""
+    customerEventLogId: ID!
+    """The relationship event identifier."""
+    relationshipEventId: ID!
+  ): CustomerRelationshipEvent
+
+  """
+  Retrieve a specific product processing event from a customer event log.
+  Maps to: GET /CustomerEventHistory/{id}/ProductProcessing/{productProcessingId}/Retrieve
+  """
+  customerProductProcessingEvent(
+    """The customer event log identifier."""
+    customerEventLogId: ID!
+    """The product processing event identifier."""
+    productProcessingEventId: ID!
+  ): CustomerProductProcessingEvent
+
+  # -------------------------------------------------------------------------
+  # Customer Position
+  # -------------------------------------------------------------------------
+
+  """
+  Retrieve a customer position state by its unique identifier.
+  Maps to: GET /CustomerPosition/{customerpositionid}/Retrieve
+  """
+  customerPosition(
+    """The unique identifier of the customer position state."""
+    customerPositionId: ID!
+  ): CustomerPositionState
+
+  """
+  Retrieve the position state for a specific customer.
+  Convenience query to find the position by customer reference.
+  """
+  customerPositionByCustomer(
+    """The customer reference to look up."""
+    customerReference: String!
+  ): CustomerPositionState
+
+  """
+  Retrieve a cash flow analysis record for a customer.
+  Maps to: GET /CustomerPosition/{id}/Cashflow/{cashflowId}/Retrieve
+  """
+  customerCashflow(
+    """The customer position identifier."""
+    customerPositionId: ID!
+    """The cashflow record identifier."""
+    cashflowId: ID!
+  ): CustomerCashflow
+
+  """
+  Retrieve a reporting arrangement for a customer position.
+  Maps to: GET /CustomerPosition/{id}/ReportingArrangement/{arrangementId}/Retrieve
+  """
+  customerReportingArrangement(
+    """The customer position identifier."""
+    customerPositionId: ID!
+    """The reporting arrangement identifier."""
+    reportingArrangementId: ID!
+  ): CustomerReportingArrangement
+}

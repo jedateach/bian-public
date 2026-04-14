@@ -1,0 +1,510 @@
+# BIAN v14 GraphQL Schema - Service Domain: Current Account
+# ==========================================================
+#
+# The Current Account Service Domain orchestrates a consumer checking /
+# demand deposit account. It covers the full lifecycle of a current account
+# facility including payments, deposits, withdrawals, standing orders, sweeps,
+# liens, and card/device access.
+#
+# BIAN Control Record: `CurrentAccountFacility`
+# BIAN Behavior Qualifiers:
+#   - PaymentTransaction   – outbound/inbound payment transactions
+#   - Deposit              – deposit transactions
+#   - Withdrawal           – withdrawal transactions
+#   - DirectDebitMandate   – direct debit mandates
+#   - IssuedDevice         – cards and devices linked to the account
+#   - AccountBalance       – balance inquiries and snapshots
+#   - Sweep                – automated sweep / liquidity management
+#   - ServiceModality      – service mode settings for the account
+#
+# Source: BIAN Release 14.0.0 - CurrentAccount.yaml
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+The primary record for a consumer current (demand deposit / checking) account.
+This is the BIAN Control Record for the Current Account Service Domain.
+
+It captures the account agreement, ownership, limits, status, and the full
+set of features and restrictions applicable to the account facility.
+
+BIAN entity: `CurrentAccountFacility`
+"""
+type CurrentAccountFacility {
+  """Unique system identifier for this current account facility."""
+  currentAccountId: ID!
+
+  """Reference to the product agreement governing this account."""
+  productInstanceReference: ProductAgreement
+
+  """The account number (e.g. IBAN or BBAN) for this current account."""
+  currentAccountNumber: AccountIdentification
+
+  """The customer who holds this account."""
+  customerReference: InvolvedParty
+
+  """The bank branch where this account is held."""
+  bankBranchLocationReference: Branch
+
+  """The type of current account (e.g. Personal, Business, Student)."""
+  accountType: Currentaccounttypevalues
+
+  """The account's primary currency."""
+  accountCurrency: AccountCurrency
+
+  """Tax identification reference for this account."""
+  taxReference: Identifier
+
+  """The definition of entitlement options applicable to this account."""
+  entitlementOptionDefinition: PartyObligationOrEntitlement
+
+  """The current entitlement option settings for this account."""
+  entitlementOptionSetting: PartyObligationOrEntitlement
+
+  """The definition of restriction options applicable to this account."""
+  restrictionOptionDefinition: AccountRestriction
+
+  """The current restriction option settings for this account."""
+  restrictionOptionSetting: AccountRestriction
+
+  """Parties associated with this account (owners, signatories, etc.)."""
+  associations: AccountInvolvement
+
+  """Type of association for the primary associated party."""
+  associationType: Accountinvolvementtypevalues
+
+  """Obligation or entitlement arising from the primary association."""
+  associationObligationOrEntitlement: PartyObligationOrEntitlement
+
+  """Reference to the primary associated party."""
+  associationReference: Party
+
+  """Other accounts linked to this account."""
+  linkedAccounts: Account
+
+  """Type of link between this and linked accounts."""
+  linkType: Account_Accountrelationshiptypevalues
+
+  """Core account details."""
+  accountDetails: Account
+
+  """Type of limit applied to the account."""
+  limitType: Limittypevalues
+
+  """The limit arrangement details."""
+  limitSettings: LimitArrangement
+
+  """The current calculated limit value."""
+  limitValue: String
+
+  """Type of account-level date being recorded."""
+  accountDateType: Accountdatetimetypevalues
+
+  """The account date value."""
+  accountDate: BianDateTime
+
+  """Current account balance."""
+  accountBalance: AccountBalance
+
+  """Current lifecycle status of the account."""
+  accountStatus: Accountstatustypevalues
+
+  # --- Behavior Qualifier collections ---
+
+  """Payment transactions processed through this account."""
+  paymentTransactions: [CurrentAccountPaymentTransaction!]
+
+  """Deposit transactions credited to this account."""
+  deposits: [CurrentAccountDeposit!]
+
+  """Withdrawal transactions debited from this account."""
+  withdrawals: [CurrentAccountWithdrawal!]
+
+  """Direct debit mandates associated with this account."""
+  directDebitMandates: [CurrentAccountDirectDebitMandate!]
+
+  """Cards and devices issued for this account."""
+  issuedDevices: [CurrentAccountIssuedDevice!]
+
+  """Balance snapshots and inquiries for this account."""
+  accountBalances: [CurrentAccountBalanceRecord!]
+
+  """Sweep arrangements configured for this account."""
+  sweeps: [CurrentAccountSweep!]
+
+  """Service modality settings for this account."""
+  serviceModalities: [CurrentAccountServiceModality!]
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: PaymentTransaction
+# ---------------------------------------------------------------------------
+
+"""
+A payment transaction (debit or credit) processed against a current account.
+
+BIAN Behavior Qualifier: `PaymentTransaction` within Current Account.
+"""
+type CurrentAccountPaymentTransaction {
+  """Unique identifier for this payment transaction record."""
+  paymentTransactionId: ID!
+
+  """Type of payment (e.g. DomesticPayment, CrossBorderPayment)."""
+  paymentTransactionType: Paymenttypevalues
+
+  """The monetary amount of the payment."""
+  paymentTransactionAmount: Amount
+
+  """Unique identification references for this payment."""
+  paymentTransactionIdentification: PaymentIdentification
+
+  """The payment mechanism selected by the bank (e.g. CHAPS, Faster Payments)."""
+  paymentTransactionUsedMechanism: String
+
+  """Date and time information for the payment."""
+  paymentTransactionDateTime: PaymentDateTime
+
+  """Purpose of the payment (e.g. Salary, Rental, Taxes)."""
+  paymentTransactionPurpose: Paymentpurposevalues
+
+  """Current status of this payment transaction."""
+  paymentTransactionStatus: PaymentTransactionStatus
+
+  """Any fee amount applied to this payment."""
+  paymentTransactionAppliedFeeAmount: Amount
+
+  """Currency of the payment transaction."""
+  paymentTransactionCurrency: Currencytypevalues
+
+  """Whether this transaction is a debit or credit."""
+  creditDebitIndicator: Debitcreditindicatortvalues
+
+  """Date and time this transaction was recorded."""
+  transactionDate: DateTime
+
+  """Free-text description of the transaction."""
+  transactionDescription: String
+
+  """Overall transaction type classification."""
+  transactionType: Transactiontypevalues
+
+  """Overall transaction status."""
+  transactionStatus: Transactionstatustypevalues
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Deposit
+# ---------------------------------------------------------------------------
+
+"""
+A deposit transaction credited to a current account.
+
+BIAN Behavior Qualifier: `Deposit` within Current Account.
+"""
+type CurrentAccountDeposit {
+  """Unique identifier for this deposit record."""
+  depositId: ID!
+
+  """Type of deposit (e.g. CashDeposit, DemandDeposit)."""
+  depositType: Deposittypevalues
+
+  """The amount deposited."""
+  depositTransactionAmount: Amount
+
+  """Date on which the deposit was made."""
+  depositTransactionDate: Date
+
+  """Identifies the source/origin of this deposit."""
+  depositTransactionSourceReference: String
+
+  """Human-readable description of the deposit."""
+  depositTransactionDescription: String
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Withdrawal
+# ---------------------------------------------------------------------------
+
+"""
+A withdrawal (debit) transaction from a current account.
+
+BIAN Behavior Qualifier: `Withdrawal` within Current Account.
+"""
+type CurrentAccountWithdrawal {
+  """Unique identifier for this withdrawal record."""
+  withdrawalId: ID!
+
+  """Type of withdrawal."""
+  withdrawalType: Withdrawaltypevalues
+
+  """Amount withdrawn from the account."""
+  withdrawalAmount: Amount
+
+  """Date on which the withdrawal was executed."""
+  withdrawalDate: Date
+
+  """Payment transaction details related to this withdrawal."""
+  withdrawalPaymentTransaction: CurrentAccountPaymentTransaction
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: DirectDebitMandate
+# ---------------------------------------------------------------------------
+
+"""
+A direct debit mandate authorising a third party to debit this account.
+
+BIAN Behavior Qualifier: `DirectDebitMandate` within Current Account.
+"""
+type CurrentAccountDirectDebitMandate {
+  """Unique identifier for this direct debit mandate record."""
+  directDebitMandateId: ID!
+
+  """Unique identification of the direct debit mandate."""
+  directDebitMandateIdentification: Identifier
+
+  """Purpose description for the direct debit."""
+  directDebitPurpose: String
+
+  """The source account to be debited."""
+  directDebitSourceAccount: Account
+
+  """Current status of this mandate (Active, Cancelled, etc.)."""
+  directDebitStatus: Directdebitstatustypevalues
+
+  """Type of direct debit (FixedAmount, VariableAmount, etc.)."""
+  directDebitType: Directdebittypevalues
+
+  """The mandate authorisation details."""
+  mandateStatus: Mandatestatustypevalues
+
+  """Number of days the mandate must be tracked."""
+  trackingDays: String
+
+  """Unique mandate identifier."""
+  mandateIdentification: Identifier
+
+  """Type of mandate."""
+  mandateType: Mandatetypevalues
+
+  """Duration / validity period of the mandate."""
+  mandateDuration: DateTimePeriod
+
+  """Whether this mandate is actively being tracked."""
+  trackingIndicator: Boolean
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: IssuedDevice
+# ---------------------------------------------------------------------------
+
+"""
+A card or device issued against a current account (e.g. debit card, token).
+
+BIAN Behavior Qualifier: `IssuedDevice` within Current Account.
+"""
+type CurrentAccountIssuedDevice {
+  """Unique identifier for this issued device record."""
+  issuedDeviceId: ID!
+
+  """Account identification linked to this device."""
+  accountIdentifier: AccountIdentification
+
+  """External account number for the device."""
+  accountExternalAccountNumber: Identifier
+
+  """The date from which this device is valid."""
+  deviceValidFromDate: DateTime
+
+  """The date until which this device is valid."""
+  deviceValidToDate: DateTime
+
+  """Customisation options selected for this device (e.g. card design)."""
+  deviceCustomerCustomisationReference: Devicecustomizationtypevalues
+
+  """The customer who holds this device."""
+  customerReference: InvolvedParty
+
+  """The branch where the device can be collected."""
+  deviceCollectLocation: Branch
+
+  """Party reference for the device (may differ from account holder)."""
+  devicePartyReference: InvolvedParty
+
+  """Type of device (e.g. debit card, contactless sticker)."""
+  deviceType: Devicetypevalues
+
+  """The delivery method for this device (post, branch collection, courier)."""
+  deviceDeliveryMethod: String
+
+  """Date on which the device was issued."""
+  deviceIssueDate: DateTime
+
+  """Permissions associated with this device."""
+  deviceAssociatedPermissions: Arrangement
+
+  """Reference to the underlying device administration record."""
+  issuedDeviceAdministrationReference: Device
+
+  """Feature type associated with this device."""
+  devicePropertyType: Feature
+
+  """Current setting for the device property."""
+  devicePropertySetting: Arrangement
+
+  """Lifecycle status of this device (e.g. Active, Blocked, Expired)."""
+  deviceStatus: Issueddevicestatustypevalues
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: AccountBalance
+# ---------------------------------------------------------------------------
+
+"""
+A balance record for a current account at a specific point in time.
+
+BIAN Behavior Qualifier: `AccountBalance` within Current Account.
+"""
+type CurrentAccountBalanceRecord {
+  """Unique identifier for this balance record."""
+  accountBalanceId: ID!
+
+  """The monetary balance amount."""
+  balanceAmount: Amount
+
+  """The type of balance (e.g. Available, Ledger, Closing)."""
+  balanceType: Balancetypevalues
+
+  """The date/time at which this balance was valid."""
+  balanceValueDate: DateTime
+
+  """Whether this balance is in debit or credit."""
+  balanceIndicator: Debitcreditindicatortvalues
+
+  """Counterparty type context for this balance."""
+  balanceCounterpartyType: Balancecounterpartytypevalues
+
+  """Date on which the balance was calculated."""
+  balanceCalculationDate: DateTime
+
+  """Further sub-classification of the balance."""
+  balanceSubType: Balancesubtypevalues
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Sweep
+# ---------------------------------------------------------------------------
+
+"""
+A sweep arrangement that automatically moves funds between accounts.
+
+BIAN Behavior Qualifier: `Sweep` within Current Account.
+"""
+type CurrentAccountSweep {
+  """Unique identifier for this sweep record."""
+  sweepId: ID!
+
+  """Type of sweep (e.g. periodic, threshold-triggered)."""
+  sweepType: String
+
+  """Definition of the sweep behaviour."""
+  sweepDefinition: String
+
+  """The schedule on which this sweep is applied."""
+  sweepApplicationSchedule: Schedule
+
+  """The target account that funds are swept to or from."""
+  targetAccount: FinancialFacility
+
+  """The mandate authorising this sweep."""
+  sweepMandate: Mandate
+
+  """Processing schedule for sweep execution."""
+  sweepProcessingSchedule: Schedule
+
+  """Monetary amount involved in the most recent sweep."""
+  sweepAmount: Amount
+
+  """Date on which the most recent sweep was executed."""
+  sweepExecutionDate: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: ServiceModality
+# ---------------------------------------------------------------------------
+
+"""
+Service mode configuration for a current account.
+
+BIAN Behavior Qualifier: `ServiceModality` within Current Account.
+"""
+type CurrentAccountServiceModality {
+  """Unique identifier for this service modality record."""
+  serviceModalityId: ID!
+
+  """Type of service modality."""
+  serviceModalityType: Modalitytypevalues
+
+  """Feature-level modality type."""
+  featureModalityType: Modalitytypevalues
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to initiate (open) a new Current Account."""
+input InitiateCurrentAccountInput {
+  """The customer opening the account."""
+  customerReference: String!
+
+  """The branch where the account is being opened."""
+  bankBranchLocationReference: String
+
+  """Type of current account to open."""
+  accountType: Currentaccounttypevalues
+
+  """Primary currency for the account."""
+  accountCurrencyCode: CurrencyCode
+
+  """Tax reference for the account."""
+  taxReference: String
+}
+
+"""Input to update an existing Current Account."""
+input UpdateCurrentAccountInput {
+  """Updated account type."""
+  accountType: Currentaccounttypevalues
+
+  """Updated primary currency."""
+  accountCurrencyCode: CurrencyCode
+
+  """Updated tax reference."""
+  taxReference: String
+}
+
+"""Input to initiate a payment transaction on a current account."""
+input InitiateCurrentAccountPaymentInput {
+  """The current account ID to debit or credit."""
+  currentAccountId: ID!
+
+  """Type of payment to initiate."""
+  paymentType: Paymenttypevalues!
+
+  """Amount of the payment."""
+  paymentAmount: Decimal!
+
+  """Currency of the payment."""
+  paymentCurrency: CurrencyCode!
+
+  """Purpose of the payment."""
+  paymentPurpose: Paymentpurposevalues
+
+  """Reference for the counterparty account."""
+  counterpartyAccountReference: String
+
+  """Payment mechanism to use."""
+  paymentMechanism: Paymentmechanismtypevalues
+}

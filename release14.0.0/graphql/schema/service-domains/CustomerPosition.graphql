@@ -1,0 +1,261 @@
+# BIAN v14 GraphQL Schema - Service Domain: Customer Position
+# ============================================================
+#
+# The Customer Position Service Domain maintains a consolidated financial
+# position for a customer by combining details from all of the customer's
+# product holdings. It provides a unified view of a customer's overall
+# financial standing with the bank.
+#
+# BIAN Control Record: `CustomerPositionState`
+# BIAN Behavior Qualifiers:
+#   - Cashflow             – cash flow analysis across all accounts
+#   - CreditPosition       – consolidated credit position
+#   - DelinquentAccount    – information on delinquent accounts
+#   - ReportingArrangement – how and when positions are reported
+#
+# Source: BIAN Release 14.0.0 - CustomerPosition.yaml
+
+# ---------------------------------------------------------------------------
+# Supporting types
+# ---------------------------------------------------------------------------
+
+"""
+A consolidated financial position for a customer.
+Maps to the BIAN `CustomerPosition` schema.
+"""
+type CustomerPositionSummary {
+  """The type of position being captured."""
+  positionType: Positiontypevalues
+
+  """A reference event or trigger associated with this position."""
+  eventReference: String
+}
+
+"""
+A report generated from customer position data.
+Maps to the BIAN `Report` schema used in CustomerPosition.
+"""
+type CustomerPositionReport {
+  """Unique identifier for this report."""
+  reportId: String
+
+  """Type of report."""
+  reportType: Reporttypevalues
+
+  """The format or template used for this report."""
+  reportFormatTemplate: String
+
+  """The report content or payload."""
+  reportContent: JSON
+}
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+The consolidated position state record for a customer,
+combining data from all product holdings.
+This is the BIAN Control Record for the Customer Position Service Domain.
+
+BIAN entity: `CustomerPositionState`
+"""
+type CustomerPositionState {
+  """Unique identifier for this customer position state."""
+  customerPositionId: ID!
+
+  """The customer whose position is being tracked."""
+  customerReference: InvolvedParty
+
+  """The consolidated position summary."""
+  customerPosition: CustomerPositionSummary
+
+  """Reference to the product agreements contributing to this position."""
+  accountReference: ProductAgreement
+
+  """Unique identifier for this particular position state snapshot."""
+  customerPositionStateReference: Identifier
+
+  # --- Behavior Qualifier collections ---
+
+  """Cash flow analyses across all accounts."""
+  cashflows: [CustomerCashflow!]
+
+  """Consolidated credit position details."""
+  creditPositions: [CustomerCreditPosition!]
+
+  """Delinquent account information."""
+  delinquentAccounts: [CustomerDelinquentAccount!]
+
+  """Reporting arrangements for this customer's position."""
+  reportingArrangements: [CustomerReportingArrangement!]
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Cashflow
+# ---------------------------------------------------------------------------
+
+"""
+A cash flow analysis record for a customer, combining data from all accounts.
+
+BIAN Behavior Qualifier: `Cashflow` within Customer Position.
+"""
+type CustomerCashflow {
+  """Unique identifier for this cashflow record."""
+  cashflowId: ID!
+
+  """The product instance this cashflow relates to."""
+  productInstanceReference: ProductAgreement
+
+  """The type of product arrangement report."""
+  productArrangementInstanceReportType: Reporttypevalues
+
+  """The product arrangement report payload."""
+  productArrangementInstanceReport: CustomerPositionReport
+
+  """Options and criteria used to select this report."""
+  reportOptionsSelectionCriteria: JSON
+
+  """The time period this cash flow report covers."""
+  reportPeriod: DateTimePeriod
+
+  """The report content."""
+  report: CustomerPositionReport
+
+  """Analytical record of the customer's cash flow position."""
+  customerCashflowPositionAnalysisRecord: JSON
+
+  """The product type contributing to this cashflow."""
+  customerProductType: Productagreementtypevalues
+
+  """The balance on the customer's account at time of analysis."""
+  customerAccountBalance: AccountBalance
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: CreditPosition
+# ---------------------------------------------------------------------------
+
+"""
+A consolidated credit position snapshot for a customer.
+
+BIAN Behavior Qualifier: `CreditPosition` within Customer Position.
+"""
+type CustomerCreditPosition {
+  """Unique identifier for this credit position record."""
+  creditPositionId: ID!
+
+  """The product instance contributing to this credit position."""
+  productInstanceReference: ProductAgreement
+
+  """Type of credit position report."""
+  reportType: Reporttypevalues
+
+  """Period this credit position covers."""
+  reportPeriod: DateTimePeriod
+
+  """The customer's total available credit."""
+  totalAvailableCredit: Amount
+
+  """The customer's total outstanding debt."""
+  totalOutstandingDebt: Amount
+
+  """The customer's credit utilisation percentage."""
+  creditUtilisationPercentage: Decimal
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: DelinquentAccount
+# ---------------------------------------------------------------------------
+
+"""
+Information about a delinquent account in the customer's portfolio.
+
+BIAN Behavior Qualifier: `DelinquentAccount` within Customer Position.
+"""
+type CustomerDelinquentAccount {
+  """Unique identifier for this delinquent account record."""
+  delinquentAccountId: ID!
+
+  """The product agreement / account that is delinquent."""
+  productInstanceReference: ProductAgreement
+
+  """The amount overdue on this account."""
+  amountPastDue: Amount
+
+  """Number of days past the due date."""
+  daysPastDue: Int
+
+  """Date on which the account first became delinquent."""
+  delinquencyStartDate: Date
+
+  """Current status of the delinquency management process."""
+  delinquencyStatus: String
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: ReportingArrangement
+# ---------------------------------------------------------------------------
+
+"""
+A reporting arrangement defining how and when customer position reports
+are generated and delivered.
+
+BIAN Behavior Qualifier: `ReportingArrangement` within Customer Position.
+"""
+type CustomerReportingArrangement {
+  """Unique identifier for this reporting arrangement."""
+  reportingArrangementId: ID!
+
+  """The channel through which reports are delivered."""
+  reportingChannel: String
+
+  """How often reports are generated."""
+  reportingFrequency: Frequencytypevalues
+
+  """Start date of this reporting arrangement."""
+  arrangementStartDate: DateTime
+
+  """End date of this reporting arrangement."""
+  arrangementEndDate: DateTime
+
+  """Current status of this arrangement."""
+  arrangementStatus: ArrangementstatusType
+
+  """Type of arrangement."""
+  arrangementType: Arrangementtypevalues
+
+  """Unique identifier for this arrangement."""
+  arrangementIdentification: Identifier
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to initiate a customer position tracking record."""
+input InitiateCustomerPositionInput {
+  """The customer whose position is being tracked."""
+  customerReference: String!
+}
+
+"""Input to request a customer position report."""
+input RequestCustomerPositionReportInput {
+  """The customer position ID to report on."""
+  customerPositionId: ID!
+
+  """The product type to focus the report on."""
+  customerProductType: Productagreementtypevalues
+
+  """The reporting period."""
+  reportPeriod: DateTimePeriodInput
+}
+
+"""Input for specifying a date-time period."""
+input DateTimePeriodInput {
+  """Start of the period (ISO 8601)."""
+  fromDateTime: DateTime!
+
+  """End of the period (ISO 8601)."""
+  toDateTime: DateTime!
+}

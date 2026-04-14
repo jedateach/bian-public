@@ -1,0 +1,51 @@
+# BIAN v14 GraphQL Schema - Root Assembly
+# =======================================
+#
+# This file is the root entry point for the BIAN v14 GraphQL schema proof
+# of concept.  It assembles the schema from its constituent parts:
+#
+#   1. scalars.graphql              – Custom scalar type definitions
+#   2. enums.graphql                – Enum types derived from BIAN typevalues schemas
+#   3. common.graphql               – Shared structural types used across Service Domains
+#   4. service-domains/             – Per-Service-Domain type and input definitions
+#      ├── CustomerWorkbench.graphql
+#      ├── CurrentAccount.graphql
+#      ├── SavingsAccount.graphql
+#      ├── PaymentOrderInitiation.graphql
+#      ├── CustomerAgreement.graphql
+#      ├── CustomerAccessEntitlement.graphql
+#      ├── CustomerEventHistory.graphql
+#      └── CustomerPosition.graphql
+#   5. operations/
+#      ├── Query.graphql            – All read (Retrieve) operations
+#      └── Mutation.graphql         – All write (Initiate/Update/Execute/etc.) operations
+#
+# SCOPE
+# -----
+# This POC covers the following BIAN v14 Service Domains, selected to represent
+# the core Customer Workbench (online banking) capability:
+#
+#   Service Domain                  | BIAN Control Record
+#   --------------------------------|------------------------------------------
+#   CustomerWorkbench               | CustomerWorkbenchOperatingSession
+#   CurrentAccount                  | CurrentAccountFacility
+#   SavingsAccount                  | SavingsAccountFacility
+#   PaymentOrderInitiation          | PaymentOrderInitiationTransaction
+#   CustomerAgreement               | CustomerAgreement
+#   CustomerAccessEntitlement       | CustomerAccessProfileAgreement
+#   CustomerEventHistory            | CustomerEventLog
+#   CustomerPosition                | CustomerPositionState
+#
+# Source:  BIAN Release 14.0.0 Semantic APIs (OAS 3.x)
+# Version: 14.0.0
+
+# ---------------------------------------------------------------------------
+# Schema declaration
+# ---------------------------------------------------------------------------
+# In GraphQL SDL the schema block is optional when the root types follow
+# the default naming convention (Query / Mutation / Subscription).
+# It is included here for explicitness and tooling compatibility.
+schema {
+  query: Query
+  mutation: Mutation
+}

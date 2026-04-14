@@ -1,0 +1,330 @@
+# BIAN v14 GraphQL Schema - Service Domain: Payment Order Initiation
+# ==================================================================
+#
+# The Payment Order Initiation Service Domain provides the customer-facing
+# payment service. It captures payer and payee details and all necessary
+# reference information to execute a payment, then submits the payment for
+# processing through the appropriate payment network.
+#
+# BIAN Control Record: `PaymentOrderInitiationTransaction`
+# BIAN Behavior Qualifiers:
+#   - Compliance      – compliance check performed on the payment
+#   - Confirmation    – confirmation of the payment order
+#   - OrderInitiation – the actual payment order sent to the payment network
+#
+# Source: BIAN Release 14.0.0 - PaymentOrderInitiation.yaml
+
+# ---------------------------------------------------------------------------
+# Supporting types
+# ---------------------------------------------------------------------------
+
+"""
+The payer party in a payment transaction.
+Maps to the BIAN `Payer` schema in PaymentOrderInitiation.
+"""
+type Payer {
+  """Identifying reference for the payer."""
+  payerReference: InvolvedParty
+
+  """The payer's bank reference."""
+  payerBankReference: String
+
+  """The product agreement / account the payer is debiting."""
+  payerProductInstanceReference: ProductAgreement
+}
+
+"""
+The payee party in a payment transaction.
+Maps to the BIAN `Payee` schema in PaymentOrderInitiation.
+"""
+type Payee {
+  """Identifying reference for the payee."""
+  payeeReference: InvolvedParty
+
+  """The payee's bank reference."""
+  payeeBankReference: String
+
+  """The product agreement / account the payee is crediting."""
+  payeeProductInstanceReference: ProductAgreement
+}
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+A payment order initiation transaction record.
+This is the BIAN Control Record for the Payment Order Initiation Service Domain.
+
+It captures all details needed to initiate a payment: payer, payee, amount,
+currency, mechanism, purpose, and supporting compliance/confirmation records.
+
+BIAN entity: `PaymentOrderInitiationTransaction`
+"""
+type PaymentOrderInitiation {
+  """Unique identifier for this payment order initiation record."""
+  paymentOrderInitiationId: ID!
+
+  """Type of payment transaction (e.g. DomesticPayment, CrossBorderPayment)."""
+  paymentTransactionType: Transactiontypevalues
+
+  """Recurring payment arrangement record, if applicable."""
+  recurringPaymentRecord: PaymentArrangementRef
+
+  """Customer reference for any recurring payment arrangement."""
+  recurringPaymentCustomerReference: InvolvedParty
+
+  """Reference to the recurring payment arrangement."""
+  recurringPaymentReference: PaymentArrangementRef
+
+  """The customer initiating the payment."""
+  customerReference: InvolvedParty
+
+  """Full payment transaction details."""
+  paymentTransaction: PaymentTransactionDetail
+
+  """The payer (debtor) party details."""
+  payerReference: Payer
+
+  """The payee (creditor) party details."""
+  payeeReference: Payee
+
+  """The payment amount."""
+  amount: Amount
+
+  """The currency of the payment."""
+  currency: CurrencyCode
+
+  """Type of date associated with this payment."""
+  dateType: Datetimetypevalues
+
+  """The relevant date value for this payment."""
+  date: BianDateTime
+
+  """Fees and charges applicable to this payment."""
+  paymentFeesCharges: FeeArrangement
+
+  """Payment mechanism to use (e.g. SEPA, SWIFT, FasterPayments)."""
+  paymentMechanism: Paymentmechanismtypevalues
+
+  """Purpose of the payment for reference and compliance."""
+  paymentPurpose: String
+
+  """Supporting identity document for this payment."""
+  documentReference: DocumentReference
+
+  # --- Behavior Qualifier collections ---
+
+  """Compliance checks performed for this payment order."""
+  complianceChecks: [PaymentComplianceCheck!]
+
+  """Confirmation records for this payment order."""
+  confirmations: [PaymentOrderConfirmation!]
+
+  """The actual order initiation records sent to the payment network."""
+  orderInitiations: [PaymentOrderInitiationRecord!]
+}
+
+"""
+A lightweight reference to a recurring payment arrangement.
+"""
+type PaymentArrangementRef {
+  """Identifier for the payment arrangement."""
+  arrangementReference: String
+
+  """Description of the arrangement."""
+  arrangementDescription: String
+}
+
+"""
+Full payment transaction details captured in a payment order.
+Maps to the BIAN `PaymentTransaction` schema (used within PaymentOrderInitiation).
+"""
+type PaymentTransactionDetail {
+  """Type of payment."""
+  paymentTransactionType: Paymenttypevalues
+
+  """Payment amount."""
+  paymentTransactionAmount: Amount
+
+  """Unique identification references for the payment."""
+  paymentTransactionIdentification: PaymentIdentification
+
+  """Date and time details for the payment."""
+  paymentTransactionDateTime: PaymentDateTime
+
+  """Purpose of the payment."""
+  paymentTransactionPurpose: Paymentpurposevalues
+
+  """Current status of this payment."""
+  paymentTransactionStatus: PaymentTransactionStatus
+
+  """Fee charged for this payment."""
+  paymentTransactionAppliedFeeAmount: Amount
+
+  """Currency of the payment."""
+  paymentTransactionCurrency: Currencytypevalues
+
+  """Debit or credit indicator."""
+  creditDebitIndicator: Debitcreditindicatortvalues
+
+  """Whether money is being transferred between internal accounts."""
+  moneyTransferSourceAccount: String
+
+  """Target account for an internal money transfer."""
+  moneyTransferTargetAccount: String
+
+  """The payment network instruction reference."""
+  moneyTransferInstructionReference: String
+
+  """The method used to transfer money."""
+  moneyTransferUsedMethod: String
+
+  """Value date for the transfer."""
+  moneyTransferValueDate: Date
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Compliance
+# ---------------------------------------------------------------------------
+
+"""
+A compliance check performed as part of a payment order initiation.
+
+BIAN Behavior Qualifier: `Compliance` within Payment Order Initiation.
+"""
+type PaymentComplianceCheck {
+  """Unique identifier for this compliance check record."""
+  complianceId: ID!
+
+  """Type of compliance check performed."""
+  complianceCheckType: Compliancechecktypevalues
+
+  """The task performed as part of the compliance check."""
+  complianceCheckTask: String
+
+  """Findings or result of the compliance check."""
+  complianceCheckResult: String
+
+  """The date on which the compliance check was performed."""
+  complianceCheckDate: Date
+
+  """Any legal or regulatory document referenced."""
+  legalDocumentReference: DocumentReference
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: Confirmation
+# ---------------------------------------------------------------------------
+
+"""
+A confirmation record for a payment order.
+
+BIAN Behavior Qualifier: `Confirmation` within Payment Order Initiation.
+"""
+type PaymentOrderConfirmation {
+  """Unique identifier for this confirmation record."""
+  confirmationId: ID!
+
+  """The funding check details for this payment."""
+  fundingCheck: PaymentFundingCheck
+
+  """Result of the confirmation process."""
+  confirmationResult: String
+
+  """Date on which the confirmation was processed."""
+  confirmationDate: Date
+}
+
+"""
+A funding check to verify sufficient funds before payment execution.
+Maps to the BIAN `FundingCheck` schema.
+"""
+type PaymentFundingCheck {
+  """Whether sufficient funds are available."""
+  fundsAvailable: Boolean
+
+  """Available balance at time of check."""
+  availableBalance: Amount
+
+  """Date and time at which the funding check was performed."""
+  fundingCheckDateTime: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: OrderInitiation
+# ---------------------------------------------------------------------------
+
+"""
+The actual payment order sent to the payment network after all checks pass.
+
+BIAN Behavior Qualifier: `OrderInitiation` within Payment Order Initiation.
+"""
+type PaymentOrderInitiationRecord {
+  """Unique identifier for this order initiation record."""
+  orderInitiationId: ID!
+
+  """The payment order instruction sent to the network."""
+  paymentOrderInitiationTaskRecord: JSON
+
+  """The payment network / rail the order was submitted to."""
+  paymentOrderInitiationTaskResult: String
+
+  """Date on which this order was submitted."""
+  orderInitiationDate: Date
+
+  """Status of the submitted order."""
+  orderInitiationStatus: String
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to initiate a new payment order."""
+input InitiatePaymentOrderInput {
+  """Reference to the customer initiating the payment."""
+  customerReference: String!
+
+  """Type of payment."""
+  paymentType: Paymenttypevalues!
+
+  """Payment amount."""
+  amount: Decimal!
+
+  """Payment currency."""
+  currency: CurrencyCode!
+
+  """The payer account reference."""
+  payerAccountReference: String!
+
+  """The payee account reference."""
+  payeeAccountReference: String!
+
+  """The payee bank reference."""
+  payeeBankReference: String
+
+  """Payment mechanism to use."""
+  paymentMechanism: Paymentmechanismtypevalues
+
+  """Purpose of the payment."""
+  paymentPurpose: String
+
+  """Requested execution date."""
+  executionDate: Date
+}
+
+"""Input to update a pending payment order."""
+input UpdatePaymentOrderInput {
+  """Updated payment amount."""
+  amount: Decimal
+
+  """Updated currency."""
+  currency: CurrencyCode
+
+  """Updated execution date."""
+  executionDate: Date
+
+  """Updated payment purpose."""
+  paymentPurpose: String
+}

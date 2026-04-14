@@ -1,0 +1,204 @@
+# BIAN v14 GraphQL Schema - Service Domain: Customer Access Entitlement
+# ======================================================================
+#
+# The Customer Access Entitlement Service Domain maintains the details
+# of the allowed channel/device-based access to products and services
+# for a customer. It controls what a customer can access, through which
+# channels, and under what restrictions or preferences.
+#
+# BIAN Control Record: `CustomerAccessProfileAgreement`
+# BIAN Behavior Qualifiers:
+#   - AccessArrangement  – specific channel/device access arrangements
+#   - Restrictions       – access restrictions applied to the customer
+#   - Preferences        – customer preferences for channel access
+#
+# Source: BIAN Release 14.0.0 - CustomerAccessEntitlement.yaml
+
+# ---------------------------------------------------------------------------
+# Supporting types
+# ---------------------------------------------------------------------------
+
+"""
+A restriction applied to a customer's channel or device access.
+Maps to the BIAN `Restrictions` / `AccessRestrictionArrangement` schema.
+"""
+type AccessRestriction {
+  """Unique identifier for this restriction record."""
+  restrictionId: ID!
+
+  """Type of access restriction applied."""
+  accessRestrictionType: Accessrestrictiontypevalues
+
+  """The channel or device category this restriction applies to."""
+  accessRestrictionChannelDeviceType: String
+
+  """Value associated with the restriction (e.g. limit amount, time window)."""
+  accessRestrictionValue: String
+
+  """Period during which this restriction is in force."""
+  accessRestrictionValidityPeriod: DateTimePeriod
+}
+
+"""
+A customer preference for channel or device access.
+Maps to the BIAN `Preferences` / `AccessPreferenceArrangement` schema.
+"""
+type AccessPreference {
+  """Unique identifier for this preference record."""
+  preferenceId: ID!
+
+  """The channel or device type this preference applies to."""
+  channelDeviceType: String
+
+  """The preference setting (e.g. preferred language, notification type)."""
+  channelDeviceAccessPreferenceType: String
+
+  """The value of the preference."""
+  channelDeviceAccessPreferenceValue: String
+
+  """Profile record capturing the full preference context."""
+  channelDeviceAccessPreferenceProfile: JSON
+}
+
+"""
+Usage record for a customer's channel or device access.
+Maps to the BIAN `ChannelUsage` schema.
+"""
+type ChannelUsageRecord {
+  """Reference to the channel or device used."""
+  channelDeviceType: String
+
+  """Description of the channel or device."""
+  channelDeviceDescription: String
+
+  """Date on which the channel/device was last used."""
+  channelDeviceDate: Date
+
+  """The access log for the channel/device."""
+  channelDeviceUsageLog: ActivityLog
+}
+
+# ---------------------------------------------------------------------------
+# Control Record
+# ---------------------------------------------------------------------------
+
+"""
+The access profile agreement for a customer, defining all channel/device
+entitlements. This is the BIAN Control Record for Customer Access Entitlement.
+
+It links the customer to their access agreements, restrictions, and preferences
+across all channels and devices.
+
+BIAN entity: `CustomerAccessProfileAgreement`
+"""
+type CustomerAccessProfile {
+  """Unique identifier for this customer access profile."""
+  customerAccessProfileId: ID!
+
+  """The customer this access profile belongs to."""
+  customerReference: InvolvedParty
+
+  """The complete customer access profile record."""
+  customerAccessProfileRecord: CustomerAccessAgreementRecord
+
+  """The period during which this access agreement is valid."""
+  customerAccessAgreementValidityPeriod: DateTimePeriod
+
+  """Parties responsible for authorising the access agreement."""
+  customerAccessAgreementSignatories: AccessArrangementInvolvementRecord
+
+  """Reference to the signed access agreement document."""
+  documentReference: DocumentReference
+
+  # --- Behavior Qualifier collections ---
+
+  """Individual channel/device access arrangements."""
+  accessArrangements: [CustomerAccessArrangement!]
+
+  """Access restrictions applied to this customer."""
+  accessRestrictions: [AccessRestriction!]
+
+  """Customer access preferences."""
+  accessPreferences: [AccessPreference!]
+
+  """Channel usage history."""
+  channelUsageHistory: [ChannelUsageRecord!]
+}
+
+"""
+The overarching access agreement for a customer.
+Maps to the BIAN `CustomerAccessAgreement` schema.
+"""
+type CustomerAccessAgreementRecord {
+  """The effective date of the access agreement."""
+  accessAgreementDate: Date
+
+  """The type of access agreement."""
+  accessAgreementType: String
+
+  """Description of the access agreement."""
+  accessAgreementDescription: String
+}
+
+"""
+Involvement details for a party in the access agreement.
+Maps to the BIAN `AccessArrangementInvolvement` schema.
+"""
+type AccessArrangementInvolvementRecord {
+  """The party involved."""
+  partyReference: InvolvedParty
+
+  """The type of involvement (e.g. authoriser, beneficiary)."""
+  involvementType: Accessarrangementinvolvementtypevalues
+}
+
+# ---------------------------------------------------------------------------
+# Behavior Qualifier: AccessArrangement
+# ---------------------------------------------------------------------------
+
+"""
+A specific channel or device access arrangement within a customer's profile.
+
+BIAN Behavior Qualifier: `AccessArrangement` within Customer Access Entitlement.
+"""
+type CustomerAccessArrangement {
+  """Unique identifier for this access arrangement."""
+  accessArrangementId: ID!
+
+  """Type of channel or device this arrangement governs."""
+  channelAccessArrangementChannelDeviceType: String
+
+  """The access profile applicable to this channel/device."""
+  channelAccessArrangementProfile: JSON
+
+  """Limitations and fees applicable to this access arrangement."""
+  channelAccessArrangementLimitations: String
+
+  """Period during which this access arrangement is in force."""
+  channelAccessArrangementValidityPeriod: DateTimePeriod
+}
+
+# ---------------------------------------------------------------------------
+# Input types for mutations
+# ---------------------------------------------------------------------------
+
+"""Input to establish (initiate) a customer access profile."""
+input InitiateCustomerAccessProfileInput {
+  """The customer for whom the access profile is being established."""
+  customerReference: String!
+
+  """Date from which the access agreement is valid."""
+  accessAgreementFromDate: Date
+
+  """Date until which the access agreement is valid."""
+  accessAgreementToDate: Date
+}
+
+"""Input to update an existing customer access profile."""
+input UpdateCustomerAccessProfileInput {
+  """Updated validity period start date."""
+  accessAgreementFromDate: Date
+
+  """Updated validity period end date."""
+  accessAgreementToDate: Date
+}
